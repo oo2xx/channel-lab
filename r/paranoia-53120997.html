@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paranoia_パラノイア — チャンネル分析レポート（完全版）</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="Paranoia_パラノイア — チャンネル分析レポート（完全版）">
+<meta property="og:description" content="全34本＋コメント3,310件＋25chファンID照合＋同ジャンル実測比較。勝ちパターンと成長処方7項。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Channel Analysis Report / 2026-07-31</div>
+  <h1>Paranoia_パラノイア【有益】 — 勝ちパターンの言語化と成長処方（共有版）</h1>
+  <p class="hero-sub">対象: <b>@paranoia369</b>（登録40.2万人）｜ 全<b>34本</b>を全量取得・統計処理 ｜ コメント<b>3,310件</b>（全34本のコメ欄上位）の定量スキャン ｜ 25chとのコメント投稿者<b>ID実測照合</b>＋同ジャンル3ch実測比較 ｜ ※n=33のため重回帰は標本不足で不実施（正直ベース・記述統計で代替）</p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">1.50</div><div class="l">再生÷登録者比（当ラボ分析10chで最高）</div></div>
+  <div class="kpi"><div class="n">60.3万</div><div class="l">本編再生中央値（34本で総再生2,003万）</div></div>
+  <div class="kpi"><div class="n">231/千件</div><div class="l">コメントの感謝語彙率（全ch最高＝感謝される番組）</div></div>
+  <div class="kpi"><div class="n">−53%</div><div class="l">2026年の中央値下落（64.7万→28.5万・要対処）</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：このチャンネルの正体は<b>「海外自己啓発の輸入商社」であり、当ラボ初の完全な「作品型」チャンネル</b>である。ヘビー層はわずか22人・高評価シェア2%（他chは16〜48%）——<b>誰も「人」を推していない。ファンがついているのは1本1本の作品</b>で、それでいて再生÷登録者比1.50は分析10chで最高。コメント欄は感謝（231/千件・全ch最高）と決意表明の場と化しており（「ここにいる人全員成功しよう」👍4,943）、バズを見分けるのは<b>「人生変わった/実践報告」語彙×1.63</b>＝視聴者の人生が実際に動いた回が伸びる。ただし赤信号が1つ：<b>2026年の中央値が半減（64.7万→28.5万）</b>。減衰と併走しているのは①長尺化（60分超の中央値41.3万 vs 30〜60分64.9万）②テーマの「稼ぐ系」シフト（習慣・ルーティン系63〜128万 vs マネー特化11〜32万）③ペース低下——3つとも可逆。</p>
+  <p class="small"><b>根拠の検証方法</b>：①全34本の記述統計（時系列・尺・テーマ）②コメント3,310件の語彙定量 ③25chとの投稿者ID照合＋同ジャンル3ch実測比較。</p>
+</div>
+
+<h2>1. チャンネル構造と現在地</h2>
+<div class="tablewrap"><table>
+<tr><th>期間</th><th class="num">本数</th><th class="num">中央値</th><th>特徴</th></tr>
+<tr><td>2024年（開始年）</td><td class="num">14</td><td class="num">647,529</td><td>月1〜2本・16〜45分・習慣/ルーティン中心</td></tr>
+<tr><td>2025年</td><td class="num">11</td><td class="num">647,375</td><td>4〜7月に5ヶ月空白→8月復帰即116万＝<b>休止しても地力は落ちなかった</b></td></tr>
+<tr><td><b>2026年</b></td><td class="num">8</td><td class="num"><b>284,816</b></td><td>60〜119分の長尺化＋マネー系シフト＋直近2本13〜15万</td></tr>
+</table></div>
+<p><b>重要な事実</b>：34本で登録40.2万・総再生2,003万＝<b>1本あたり58.9万再生・登録転換も異常効率</b>。2025年の5ヶ月休止から116万再生で復帰した事実は「ストック型（作品が資産として残り、投稿間隔に耐える）」の証明——当ラボ分析の他チャンネル（フロー型・投稿停止＝死）と正反対の稀有な体質。</p>
+
+<h2>2. 勝ちパターン — テーマ・尺・人物の実測（n=33・記述統計）</h2>
+<div class="tablewrap"><table>
+<tr><th>軸</th><th>勝ち</th><th>負け</th></tr>
+<tr><td><b>テーマ</b></td><td>習慣・ルーティン・デトックス系：モーニングルーティン128万／モンクモード94.7万／ゴーストモード98.7万／SNS断ち63〜60万</td><td>マネー特化系（2026年に集中）：富の階段25万→11.4万／ゼロから稼ぐ31.8万／凡人逆転13.7万</td></tr>
+<tr><td><b>尺</b></td><td>8〜30分（中央値63.2万）／30〜60分（64.9万）</td><td><b>60分超（41.3万）</b>——長いほど有益ではない</td></tr>
+<tr><td><b>人物（グル）</b></td><td>アレックス・ホルモジ3本：85.9万→73.3万→87.8万（<b>減衰ゼロの専属グル</b>）／イマン・ガジ2本：56.3万→64.7万（+15%）</td><td>前後編分割：富の階段①→②で45%に半減——<b>分割はこのchでは機能しない</b></td></tr>
+</table></div>
+<p class="note">⚠ n=33のため重回帰は不実施（基準n≥120・当ラボ品質基準による降格）。上記は記述統計であり、2026年の減衰は「長尺化」「テーマシフト」「時期」が同時に起きているため単一要因への分解はできない——ただし3要因とも同じ方向（負）を向いており、全て可逆である点が重要。</p>
+
+<h2>3. 負けパターン</h2>
+<div class="grid2">
+<div class="panel lose"><h4>負け筋①：2026年の路線変化（中央値−53%）</h4>
+<ul><li>60〜119分への長尺化（2026年8本中5本が60分超）——実測では60分超は30〜60分帯の64%の再生しか取れていない</li><li>「習慣で人生を立て直す」→「金持ちになる方法」へのテーマシフト——視聴者が買っているのは前者（コメント欄の実践報告はすべて習慣系）</li></ul></div>
+<div class="panel lose"><h4>負け筋②：前後編分割（富の階段①25万→②11.4万）</h4>
+<ul><li>作品型チャンネルは1本で完結する「完成品」が単位——続きものは機能しない（保持率45%）</li><li>長い素材は分割でなく圧縮が正解（尺の実測とも整合）</li></ul></div>
+</div>
+
+<h2>4. なぜこの再生数になるのか — コメント3,310件の定量検証</h2>
+<h3>バズ回を見分ける語彙</h3>
+<div class="tablewrap"><table>
+<tr><th>語彙群</th><th class="num">バズ回(/1000件)</th><th class="num">不発回</th><th class="num">倍率</th><th>解釈</th></tr>
+<tr><td><b>人生変わった/実践報告</b></td><td class="num">68.8</td><td class="num">42.3</td><td class="num"><b>×1.63</b></td><td><b>バズの弁別因子＝視聴者の人生が動いた回</b></td></tr>
+<tr><td>感謝/出会えてよかった</td><td class="num">231.2</td><td class="num">263.4</td><td class="num">×0.88</td><td>全動画に超高率で均一＝<b>ブランドの基礎体力（全ch最高）</b></td></tr>
+<tr><td>自分の悩み語り</td><td class="num">57.5</td><td class="num">57.7</td><td class="num">×1.00</td><td>コメント欄が人生相談の場として定着</td></tr>
+<tr><td>翻訳/編集の質への言及</td><td class="num">32.5</td><td class="num">45.1</td><td class="num">×0.72</td><td>品質はコアが評価（バズ因子ではない）</td></tr>
+</table></div>
+<h3>快感の型 — 高評価コメントの実引用から</h3>
+<div class="grid2">
+<div class="panel win"><h4>①同志との連帯（このchの発明）</h4>
+<blockquote>ここにいる人全員成功しよう。<span class="src">👍4,943 / モーニングルーティン回（チャンネル最多高評価・128万再生）</span></blockquote>
+<blockquote>ここにいる人2025年結果を残そう。<span class="src">👍1,477 / ミニマリズム回</span></blockquote>
+<p class="small">コメント欄が「同じ方向を向く他人」の集会所になっている——動画は教材、コメント欄は教室。</p></div>
+<div class="panel win"><h4>②人生が動いた報告（×1.63の実体）</h4>
+<blockquote>このチャンネルに出会えてやっと年収が５０００万円を超えるとこまで来ました。<span class="src">👍1,824 / ゴーストモード回</span></blockquote>
+<blockquote>朝4時起きして簿記の勉強をしており、先日簿記二級に合格し、会計事務所から内定を頂…<span class="src">👍1,599 / モーニングルーティン回</span></blockquote></div>
+<div class="panel"><h4>③視聴者が教材を自作配布する</h4>
+<blockquote>アンチビジョンを書くために、テンプレートを用意しました。もしよろしければ、ご活用ください。一緒にがんばりましょう！<span class="src">👍3,361 / アンチビジョン回</span></blockquote>
+<p class="small">視聴者がワークシートを自作してコメント欄で配る——<b>公式がやるべきことをファンが先にやっている</b>（未回収資産）。</p></div>
+<div class="panel"><h4>④共通の敵＝スマホ・SNS</h4>
+<blockquote>Xはまじで心病む。…見なくなったらいくらか気持ちが晴れた。<span class="src">👍2,534 / SNS断ち回</span></blockquote>
+<blockquote>YouTubeが一番やめられん<span class="src">👍1,645 / ドーパミンデトックス回</span></blockquote></div>
+</div>
+<h3>ファン構造の実測 — 当ラボ初の「作品型」</h3>
+<div class="tablewrap"><table>
+<tr><th>測定</th><th class="num">値</th><th>意味</th></tr>
+<tr><td>ヘビー層（5本以上にコメント）</td><td class="num"><b>22人</b>（高評価シェア2%）</td><td>他ch実測16〜48%に対し異常な低さ＝<b>「推し文化」が存在しない</b></td></tr>
+<tr><td>2本以上に出現</td><td class="num">12%</td><td>リピーターのコメント習慣も最少</td></tr>
+<tr><td>ID照合の最大重複</td><td class="num">BUDDICA中野 2.49%</td><td>唯一の有意な重複が<b>経営者マインド系</b>——「向上心オーディエンス圏」の存在。エンタメ系とは0.4〜1.2%で断絶</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>判定：「作品型」——人ではなく1本1本の完成品にファンがつく、当ラボ初のプロファイル</b>。含意は3つ。①推し文化がないため<b>投稿者の顔出し・人格営業は不要</b>（現路線の匿名性は正しい）。②その代わり1本の品質低下が直撃する（箱推しのクッションがない）——2026年の減衰が急峻なのはこのため。③ストック型の証明（5ヶ月休止→116万復帰）と合わせ、<b>「量産せず、1本を作品として磨き、外さない」が唯一の戦略</b>。</p>
+</div>
+
+<h2>5. シリーズの代数 — 「擦り」の実測</h2>
+<div class="tablewrap"><table>
+<tr><th>シリーズ</th><th>変遷（再生数）</th><th>法則</th></tr>
+<tr><td>アレックス・ホルモジ（人物）</td><td>85.9万 → 73.3万 → 87.8万</td><td><b>専属グルは減衰しない</b>——「この人の教え」シリーズは資産</td></tr>
+<tr><td>イマン・ガジ（人物）</td><td>56.3万 → 64.7万</td><td>同上（+15%）</td></tr>
+<tr><td>1年で差をつけるルール（フォーマット）</td><td>73.3万 → 49.5万（1年後）</td><td>同一フォーマットの年次改訂は67%——可</td></tr>
+<tr><td>富の階段（前後編）</td><td>25.1万 → 11.4万</td><td>分割は45%に半減——禁止</td></tr>
+</table></div>
+<div class="callout gold"><p><b>法則：「人物（グル）は資産、分割は借金」</b>。ホルモジ・ガジのような「専属グルのポートフォリオ」を持つことがこのchのシリーズ戦略の本体。</p></div>
+
+<h2>6. 同ジャンル比較 — 自己啓発・本解説系の現在地（直近1年実測）</h2>
+<div class="tablewrap"><table>
+<tr><th>チャンネル</th><th class="num">登録</th><th class="num">長尺中央値</th><th class="num">ペース/月</th><th class="num">中央値÷登録者</th><th>型</th></tr>
+<tr><td><b>パラノイア</b></td><td class="num">40.2万</td><td class="num">413,453（直近1年）</td><td class="num"><b>1.2</b></td><td class="num"><b>1.03</b></td><td><b>海外グル翻訳×シネマティック</b></td></tr>
+<tr><td>フェルミ漫画大学</td><td class="num">139万</td><td class="num">171,029</td><td class="num">7.2</td><td class="num">0.12</td><td>漫画で本要約（量産）</td></tr>
+<tr><td>ハック大学</td><td class="num">28.6万</td><td class="num">37,666</td><td class="num">1.9</td><td class="num">0.13</td><td>ビジネススキル解説</td></tr>
+<tr><td>サムの本解説ch</td><td class="num">58.1万</td><td class="num">15,013</td><td class="num">8.4</td><td class="num">0.03</td><td>本要約（量産・単価崩壊）</td></tr>
+</table></div>
+<p><b>発見①</b>：中央値÷登録者は<b>界隈の8〜30倍</b>（1.03 vs 0.03〜0.13）——本要約・自己啓発ジャンルが軒並み単価崩壊する中、唯一単価を保っている。<b>発見②</b>：差の正体は「本の要約」ではなく<b>「海外グルという人物と物語の輸入」×シネマティック品質</b>——競合が量産（月7〜8本）で消耗する中、月1〜2本の作品主義が正解だった。<b>発見③</b>：この構造の弱点が2026年に露出——作品主義は1本の外れが月全体の外れになる。品質管理が全て。</p>
+
+<h3>未回収の企画案 — コメント欄からの発掘</h3>
+<ul>
+<li><b>公式ワークシート/テンプレ配布</b>——視聴者が自作テンプレを配布して👍3,361。概要欄PDF・コミュニティ投稿で公式化すれば、保存・再訪・登録の全てに効く（作品型chの「作品の付属品」戦略）</li>
+<li><b>タルムード続編</b>——「もっとタルムードお願い」👍141。44.5万と当たった新シリーズの種</li>
+<li><b>視聴者の実践報告回</b>——年収5,000万報告・簿記合格報告など人生が動いた報告が資産化されていない。「視聴者の変化」を集めた回はバズ因子×1.63の直接回収</li>
+<li><b>オーディオブック・ベスト本企画</b>——「オーディブルで聴いてオススメだった本ベスト100やってほしい」👍69</li>
+</ul>
+
+<h2>7. 成長処方 — 優先順つき</h2>
+<ol class="formula">
+<li><b>テーマを「人生を立て直す習慣」に戻す</b>実測：習慣・ルーティン系63〜128万 vs マネー特化11〜32万。視聴者が買っているのは「金持ちになる方法」ではなく「今日から変われる手順」。マネー系をやるなら「習慣の物語」として包む。</li>
+<li><b>尺を22〜45分に戻す</b>60分超は30〜60分帯の64%しか取れていない。長い素材は分割でなく圧縮する（前後編は45%の実測で禁止）。</li>
+<li><b>専属グルのポートフォリオを増やす</b>ホルモジ（減衰ゼロ×3本）・ガジ（+15%）方式。新規グルの1本目→当たれば年2本の定期便に。</li>
+<li><b>公式テンプレ・ワークシートを毎回付ける</b>視聴者の自作配布（👍3,361）が需要の証明。作品型chの登録動機は「次の作品を逃したくない」＋「付属品が欲しい」。</li>
+<li><b>月2本の定期便に戻す</b>2024〜25年の勝ちペース。ストック型なので無理な量産は不要だが、月1未満だと2026年のように「外れ1本が四半期を決める」リスク構造になる。</li>
+<li><b>視聴者の実践報告を年1回の「卒業式」回にする</b>コメント欄の人生報告（5,000万・簿記合格）を集約する回はこのchにしか作れない——同志文化（「ここにいる人全員成功しよう」👍4,943）の最大の回収装置。</li>
+<li><b>Shorts実験（60秒1ルール型）</b>現在1本のみ。作品の切り抜きでなく「1動画1ルール」の定型で新規接触の網を張る。</li>
+</ol>
+
+<h2>8. データの注記（正直ベース）</h2>
+<ul class="small">
+<li>n=33のため重回帰・勝率表は不実施（当ラボ品質基準による降格）。テーマ・尺・時期の効果は記述統計であり相互に交絡している（本文明記の通り）。</li>
+<li>再生数は累積値。2026年動画は累積途上を含むが、同月齢比較でも2024〜25年勝ち筋との差は明確。</li>
+<li>コメントは全34本のコメ欄上位100件＝3,310件。ID照合は2026-07-31取得の同日パネル25ch・下限推定。</li>
+<li>本レポートの指標はYouTube公式の提供指標ではなく公開データからの独自算出。視聴維持率・CTR等の非公開データは未使用。</li>
+</ul>
+
+<footer>Paranoia_パラノイア【有益】 (@paranoia369) 分析レポート ｜ データ取得: 2026-07-31 / YouTube Data API v3 ｜ 全34本＋コメント3,310件＋25ch ID照合＋同ジャンル3ch実測比較</footer>
+</div>
+
+</body>
+</html>

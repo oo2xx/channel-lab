@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>青柳克哉の勝つ!勝つ!勝つ! — チャンネル分析レポート（完全版）</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="青柳克哉の勝つ!勝つ!勝つ! — チャンネル分析レポート（完全版）">
+<meta property="og:description" content="全142本＋コメント2,525件＋経済圏実測比較＋シリーズ代数＋未回収企画案つき完全版。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Channel Analysis Report / 2026-07-31</div>
+  <h1>青柳克哉の勝つ!勝つ!勝つ! — 勝ちパターンの言語化と成長処方（共有版）</h1>
+  <p class="hero-sub">対象: <b>@katsuya_wataame</b>（登録1.83万人）｜ 全<b>142本</b>を全量取得・統計処理 ｜ コメント<b>2,525件</b>の定量スキャン ｜ ヒカル経済圏4ch＋コントロール13chとのコメント投稿者<b>ID実測照合</b></p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">206万</div><div class="l">総再生数（1年5ヶ月・142本）</div></div>
+  <div class="kpi"><div class="n">2.1万</div><div class="l">本編再生中央値（8分以上・51本）</div></div>
+  <div class="kpi"><div class="n">31.4%</div><div class="l">コメ民のヒカル経済圏との実測重複（照合の核心）</div></div>
+  <div class="kpi"><div class="n">2.6倍</div><div class="l">有名人名入りタイトルの効果（3.0万 vs 1.2万）</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：このチャンネルの現在の正体は<b>「ヒカル経済圏の公認サテライト番組」</b>である。コメント投稿者1,295人の31.4%がヒカル/相馬/ぷろたん/遊楽舎のコメント欄にも出現し（無関係ch群は0.2〜0.5%）、高評価コメントの定型句は「<b>ヒカルチャンネルがない時にありがたい</b>」。再生の水源は経済圏からの流入で、有名人名入りタイトルはそれ以外の2.6倍。<b>これは弱点ではなく、経済圏の準メンバーとして認められた稀有な資産</b>——ただし水源が1つである限り、ヒカルの動向がそのままこのチャンネルのリスクになる。次の課題は「借りた客を、青柳の客に変える」転換装置の設計。</p>
+  <p class="small"><b>根拠の検証方法</b>：①テーマ別実測（有名人絡み vs 自前企画で最大46倍差）②コメント2,525件の語彙定量（ヒカル言及182/千件 vs 青柳個人への好意41/千件）③計17chとの投稿者ID照合（経済圏31.4% vs コントロール0.5%以下）。</p>
+</div>
+
+<h2>1. チャンネル構造と現在地</h2>
+<div class="tablewrap"><table>
+<tr><th>レイヤー</th><th>定義</th><th class="num">本数</th><th class="num">再生中央値</th><th>役割</th></tr>
+<tr><td><b>本編</b></td><td>8分以上</td><td class="num">51本</td><td class="num">21,283</td><td>再生の88%を稼ぐ主戦場</td></tr>
+<tr><td>クリップ</td><td>1〜8分</td><td class="num">19本</td><td class="num">3,572</td><td>2026年6月〜量産中だが型が未確立</td></tr>
+<tr><td>Shorts</td><td>61秒以下</td><td class="num">57本</td><td class="num">3,340</td><td>同上（総再生の13%）</td></tr>
+</table></div>
+<p><b>重要な事実</b>：本編中央値2.1万は登録者1.83万の<b>1.16倍</b>＝動画は登録者の外（経済圏のファン）に届いている。一方2026年7月は本編を薄めてクリップ/Shorts計24本を量産し月中央値が急落（4,565）——<b>型が決まる前の量産は在庫の山になる</b>（クリップ中央値3,572）。</p>
+
+<h2>2. 勝ちパターン — テーマ別実測（本編51本・投稿14日超）</h2>
+<div class="tablewrap"><table>
+<tr><th>テーマ</th><th class="num">n</th><th class="num">再生中央値</th><th class="num">最高</th><th class="num">高評価率</th><th>判定</th></tr>
+<tr><td>遊楽舎/SAKO絡み（雇用美談）</td><td class="num">2</td><td class="num"><b>64,124</b></td><td class="num">91,078</td><td class="num"><b>3.6%</b></td><td><span class="tag win">最強＋最深</span></td></tr>
+<tr><td>他有名人（青汁/林/Tier表企画）</td><td class="num">3</td><td class="num">59,158</td><td class="num">213,210</td><td class="num">1.6%</td><td><span class="tag win">勝ち筋</span></td></tr>
+<tr><td>相馬/カルビ/コンボイ絡み</td><td class="num">4</td><td class="num">51,763</td><td class="num">76,851</td><td class="num">2.6%</td><td><span class="tag win">勝ち筋</span></td></tr>
+<tr><td>ヒカル絡み</td><td class="num">17</td><td class="num">35,180</td><td class="num">213,210</td><td class="num">2.8%</td><td><span class="tag win">主水源・17ヶ月消耗なし</span></td></tr>
+<tr><td>捧さん絡み</td><td class="num">6</td><td class="num">20,875</td><td class="num">71,660</td><td class="num">3.1%</td><td><span class="tag mid">安定</span></td></tr>
+<tr><td>ぷろたん絡み</td><td class="num">11</td><td class="num">16,751</td><td class="num">46,284</td><td class="num">2.5%</td><td><span class="tag mid">中堅</span></td></tr>
+<tr><td>青柳単体（16億の家/買い物）</td><td class="num">6</td><td class="num">14,151</td><td class="num">57,878</td><td class="num">3.0%</td><td><span class="tag mid">自前資産の芽</span></td></tr>
+<tr><td>社内/営業/社員企画</td><td class="num">7</td><td class="num"><b>1,402</b></td><td class="num">—</td><td class="num">2.6%</td><td><span class="tag lose">現形式は見直し対象</span></td></tr>
+</table></div>
+<h3>形式要素（単変量）</h3>
+<div class="tablewrap"><table>
+<tr><th>要素</th><th>あり</th><th>なし</th><th>示唆</th></tr>
+<tr><td>タイトルに有名人名</td><td class="num">中央値 30,107 (n=35)</td><td class="num">11,571 (n=16)</td><td><b>2.6倍</b>。経済圏回では名前を必ず入れる</td></tr>
+</table></div>
+<p class="note">⚠ 本編n=51のため重回帰による要因分離は標本不足で不実施（当ラボの品質基準による降格）。上記は記述統計であり交絡を含む——特に「有名人名の効果」と「テーマの効果」は不可分。</p>
+
+<h2>3. 負けパターン — 何をやると落ちるか</h2>
+<div class="grid2">
+<div class="panel lose"><h4>負け筋①：文脈なしの社内企画（中央値1,402）</h4>
+<ul><li>営業ロープレ対決819・営業王決定戦1,299・逆アルハラ1,402——視聴者は社員を知らないため誰の物語でもない</li><li>ただし例外が答えを教えている：カルビ営業回76,851・SAKO雇用回91,078——<b>「経済圏の文脈」と接続した社内企画は最強クラスに化ける</b></li></ul></div>
+<div class="panel lose"><h4>負け筋②：型のないクリップ/Shorts量産（2026年7月）</h4>
+<ul><li>クリップ19本中央値3,572・Shorts57本中央値3,340。本編の切り抜きでも定型でもない中間物が多い</li><li>月の総投稿34本に対し再生貢献は僅少——工数配分が逆転している</li></ul></div>
+</div>
+<div class="callout lose">
+<p><b>伸びない動画の共通点</b>：品質の問題ではなく「<b>経済圏の物語に接続されていない</b>」。このチャンネルの視聴動機は現状ほぼ100%が経済圏文脈（§4で実証）なので、接続のない企画は存在を認知されない。</p>
+</div>
+
+<h2>4. なぜこの再生数になるのか — コメント2,525件とID照合による実証</h2>
+<h3>視聴動機の語彙定量</h3>
+<div class="tablewrap"><table>
+<tr><th>コメント語彙</th><th class="num">出現率(/千件)</th><th>意味</th></tr>
+<tr><td>ヒカル言及</td><td class="num"><b>182</b></td><td>「ヒカルチャンネルない時にありがたい」が定型句＝<b>補完番組として視聴されている</b></td></tr>
+<tr><td>相馬/カルビ言及</td><td class="num">89</td><td>第2水源</td></tr>
+<tr><td>青柳個人への好意（好き/おもろい/応援）</td><td class="num">41</td><td><b>自前ファンダムの芽</b>。「陽気で器デカイから推せる」「人間力高すぎ」</td></tr>
+<tr><td>ビジネス/勉強になる</td><td class="num">25</td><td>「社長ch」なのに学び動機は僅か＝視聴者はエンタメとして見ている</td></tr>
+</table></div>
+<h3>ファンはどこから来ているか — 投稿者ID実測照合</h3>
+<div class="tablewrap"><table>
+<tr><th>照合先</th><th class="num">重複率（自ch側1,295人中）</th></tr>
+<tr><td>ヒカル（489万人）</td><td class="num"><b>16.6%</b></td></tr>
+<tr><td>相馬トランジスタ（85万人）</td><td class="num">14.1%</td></tr>
+<tr><td>ぷろたん（211万人）</td><td class="num">9.7%</td></tr>
+<tr><td>遊楽舎（47万人）</td><td class="num">2.1%</td></tr>
+<tr><td><b>経済圏4chのいずれかに出現</b></td><td class="num"><b>31.4%</b></td></tr>
+<tr><td>コントロール13ch（エンタメ/大手/夜の街系）の最大値</td><td class="num">0.5%</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>判定：「入口も定着も、現状はヒカル経済圏」の衛星フェーズ</b>。当ラボの過去実測では、コメント民の他ch重複は「同じ人間の別チャンネル」でも14%が上限だった。<b>青柳chはヒカル本人のチャンネルと16.6%重複している＝ファンから見て実質「ヒカル系列の一番組」として扱われている</b>。これは信頼の証であり最大のリスクでもある：水源が経済圏1本である限り、ヒカルの休止・炎上・関係変化がそのまま経営リスクになる。</p>
+<p>希望も実測されている：①ヘビー層94人が高評価の32%を形成（世論の核が育ち始めている）②青柳個人への好意41/千件 ③最高エンゲージ回はヒカル回ではなく<b>SAKO雇用回（lr4.3%）＝「社長として人を救う物語」</b>。自前資産の種は「事業家・雇用主としての青柳」にある。</p>
+</div>
+
+
+<h3>快感の型 — 高評価コメントの実引用から</h3>
+<div class="grid2">
+<div class="panel win"><h4>①経済圏の物語への参加欲（最強の反応）</h4>
+<blockquote>相馬さんのグリーンロックの活動に一回だけだけどガチで1万円寄付するから、xかインスタのどっちかで告知してほしい<span class="src">👍73 / 相馬さんと飲み直し回</span></blockquote>
+<blockquote>現状の布陣で足りてないピースはもしかしたら相馬さんで、これで相馬さんとも関われたらヒカルさん界隈をコンプリートすることになるのでは？<span class="src">👍37 / お泊まり裏側回</span></blockquote>
+<p class="small">ファンは「青柳が経済圏の中で位置を上げていく物語」を攻略ゲームのように観戦している。金を出す宣言まで出る熱量。</p></div>
+<div class="panel win"><h4>②企画の共同設計欲（未回収の宝庫）</h4>
+<blockquote>カルビさんと相馬さんが青柳さんの会社で研修から職場体験してる動画あったら見たいかもです<span class="src">👍64</span></blockquote>
+<blockquote>青柳さんもカルビさんみたいに髪バッサリカットする企画してほしい。絶対見ちゃうw<span class="src">👍53</span></blockquote></div>
+<div class="panel"><h4>③本人の継続への応援（定着の芽）</h4>
+<blockquote>再生数とか一旦関係無しにとりあえず動画投稿を継続してほしいな<span class="src">👍57</span></blockquote></div>
+<div class="panel"><h4>④独自企画への手応え</h4>
+<blockquote>ヒカルさんのチャンネルとかだと強すぎて注目集めすぎちゃうから、青柳さんのチャンネルでこういう企画はいいかもですね！<span class="src">👍45 / Tier表回</span></blockquote>
+<p class="small">ファン自身が「本家では出来ない企画の受け皿」というポジションを言語化している。</p></div>
+</div>
+<h2>5. シリーズの代数 — 「擦り」の実測</h2>
+<div class="tablewrap"><table>
+<tr><th>シリーズ</th><th>変遷（再生数）</th><th>法則</th></tr>
+<tr><td>ヒカル絡み（2025年2月〜6月）</td><td>10,297 → 35,180 → 30,107 → 145,394 → <b>213,210</b></td><td><b>関係が深まるほど成長する「攻略アーク」</b>。5ヶ月で21倍</td></tr>
+<tr><td>ぷろたん絡み</td><td>46,284（2025-06ピーク）→ 8,733 → 14,363 → 3,831（2026-01）</td><td>同じ相手との擦りは減衰。「新しい関係の進展」がないコラボは失速する</td></tr>
+<tr><td>社長Tier表</td><td>213,210 → <b>続編なし</b></td><td>歴代1位の構造が未再利用（※2026-07の「格付けチェック」は飲食店ゲームで別物・7,984）</td></tr>
+</table></div>
+<div class="callout gold"><p><b>法則</b>：このチャンネルのシリーズは「同じ企画の反復」ではなく<b>「関係性の進展」で伸びる</b>。ヒカルアークの21倍成長と、進展が止まったぷろたん枠の減衰が対になっている。次に伸びるのは「新しい大物との関係がゼロから深まる」新アーク（コメント欄は相馬さんを名指ししている）。</p></div>
+
+<h2>6. 経済圏の中での現在地 — 直近1年実測比較</h2>
+<div class="tablewrap"><table>
+<tr><th>チャンネル</th><th class="num">登録</th><th class="num">長尺中央値</th><th class="num">ペース/月</th><th class="num">中央値÷登録者</th></tr>
+<tr><td>ヒカル（ハブ）</td><td class="num">489万</td><td class="num">1,084,962</td><td class="num">17.9</td><td class="num">0.22</td></tr>
+<tr><td>ぷろたん</td><td class="num">211万</td><td class="num">408,051</td><td class="num">7.7</td><td class="num">0.19</td></tr>
+<tr><td>相馬トランジスタ</td><td class="num">85.2万</td><td class="num">231,351</td><td class="num">10.5</td><td class="num">0.27</td></tr>
+<tr><td>遊楽舎</td><td class="num">47.3万</td><td class="num">9,582</td><td class="num">10.8</td><td class="num">0.02</td></tr>
+<tr><td><b>青柳克哉</b></td><td class="num">1.83万</td><td class="num">21,283</td><td class="num">4.4</td><td class="num"><b>1.16</b></td></tr>
+</table></div>
+<p><b>発見①</b>：中央値÷登録者は<b>経済圏5chで断トツの1.16</b>（2位相馬の4倍）——登録者の外から最も効率よく再生を集めている＝経済圏の回遊が水源である実証と整合。<b>発見②</b>：経済圏の投稿ペース標準は月8〜18本。青柳の本編4.4本/月は最少で、<b>水源が生きているうちに供給を増やす余地が大きい</b>。<b>発見③</b>：遊楽舎の長尺中央値9,582は「経済圏所属でも本編フォーマットが弱いと数字は出ない」ことの証明——所属は前提条件であって勝因ではない。</p>
+
+<h3>未回収の企画案 — コメント欄からの発掘（全て実リクエスト）</h3>
+<ul>
+<li><b>相馬・カルビの職場体験 in 青柳の会社</b>（👍64）——「金と雇用のリアル」×経済圏文脈の交点で、処方③との整合が完璧</li>
+<li><b>青柳の髪バッサリ企画</b>（👍53）——カルビ回のフォーマット借用。低コスト高確度</li>
+<li><b>相馬のYouTubeコンサルを受けてみた</b>（👍47）——経済圏の新サービスの実験台になる回。関係進展アークの起点にもなる</li>
+<li><b>社長Tier表の続編</b>（業界別/年商別）——歴代1位構造の再利用。コメントも続編を期待（👍59「この企画面白かった」）</li>
+</ul>
+<h2>7. 成長処方 — 優先順つき</h2>
+<ol class="formula">
+<li><b>経済圏戦略は継続する（否定しない）</b>17ヶ月消耗なしの水源であり、経済圏の回遊文化はこのchの追い風。有名人名は必ずタイトルへ（実測2.6倍）。</li>
+<li><b>「借りた客」の転換装置を作る</b>経済圏回のラスト60秒に毎回同じ「青柳固有の型」を置く（次回予告・定番コーナー・決め台詞）。ヒカル目当ての視聴者に「この番組自体の続き」を予約させる。</li>
+<li><b>自前企画は「金と雇用のリアル」に張る</b>エンタメはヒカル達に勝てないが、<b>本物の事業家は経済圏内で青柳だけ</b>。SAKO雇用91k・16億の家57kが実証済み。「社員の給料全公開」「赤字事業の畳み方」「面接ガチ密着」等、社長にしか撮れない画で独自ポジションを確立する。</li>
+<li><b>社内企画は経済圏文脈と接続してから出す</b>単体では1,402、接続すれば76k〜91k（カルビ営業回/SAKO回）。社員を出すなら「経済圏の誰かとの関係」を必ず仕込む。</li>
+<li><b>Tier表の続編を打つ</b>歴代1位（213k）の構造が未再利用（2026-07の「格付けチェック」は別物）。「社長Tier表」を舞台替えで（業界別/年商別/経済圏内格付け）。</li>
+<li><b>クリップ量産を定型化してから再開する</b>2026年7月の投稿34本は工数配分が逆転。クリップは「本編の名場面切り抜き＋有名人名タグ」の定型に絞り、浮いた工数を本編週2本の質に戻す。</li>
+<li><b>ヘビー層94人に名前を付ける</b>高評価の32%を作る核。コミュニティ投稿・コメント返信・生配信で「青柳の常連」というアイデンティティを与える——borrowed→ownedの転換は常連の自覚から始まる。</li>
+</ol>
+
+<h2>8. データの注記（正直ベース）</h2>
+<ul class="small">
+<li>本編n=51のため重回帰は不実施（基準n≥120）。テーマ別数値は記述統計であり交絡を含む。テーマ別のnが小さいもの（遊楽舎n=2等）は方向性の参考値。</li>
+<li>投稿14日未満は集計除外。再生数は累積値のため古い動画ほど有利。</li>
+<li>ID照合は2026-07-31取得。経済圏4chは直近1年の人気動画30本ずつのコメント欄上位、コントロール13chは同日取得の既存パネル。コメント投稿者は視聴者全体の一部のため重複率は下限推定。</li>
+<li>本レポートの指標はYouTube公式の提供指標ではなく公開データからの独自算出。視聴維持率・CTR・流入内訳は非公開データのため未使用。</li>
+</ul>
+
+<footer>青柳克哉の勝つ!勝つ!勝つ! (@katsuya_wataame) 分析レポート ｜ データ取得: 2026-07-31 / YouTube Data API v3 ｜ 全142本＋コメント2,525件＋17ch ID照合＋経済圏4ch実測比較</footer>
+</div>
+
+</body>
+</html>

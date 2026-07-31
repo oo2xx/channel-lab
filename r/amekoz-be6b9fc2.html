@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>雨来ズ。チャンネル分析レポート — 勝ちパターンの言語化</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="雨来ズ。チャンネル分析レポート — 勝ちパターンの言語化">
+<meta property="og:description" content="全1,411本＋コメント33,973件を全量解析。勝ち/負けパターンと再現フォーマット。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Channel Analysis Report / 2026-07-31</div>
+  <h1>雨来ズ。— 勝ちパターンの言語化と再現フォーマット</h1>
+  <p class="hero-sub">対象: <b>@amekoz</b>（登録57.6万人）｜ 全<b>1,411本</b>を全量取得・統計処理 ｜ コメント<b>33,973件</b>の定量スキャン ｜ 重回帰による要因分離（ブートストラップ4,000回） ｜ 計12chとのコメント投稿者<b>ID実測照合</b></p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">3.17億</div><div class="l">総再生数</div></div>
+  <div class="kpi"><div class="n">1,411本</div><div class="l">全動画（本編288+切抜563+Shorts550 ※2020年〜）</div></div>
+  <div class="kpi"><div class="n">30.4万</div><div class="l">本編の再生中央値（2025年）</div></div>
+  <div class="kpi"><div class="n">87%</div><div class="l">最強テーマの勝率（30万再生超え率）</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：このチャンネルの勝ちの正体は「<b>タブー地帯 × 善悪の非対称 × 知性での制圧</b>」。夜の街・マルチ・迷惑行為者という"叩いてよい相手"に対し、モトダの法知識・交渉力・忍耐で勝つ構図が出た時だけ、再生が中央値の2〜3倍（50万〜230万）に跳ねる。逆に、この構図がない企画（大食い・旅・コラボ・内輪トーク）は勝率14〜27%まで落ちる。ファンが買っているのは「過激さ」そのものではなく<b>「安全地帯から見る、頭のいい制裁のカタルシス」</b>である。</p>
+  <p class="small"><b>根拠の検証方法</b>：この結論は①重回帰による要因分離（悪者成敗×2.30・夜の街×1.94が独立に有意、§3）②コメント33,973件の語彙定量（バズ回を見分けるのは「安心感」語彙×4.7、§5）③計12chとの投稿者ID照合（97.6%がどこにも出現しない排他的ファン圏＝「入口は企画、定着は人間」、§5・§8）で三方向から検証済み。</p>
+</div>
+
+<h2>1. チャンネル構造と現在地</h2>
+<p>2021年結成の男4人組（モトダ=頭脳・リーダー／そうた／よろず／ケニー）。動画は実質3レイヤー構造。</p>
+<div class="tablewrap"><table>
+<tr><th>レイヤー</th><th>定義</th><th class="num">本数</th><th class="num">再生中央値</th><th>役割</th></tr>
+<tr><td><b>本編</b></td><td>10分以上</td><td class="num">288本(2024〜は205本)</td><td class="num">約25万</td><td>収益と世界観の主戦場</td></tr>
+<tr><td><b>切り抜きクリップ</b></td><td>1〜10分（2025年12月〜量産）</td><td class="num">201本(直近8ヶ月)</td><td class="num">2.7万</td><td>新規接触の網</td></tr>
+<tr><td><b>Shorts</b></td><td>61秒以下</td><td class="num">271本(直近8ヶ月)</td><td class="num">3.0万</td><td>新規接触の網</td></tr>
+</table></div>
+<p><b>重要な事実</b>：2025年12月に「本編月10本前後」→「本編月2〜4本＋切り抜き/Shorts月60〜90本」の工場型に転換。その後も<b>本編中央値は 29.3万 → 31.9万 と落ちていない</b>。切り抜き量産は本編を食わず、直近8ヶ月で+3,400万再生を上乗せした（10万超えヒット率13%）。</p>
+
+<h2>2. 勝ちパターン — テーマ別勝率（本編・2024年以降 n=205）</h2>
+<p class="small">勝率 = 30万再生（本編中央値の約1.4倍）を超えた割合。</p>
+<div class="tablewrap"><table>
+<tr><th>テーマ</th><th class="num">n</th><th class="num">再生中央値</th><th class="num">勝率</th><th class="barcell"></th><th>判定</th></tr>
+<tr><td>マッチングアプリ/Tinder系</td><td class="num">6</td><td class="num">581,692</td><td class="num">83%</td><td class="barcell"><span class="bar win" style="width:83%"></span></td><td><span class="tag win">勝ち筋</span></td></tr>
+<tr><td>立ちんぼ/歌舞伎町/夜の街</td><td class="num">15</td><td class="num">542,204</td><td class="num">87%</td><td class="barcell"><span class="bar win" style="width:87%"></span></td><td><span class="tag win">勝ち筋</span></td></tr>
+<tr><td>マルチ/詐欺/悪者成敗</td><td class="num">6</td><td class="num">469,649</td><td class="num">83%</td><td class="barcell"><span class="bar win" style="width:83%"></span></td><td><span class="tag win">勝ち筋</span></td></tr>
+<tr><td>女性絡み（合コン/ナンパ検証）</td><td class="num">31</td><td class="num">311,045</td><td class="num">55%</td><td class="barcell"><span class="bar" style="width:55%"></span></td><td><span class="tag mid">中堅</span></td></tr>
+<tr><td>メンバー内ドッキリ/サプライズ</td><td class="num">9</td><td class="num">301,509</td><td class="num">56%</td><td class="barcell"><span class="bar" style="width:56%"></span></td><td><span class="tag mid">中堅</span></td></tr>
+<tr><td>検証/社会実験（汎用）</td><td class="num">32</td><td class="num">279,758</td><td class="num">47%</td><td class="barcell"><span class="bar" style="width:47%"></span></td><td><span class="tag mid">中堅</span></td></tr>
+<tr><td>大食い/飲食</td><td class="num">22</td><td class="num">216,670</td><td class="num">27%</td><td class="barcell"><span class="bar lose" style="width:27%"></span></td><td><span class="tag lose">負け筋</span></td></tr>
+<tr><td>旅/大型ロケ/○時間生活</td><td class="num">14</td><td class="num">202,602</td><td class="num">14%</td><td class="barcell"><span class="bar lose" style="width:14%"></span></td><td><span class="tag lose">負け筋</span></td></tr>
+<tr><td>その他（内輪トーク/レビュー/告知）</td><td class="num">97</td><td class="num">169,686</td><td class="num">19%</td><td class="barcell"><span class="bar lose" style="width:19%"></span></td><td><span class="tag lose">負け筋</span></td></tr>
+</table></div>
+
+<h3>勝ち動画の共通条件（統計）</h3>
+<div class="tablewrap"><table>
+<tr><th>要素</th><th>あり</th><th>なし</th><th>示唆</th></tr>
+<tr><td>タイトルに伏字（売●婦 / S●X 等）</td><td class="num">中央値 747,422 (n=8)</td><td class="num">210,550</td><td>伏字＝タブー保証のシグナル。<b>約3.5倍</b></td></tr>
+<tr><td>尺 30〜45分</td><td class="num">勝率44% (n=61)</td><td class="num">15〜20分は勝率16%</td><td>緊張が続く限り長尺ほど強い。45分超は勝率50%</td></tr>
+<tr><td>【】ブラケット冒頭</td><td class="num">235,437 (n=138)</td><td class="num">186,315</td><td>+26%。企画のジャンル宣言として機能</td></tr>
+<tr><td>タイトルにメンバー名</td><td class="num">153,314 (n=6)</td><td class="num">225,363</td><td><b>逆効果</b>。新規はメンバーを知らない</td></tr>
+<tr><td>投稿曜日</td><td colspan="2" class="num">中央値 19〜24万でほぼ差なし</td><td>曜日最適化に工数を割く価値なし</td></tr>
+</table></div>
+
+<h3>歴代トップ層の構図（2024年以降）</h3>
+<div class="tablewrap"><table>
+<tr><th class="num">再生数</th><th>タイトル（抜粋）</th><th>勝ち要素の分解</th></tr>
+<tr><td class="num">2,309,086</td><td>高額商材を押し売りするマルチ女に「入会するからS●Xさせて」とお願いした結果...</td><td>悪者(マルチ)×立場逆転×伏字</td></tr>
+<tr><td class="num">1,805,847</td><td>【ドッキリ】犬カフェに実家の愛犬がいたら気づくのか！？</td><td>例外枠：動物×感情。保護犬文脈が高評価</td></tr>
+<tr><td class="num">1,602,753</td><td>キャバクラに来た''貧乏ブサイク''が実は大金持ちだったら態度豹変するのか!?</td><td>夜の街×人間性テスト（態度豹変）</td></tr>
+<tr><td class="num">1,255,396</td><td>【売●婦】歌舞伎町の立ちんぼは見た目によって値段を変えるのか検証</td><td>タブー地帯×検証×伏字</td></tr>
+<tr><td class="num">1,208,021</td><td>マルチ勧誘のヤバ女を「何もしないよ」でお持ち帰りして本当に何もしない</td><td>悪者×忍耐の男気×シリーズ化</td></tr>
+<tr><td class="num">1,034,385</td><td>【警察出動】路上喫煙してる人に大人数で突撃したらブチ切れられた</td><td>迷惑行為者×知識で制圧×警察</td></tr>
+</table></div>
+<p class="small">※「何もしないよ」シリーズは3本とも当たり（71万/121万/直近も初速良好）。<b>唯一の確立済みフランチャイズ</b>。</p>
+<p class="note">⚠ 上の「共通条件」表は単変量の比較であり、テーマとの交絡を含む。各要因の<b>独立した効果</b>は§3の重回帰を参照（伏字・ブラケット単体の効果は見かけより小さい）。</p>
+
+<h2>3. 要因分離 — 「何が独立に効くのか」を重回帰で切り分ける</h2>
+<p class="small">本編205本（2024年以降）の log(再生数) を目的変数に、テーマ8種＋タイトル形式＋尺＋年次の計14要因を同時投入した重回帰（R²=0.38）。信頼区間はブートストラップ4,000回。単純比較に混入する「見せかけの効果」を除去した、各要因の独立寄与。</p>
+<div class="tablewrap"><table>
+<tr><th>要因</th><th class="num">独立効果</th><th class="num">95%信頼区間</th><th>判定</th></tr>
+<tr><td>悪者成敗（マルチ/詐欺/迷惑行為）</td><td class="num"><b>×2.30</b></td><td class="num">[×1.37 – ×3.79]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>夜の街（立ちんぼ/歌舞伎町/キャバ）</td><td class="num"><b>×1.94</b></td><td class="num">[×1.29 – ×3.02]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>マッチングアプリ系</td><td class="num">×1.64</td><td class="num">[×0.90 – ×2.76]</td><td><span class="tag mid">正方向・標本小</span></td></tr>
+<tr><td>伏字タイトル</td><td class="num">×1.52</td><td class="num">[×0.80 – ×2.73]</td><td><span class="tag mid">交絡大</span></td></tr>
+<tr><td>ドッキリ/サプライズ</td><td class="num">×1.47</td><td class="num">[×0.89 – ×2.61]</td><td><span class="tag mid">正方向</span></td></tr>
+<tr><td>2025年投稿（チャンネル地力）</td><td class="num">×1.40</td><td class="num">[×1.17 – ×1.65]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>女性絡み（合コン/ナンパ検証）</td><td class="num">×1.28</td><td class="num">[×1.05 – ×1.57]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>長尺30分以上</td><td class="num">×1.12</td><td class="num">[×0.94 – ×1.32]</td><td><span class="tag lose">独立効果なし</span></td></tr>
+<tr><td>【】ブラケット</td><td class="num">×1.02</td><td class="num">[×0.87 – ×1.22]</td><td><span class="tag lose">独立効果なし</span></td></tr>
+</table></div>
+<div class="callout">
+<p><b>この分析が変える結論</b>：§2の単純比較で見えた「伏字3.5倍」「ブラケット+26%」「長尺有利」は、大部分が<b>勝ちテーマとの交絡</b>だった。要因を分離すると、独立に効いているのは圧倒的に「<b>誰と何をやるか</b>」（悪者成敗×2.30、夜の街×1.94）で、タイトル記号や尺は勝ち企画に付随していただけ。<b>工数を割くべきは記号の最適化ではなく「敵の設計」</b>——これが統計的な結論。</p>
+<p>もう1つ：2025年ダミー×1.40が有意 ＝ <b>企画要因を固定してもチャンネル地力が年+40%成長している</b>。伸びは企画のマグレではなく構造的。</p>
+</div>
+
+<h2>4. 負けパターン — 何をやると落ちるか</h2>
+<div class="grid2">
+<div class="panel lose"><h4>負け筋①：内輪が主語の企画（10万前後で頭打ち）</h4>
+<ul>
+<li>コラボ回（レペゼン関連4本：6.1万〜8.7万）— 相手のファンは流入せず、既存ファンだけが見る</li>
+<li>告知・報告・記念ライブ（4.1万〜8.8万）</li>
+<li>レビュー/ランキング（白T比較10.0万、必須アイテム9.1万、サイゼ模写9.8万）</li>
+</ul></div>
+<div class="panel lose"><h4>負け筋②：「誰でもできる企画」（差別化ゼロ）</h4>
+<ul>
+<li>旅・グランピング・○時間生活：勝率14%。雨来ズでなくても成立する→選ぶ理由がない</li>
+<li>大食い/飲食：勝率27%。同上</li>
+<li>人狼・ゲーム系トーク：9〜10万で停滞</li>
+</ul></div>
+</div>
+<div class="callout lose">
+<p><b>負けの本質</b>：負け動画は「クオリティが低い」のではなく<b>「善悪の非対称がない」</b>。敵（悪者・タブー・気まずさ）が不在だと、このチャンネルを選ぶ理由が「4人が好きか」だけになり、天井がコアファン数（≒10〜17万再生）で止まる。</p>
+</div>
+
+<h2>5. なぜこの再生数・この高評価数になるのか — メカニズムの言語化と定量検証</h2>
+<p>代表16本の高評価コメント精読で快感の型を抽出し（①〜④）、その後<b>本編205本のコメント欄33,973件への語彙マッチング</b>で全量検証した（§5後半）。</p>
+
+<h3>① 知性による制裁のカタルシス（最大の燃料）</h3>
+<blockquote>「圧倒的学力でねじ伏せんのさすがすぎるwww」（👍2,177）<span class="src">— 路上喫煙突撃回（103万再生）</span></blockquote>
+<blockquote>「トラブルにモトダが来た時の安心感ヤバい」（👍1,934）<span class="src">— 立ちんぼ検証回（125万再生）</span></blockquote>
+<p>暴力ではなく<b>法知識・語彙・交渉</b>で勝つ。これが「スカッと系」との決定的な差別化であり、高学歴設定（慶應/早稲田/中央法）が企画装置として機能している。</p>
+
+<h3>② 安全地帯からのタブー覗き見</h3>
+<blockquote>「こういうのが安全地帯から見られるのがいい」（👍1,666）<span class="src">— 同上</span></blockquote>
+<p>歌舞伎町・マルチ・裏垢。視聴者が絶対に近寄らない場所を、代わりに踏んでくれる<b>代理体験装置</b>。緊張が続く限り視聴が持続するため、30分超の長尺ほど勝率が上がる（§2）。</p>
+
+<h3>③ 加害者と被害者の立場逆転</h3>
+<blockquote>「普通加害者になる人が被害者になる企画おもろすぎる」（👍976）<span class="src">— マルチ女回（230万再生）</span></blockquote>
+<blockquote>「自分犯罪してるから付きまとわれても警察呼べないの草」（👍3,173）<span class="src">— チャリパク追跡回（85万再生）</span></blockquote>
+<p>相手が悪者だから<b>罪悪感なしで笑える</b>。「胸糞回避」が設計に組み込まれている。ここが崩れる（相手が善人・弱者に見える）とコメント欄に同情が混ざり、伸びが止まる。</p>
+
+<h3>④ 裏側にある4人の関係性（コア層の接着剤）</h3>
+<blockquote>「これが真の『男の友情』だと思う」（👍118）<span class="src">— リーダー号泣サプライズ回（23万再生・高評価率2.2%）</span></blockquote>
+<p>再生数は取れないが、高評価率とコメント率が跳ねる。<b>この層が切り抜きの素材（メンバーの人間味）を拾い、離脱を防いでいる</b>。</p>
+
+<h3>数字で見る「2層オーディエンス」構造</h3>
+<div class="tablewrap"><table>
+<tr><th></th><th class="num">再生中央値</th><th class="num">高評価率</th><th class="num">コメント率(/千再生)</th><th>正体</th></tr>
+<tr><td>再生数<b>上位</b>20%の本編</td><td class="num">539,346</td><td class="num">1.34%</td><td class="num">0.84</td><td>ライト層（制裁・タブー目当ての一見客）</td></tr>
+<tr><td>再生数<b>下位</b>20%の本編</td><td class="num">102,602</td><td class="num"><b>1.73%</b></td><td class="num"><b>1.66</b></td><td>コア層（4人が好き。内輪回ほど濃く反応）</td></tr>
+</table></div>
+<div class="callout">
+<p><b>ここが本レポートの核心</b>：エンゲージ率は再生数と<b>逆相関</b>している。つまり「バズる企画」と「ファンが愛す企画」は別物。<b>再生を取るのは①②③（外向きの制裁企画）、ファンを固定するのは④（内向きの関係性）</b>。負け筋に見える内輪回は、頻度を絞って「コア層への配当」として打つ分には正しい。全滅させてはいけないが、月の主力にしてもいけない。</p>
+</div>
+
+<h3>定量検証① 快感語彙の全量スキャン — バズを見分けるのは「安心感」</h3>
+<p class="small">バズ回（再生上位1/4の本編）と不発回（下位1/4）で、コメント1,000件あたりの快感語彙の出現率を比較。</p>
+<div class="tablewrap"><table>
+<tr><th>快感語彙群</th><th class="num">バズ回 (/1000件)</th><th class="num">不発回 (/1000件)</th><th class="num">倍率</th><th>解釈</th></tr>
+<tr><td>安心感・頼り（"モトダが来た時の安心感"等）</td><td class="num">3.4</td><td class="num">0.7</td><td class="num"><b>×4.7</b></td><td><b>バズを最も見分ける語彙</b></td></tr>
+<tr><td>制裁・スカッと</td><td class="num">1.7</td><td class="num">0.9</td><td class="num">×2.0</td><td>バズ回に偏在</td></tr>
+<tr><td>スリル・代理体験</td><td class="num">5.8</td><td class="num">3.9</td><td class="num">×1.5</td><td>バズ回に偏在</td></tr>
+<tr><td>笑い（おもろ/草/ww）</td><td class="num">251.8</td><td class="num">179.6</td><td class="num">×1.4</td><td>最大母数。バズ回で4割増</td></tr>
+<tr><td>関係性・尊さ</td><td class="num">17.4</td><td class="num">15.0</td><td class="num">×1.2</td><td>全動画に均一＝固定ファンの基礎反応</td></tr>
+<tr><td>知性・論破・学歴</td><td class="num">10.9</td><td class="num">13.0</td><td class="num">×0.8</td><td>全動画に均一＝<b>ブランドの基礎体力</b></td></tr>
+</table></div>
+<p><b>解釈</b>：「知性」語彙はバズ回に限らず全コメント欄に一定率で出る＝もはや空気のように定着したブランド資産。バズ回だけに跳ねるのは<b>「危機→モトダ登場→安心」の語彙（×4.7）</b>。つまりバズの引き金は「知性の披露」ではなく<b>「危機の中で知性が発動する瞬間」</b>。企画設計上は「トラブルが起きうる構造」を意図的に仕込むことが安心感語彙の発生条件になる。</p>
+
+<h3>定量検証② メンバー言及の実測 — 役割分担が数字で見える</h3>
+<div class="tablewrap"><table>
+<tr><th>メンバー</th><th class="num">全体言及率</th><th class="num">バズ回</th><th class="num">不発回</th><th class="num">高評価加重</th><th>実測された役割</th></tr>
+<tr><td>モトダ</td><td class="num">5.7%</td><td class="num">6.1%</td><td class="num">6.2%</td><td class="num"><b>9.1〜10.3%</b></td><td>エース。言及コメントの高評価が突出（加重が素点の1.6倍）</td></tr>
+<tr><td>ケニー</td><td class="num">7.0%</td><td class="num">5.1%</td><td class="num"><b>8.5%</b></td><td class="num">6.5%</td><td><b>コア接着剤</b>。不発回で言及率1.7倍＝内輪回はケニーが主語</td></tr>
+<tr><td>よろず</td><td class="num">6.7%</td><td class="num">6.9%</td><td class="num">5.8%</td><td class="num">9.8%</td><td>バズ・不発両対応の万能枠</td></tr>
+<tr><td>そうた</td><td class="num">6.0%</td><td class="num">6.8%</td><td class="num">4.8%</td><td class="num">6.2%</td><td>バズ回寄り</td></tr>
+</table></div>
+
+<h3>定量検証③ コア層のサイズ実測 — 世論を作っているのは約1,300人</h3>
+<p>205本のコメント欄上位に出現したユニーク投稿者は<b>12,758人</b>。うち2本以上に出現34.3%、<b>5本以上に出現する「ヘビー層」は1,258人（9.9%）で、この層だけでコメント欄の全高評価の48.2%を生成</b>している。コメント欄の空気＝実質1,300人の世論であり、この層の反応源泉（④関係性）を裏切る運営はコメント欄経由で新規の第一印象まで毀損する。逆に言えば、守るべき相手の顔と数が特定できたということ。</p>
+
+<h3>定量検証④ ファンは「人間」についているのか「企画」についているのか — 12chパネル判定</h3>
+<p class="small">雨来ズのコメント投稿者12,758人を、①同ジャンル6ch（がーどまん/夜のがーどまん/エスポ/中町JP/KENZO/ジャスティスター）②接点・別ジャンル6ch（コムドット/ヒカキン/はじめしゃちょー/QuizKnock/東海オンエア/スカイピース）の直近人気30本ずつのコメント欄とID照合。あわせて方法の感度検証として、パネル同士の重複も測定した。</p>
+<div class="tablewrap"><table>
+<tr><th>測定</th><th class="num">重複率</th><th>意味</th></tr>
+<tr><td><b>【感度検証】がーどまん本ch × 夜のがーどまんch</b>（同じ人間の別チャンネル）</td><td class="num"><b>14.0%</b></td><td>「人間に付いたファン」は別チャンネルまで追従する — 方法はこれを検出できる</td></tr>
+<tr><td>【感度検証】別の箱同士（中町×KENZO / がーどまん×KENZO / 東海×スカイピース）</td><td class="num">0.0〜0.4%</td><td><b>同ジャンルでも箱が違えばファンは回遊しない</b>（ジャンルのファンダムは存在しない）</td></tr>
+<tr><td>【感度検証】無関係大手同士（ヒカキン×はじめ 等）</td><td class="num">2.9〜3.1%</td><td>超大手同士の自然な背景重複</td></tr>
+<tr><td>雨来ズ → 同ジャンル6ch 各社</td><td class="num">0.03〜0.53%</td><td>「箱違い」ベースレートと同水準＝制裁ジャンルの回遊客ではない</td></tr>
+<tr><td>雨来ズ → 接点・別ジャンル6ch 各社</td><td class="num">0.03〜0.20%</td><td>先輩コムドットですら0.20%</td></tr>
+<tr><td><b>雨来ズコメ民のうち12chのどこにも出現しない割合</b></td><td class="num"><b>97.6%</b></td><td>ヘビー層に限っても96.4%。<b>「雨来ズにしかコメントしない人たち」</b></td></tr>
+<tr><td>ライト層（1本のみコメントの8,383人）のバズ回集中度</td><td class="num">36%</td><td>動画数ベース期待値25%に対し1.4倍＝新規はバズ企画から入る</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>判定：「入口は企画、定着は人間」</b>。もしファンが企画ジャンルに付いているなら同ジャンル各社と数%規模で重複するはずだが、実測は箱違いベースレート（≒0%）と同水準。一方、がーどまん2ch間の14%が示す通り「人間に付いたファン」は箱を追従する——そして雨来ズのコメ民は97.6%がどこにも現れない排他的な箱推し。<b>ファン資産は4人の人間に付いており、企画は新規を吸い込むファネルの口にすぎない</b>。だから企画（敵・舞台）は大胆に入れ替えてもファンは壊れない（§6の敵替え+69%と整合）し、逆にメンバーの関係性を毀損する変更だけが資産を直撃する。がーどまんの解散ドラマが爆発したのも「箱そのものの物語」だったから。</p>
+</div>
+
+<h2>6. シリーズの代数 — 「擦り」はいつ死に、いつ育つか（全実測）</h2>
+<div class="tablewrap"><table>
+<tr><th>シリーズ</th><th>変遷（再生数）</th><th class="num">保持/成長率</th><th>抽出される法則</th></tr>
+<tr><td>「何もしないよ」</td><td>71.4万 → 120.8万</td><td class="num"><b>+69%</b></td><td>敵を替えた続編（売●婦→マルチ女）は<b>成長する</b></td></tr>
+<tr><td>態度豹変（合コン舞台）</td><td>220万 → 154万 → 28万 → 29万 → 37万</td><td class="num">18%まで減衰</td><td>同一舞台の再放送は3回目で死ぬ</td></tr>
+<tr><td>態度豹変（舞台替え）</td><td>合コン→キャバクラ移植で160万 → 1年後の同舞台再放送54万</td><td class="num">復活後34%</td><td><b>舞台を替えると完全リセット復活</b>、また擦ると減衰</td></tr>
+<tr><td>GPS追跡（前後編）</td><td>28.2万 → 60.2万（2日連続公開）</td><td class="num"><b>×2.1</b></td><td>続きが気になるアーク化は後編を倍にする</td></tr>
+<tr><td>立ちんぼテーマ全体</td><td>18ヶ月で本編9本、中央値47万</td><td class="num">減衰なし</td><td>テーマ自体は消耗しない（消耗するのは「同一舞台」）</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>法則：「構造と敵は資産、再放送は借金」</b>。同じ構造でも敵・舞台を差し替える限り維持〜成長（+69%）、同一舞台の擦り直しは2〜3回目で18〜34%に減衰。前後編アークは実測×2.1。がーどまんの連続ドラマ（§8）の威力を、雨来ズは既にGPS回で自己実証している。</p>
+</div>
+
+<h2>7. 再現フォーマット — 勝ち動画の設計テンプレ</h2>
+<ol class="formula">
+<li><b>敵の設定（最重要）</b>視聴者が心置きなく笑える「叩いてよい相手」を置く：マルチ／ぼったくり／迷惑行為者／傲慢な態度豹変。相手が善人だと成立しない。</li>
+<li><b>舞台はタブー地帯</b>歌舞伎町・夜職・裏垢・マッチングアプリ等、視聴者が自分では行けない場所。伏字がタイトルに乗るテーマは強い（中央値3.5倍）。</li>
+<li><b>勝ち方は「知性 or 忍耐」</b>法知識で論破する、あるいは「何もしないよ」で耐え抜く。腕力・怒鳴り合いは使わない。ここがブランドの背骨。</li>
+<li><b>尺は25〜40分</b>緊張が持続する題材なら長いほど勝率が上がる（30-45分:44%、45分+:50%）。15-20分は中途半端で最弱（16%）。</li>
+<li><b>タイトル公式</b>【ジャンル宣言】＋伏字＋結果の予告（〜したらブチギレられたww）。メンバー名は入れない。曜日は気にしない。</li>
+<li><b>当たったら即シリーズ化 — ただし敵を替えて</b>「何もしないよ」型：同じ構造 × 敵だけ差し替えで+69%成長（§6）。同一舞台の再放送は18〜34%に減衰するので禁止。前後編アークは後編×2.1。</li>
+<li><b>本編1本 → 切り抜き5〜10本</b>制裁の決定的瞬間（警察対応・論破・ブチギレ）だけを切る。直近8ヶ月の実績：本編を食わずに+3,400万再生。</li>
+</ol>
+
+<div class="callout gold">
+<p><b>次の一手の候補（データ根拠つき）</b>：①犬カフェ回（180万）のコメント欄で「<b>悪質ブリーダー成敗企画</b>」が👍857を集めて放置されている — 「動物×悪者成敗」は勝ち筋①×例外枠の掛け算で、ファン自身が発注済み。②チャリパク回のコメント「盗まれる自転車にスピーカー仕込んで大音量」👍2,521も同様に企画原案がファンから出ている。<b>高評価コメント欄は無料の企画会議室</b>として毎回収穫すべき。</p>
+</div>
+
+<h2>8. 同属性チャンネル比較 — 界隈の中での現在地</h2>
+<p class="small">勝ちテーマ14ワード＋グループ検証系10ワードのYouTube検索横断で同属性チャンネルを機械抽出し、主要8chの直近1年・各200本を実測比較（2026-07-31取得）。</p>
+<div class="tablewrap"><table>
+<tr><th>チャンネル</th><th class="num">登録</th><th class="num">長尺中央値</th><th class="num">長尺ペース</th><th class="num">Shorts中央値</th><th>勝ち方の型</th></tr>
+<tr><td><b>雨来ズ。</b></td><td class="num">58万</td><td class="num"><b>320,000</b></td><td class="num">2〜4本/月</td><td class="num">30,000</td><td><b>知性による制裁</b>（界隈で唯一・空席ポジション）</td></tr>
+<tr><td>がーどまん</td><td class="num">308万</td><td class="num">744,000</td><td class="num"><b>12.2本/月</b></td><td class="num">575,000</td><td>破壊＋連続ドラマ（解散劇がトップ5独占280〜420万）</td></tr>
+<tr><td>エスポワール・トライブ</td><td class="num">152万</td><td class="num">354,000</td><td class="num">11.8本/月</td><td class="num"><b>316,000</b></td><td>先輩後輩の上下関係を全動画の定型に</td></tr>
+<tr><td>中町JP</td><td class="num">67万</td><td class="num">319,000</td><td class="num">6.8本/月</td><td class="num">—</td><td>夜の街の内幕×飲みトーク（登録者規模が最も近い）</td></tr>
+<tr><td>KENZO（新宿109）</td><td class="num">102万</td><td class="num">212,000</td><td class="num">4.8本/月</td><td class="num">154,000</td><td>悪徳成敗×迫力。「44万返金させた」等の戦果明示</td></tr>
+<tr><td>ジャスティスター</td><td class="num">134万</td><td class="num">129,000</td><td class="num">3.3本/月</td><td class="num"><b>779,000</b></td><td>ショートネイティブ設計（長尺は弱い）</td></tr>
+<tr><td>朝倉未来 / KAI</td><td class="num">354/139万</td><td class="num" colspan="2">テーマ被りのみ</td><td class="num">—</td><td>腕力（格闘家ブランド）で制裁</td></tr>
+<tr><td>エド / 東京DEEP</td><td class="num">83/8万</td><td class="num" colspan="2">直近1年ほぼ停止</td><td class="num">—</td><td>詐欺突撃の先行者→失速組</td></tr>
+</table></div>
+
+<h3>発見① 登録者あたり再生効率は界隈トップ</h3>
+<p>長尺中央値÷登録者数：<b>雨来ズ 0.55</b> ＞ 中町JP 0.48 ＞ がーどまん 0.24 ＞ エスポ 0.23 ＞ KENZO 0.21。1本あたりの引力は既に界隈最強クラス。<b>伸び代はコンテンツの質ではなく露出量（頻度とShorts）に集中している</b>ため、取るべき打ち手は企画の変更ではなく「量と定型化」。</p>
+
+<h3>発見② 勝者は全員「快感を1つの型に固定」している</h3>
+<p>がーどまん=破壊＋連続ドラマ、エスポ=先輩後輩、KENZO=返金の戦果数字、中町=夜の街の内幕。このジャンルの視聴者が買うのは「日常で得られない正義/優越の代理執行」であり、勝者はそれを毎回同じ型で保証する。<b>「知性で制裁する」型はこの界隈で雨来ズ以外に担い手がいない</b>（朝倉系=腕力、KENZO=迫力、がーどまん=破壊）。差別化は既に完成しており、最優先で守るべき資産。</p>
+
+<h3>発見③ 最大の伸び代はShorts（3.0万 vs エスポ32万 = 10倍差）</h3>
+<p>エスポのShortsは本編の切り抜きではなく「先輩後輩ギミックの定型」を短尺専用に量産したもの。雨来ズの短尺は現状「本編の名場面切り」が中心で、ここに10倍級の余地がある。「モトダが知識でねじ伏せる30秒」「メンバーいじりの定型構図」など<b>Shorts専用フォーマットの開発</b>が効く。</p>
+
+<div class="callout win">
+<p><b>取り入れる優先順</b>：①がーどまん式「頻度＋連続ストーリー」（「何もしないよ」シリーズを単発でなく続き物のアークに）→ ②エスポ式「Shorts定型化」→ ③KENZO式「戦果明示タイトル」（◯万円返金・警察◯回出動）。<b>追わなくてよい型</b>：飲みトーク型 — 中央値は並ぶが高評価率0.8%とファン蓄積効率が低い（雨来ズの本編は1.5%）。</p>
+</div>
+
+<h3>視聴者は実際に被っているのか — コメント投稿者IDの実測照合</h3>
+<p class="small">雨来ズ本編205本のコメント投稿者12,758人と、競合6chの直近人気動画30本ずつのコメント投稿者を、YouTubeチャンネルIDレベルで突合した（推測でなく実測）。</p>
+<div class="tablewrap"><table>
+<tr><th>競合</th><th class="num">競合側コメ投稿者</th><th class="num">重複人数</th><th class="num">競合コメ民のうち雨来ズにも出現</th></tr>
+<tr><td>中町JP</td><td class="num">2,457人</td><td class="num">68人</td><td class="num"><b>2.8%</b></td></tr>
+<tr><td>夜のがーどまん</td><td class="num">2,212人</td><td class="num">54人</td><td class="num">2.4%</td></tr>
+<tr><td>KENZO（新宿109）</td><td class="num">2,292人</td><td class="num">43人</td><td class="num">1.9%</td></tr>
+<tr><td>がーどまん</td><td class="num">2,591人</td><td class="num">45人</td><td class="num">1.7%</td></tr>
+<tr><td>エスポワール・トライブ</td><td class="num">1,517人</td><td class="num">16人</td><td class="num">1.1%</td></tr>
+<tr><td>ジャスティスター</td><td class="num">1,398人</td><td class="num">4人</td><td class="num">0.3%</td></tr>
+</table></div>
+<div class="callout">
+<p><b>発見：重複は最大でも2.8%。雨来ズのコメント民は同ジャンル競合とほぼ被らない「独自圏」</b>。含意は2つ。①競合から客を奪う消耗戦は不要 — 市場は未開拓側に広い。②§4のコラボ回が伸びにくかったことの構造的説明 — そもそもアクティブなファン層が交差していないため、同ジャンルでもコラボは流入装置として機能しにくい。<span class="note">※コメント投稿者は視聴者全体の一部のため重複率は下限推定。方向性の判断材料として使う。</span></p>
+</div>
+
+<footer>雨来ズ。(@amekoz) 分析レポート ｜ データ取得: 2026-07-31 / YouTube Data API v3 ｜ 全1,411本＋代表16本のコメント上位240件<br>
+※再生数は累積値のためテーマ勝率は2024年以降・投稿60日超に限定して算出。テーマ分類はタイトルベースの機械分類。§3の重回帰はR²=0.38（残り分散はサムネ・初速アルゴリズム等の未観測要因）で、効果量は関連の強さであり厳密な因果ではない。§5のコメント分析は各動画のコメント欄上位（relevance順）最大200件＝計33,973件のサンプル。§8の競合比較は各chの直近200本のうち直近1年・投稿30日超分で算出（がーどまんは解散ドラマ期のブーストを含む）。ファン重複はコメント投稿者ベースの下限推定。視聴維持率・CTR等の非公開データは未使用（Studio解析と突き合わせれば精度向上余地あり）。</footer>
+</div>
+
+</body>
+</html>

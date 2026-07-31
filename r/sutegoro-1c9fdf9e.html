@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ステゴロパンチャーズ — チャンネル分析レポート（完全版）</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="ステゴロパンチャーズ — チャンネル分析レポート（完全版）">
+<meta property="og:description" content="全1,299本＋コメント14,605件＋24chファンID照合＋報道系界隈実測比較。勝ちパターンと成長処方7項。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Channel Analysis Report / 2026-07-31</div>
+  <h1>ステゴロパンチャーズ — 勝ちパターンの言語化と成長処方（共有版）</h1>
+  <p class="hero-sub">対象: <b>@sutegoropanch</b>（登録87.9万人）｜ 全<b>1,299本</b>を全量取得・統計処理 ｜ コメント<b>14,605件</b>の定量スキャン ｜ 経過日数を統制した重回帰（n=368・ブートストラップ4,000回） ｜ 24chとのコメント投稿者<b>ID実測照合</b>＋同ジャンル4ch実測比較</p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">5.72億</div><div class="l">総再生数（4年半・1,299本）</div></div>
+  <div class="kpi"><div class="n">57.3万</div><div class="l">本編再生中央値（直近2年n=368）</div></div>
+  <div class="kpi"><div class="n">×86</div><div class="l">バズ回を見分ける「的確/正論/代弁」語彙の偏在（当ラボ最大値）</div></div>
+  <div class="kpi"><div class="n">16倍</div><div class="l">4年での本編中央値成長（3.7万→61.7万）</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：このチャンネルの正体は<b>「YouTube界の裁判所つき報道番組」</b>である。コメントの大半は笑い（302/千件）だが、バズを見分けるのは笑いではなく<b>「的確/正論/代弁」語彙×86</b>（8.6 vs 0.0/千件・当ラボ9ch分析で最大の偏在）と「公平中立への信頼」×24——<b>視聴者は騒動の情報ではなく「界隈の世論を代弁する審判」を買っている</b>。量産基盤は騒動報道（n=156・×1.21）だが、独立効果の最大は自前企画：テオ君検証×2.19・共感性羞恥いじり×2.00。そして重要な資産が1つ：報道対象本人から公認コメントが届く<b>「愛あるいじり」の界隈公認ポジション</b>（フォーエイト本人👍11,684）。注意点は2026年×0.80の軽い減速——他人の騒動という「他給自足」構造の限界が見え始めている。</p>
+  <p class="small"><b>根拠の検証方法</b>：①経過日数統制の重回帰（R²=0.23）②コメント14,605件の語彙定量 ③24chとの投稿者ID照合＋同ジャンル4ch実測比較。</p>
+</div>
+
+<h2>1. チャンネル構造と現在地</h2>
+<div class="tablewrap"><table>
+<tr><th>レイヤー</th><th>定義</th><th class="num">本数</th><th class="num">再生中央値</th><th class="num">総再生</th></tr>
+<tr><td><b>本編</b></td><td>8分以上</td><td class="num">980本</td><td class="num">295,627（直近2年57.3万）</td><td class="num">4.02億</td></tr>
+<tr><td>Shorts</td><td>61秒以下</td><td class="num">249本</td><td class="num">187,473</td><td class="num">1.65億</td></tr>
+<tr><td>クリップ</td><td>1〜8分</td><td class="num">70本</td><td class="num">17,470</td><td class="num">0.04億</td></tr>
+</table></div>
+<p><b>重要な事実</b>：①年次中央値が3.7万（2022）→13.9万→38.0万→<b>61.7万（2025）と4年で16倍</b>の右肩上がり——月10〜15本の量産体制を4年半崩さず登り続けた稀有な成長曲線。②2026年は経過日数統制後も×0.80と初の軽い減速シグナル（月次中央値49〜73万で高止まりの踊り場）。③ln経過日数×0.88＝報道型らしい初速集中のフロー構造で、投稿が止まると資産も止まる。</p>
+
+<h2>2. 勝ちパターン — テーマ別実測（本編・直近2年368本・投稿14日超）</h2>
+<div class="tablewrap"><table>
+<tr><th>テーマ</th><th class="num">n</th><th class="num">再生中央値</th><th class="num">勝率(80万超)</th><th>判定</th></tr>
+<tr><td><b>共感性羞恥（ラップ/ダンスいじり）</b></td><td class="num">10</td><td class="num">1,060,818</td><td class="num"><b>80%</b></td><td><span class="tag win">最強・低頻度</span></td></tr>
+<tr><td><b>テオ君・身体検証</b>（50m走ガチ考察）</td><td class="num">18</td><td class="num">1,058,939</td><td class="num">67%</td><td><span class="tag win">最強・自前企画</span></td></tr>
+<tr><td>視聴者DM・投稿ネタ</td><td class="num">12</td><td class="num">751,503</td><td class="num">42%</td><td><span class="tag win">取材網化の芽</span></td></tr>
+<tr><td>騒動・解散・炎上の報道/論評</td><td class="num">156</td><td class="num">617,529</td><td class="num">27%</td><td><span class="tag mid">量産の基盤（毎日のニュース枠）</span></td></tr>
+<tr><td>あきら/あきプロ神回</td><td class="num">21</td><td class="num">557,964</td><td class="num">19%</td><td><span class="tag mid">定常枠</span></td></tr>
+<tr><td><b>記念ライブ・ニュースまとめ</b></td><td class="num">10</td><td class="num">331,239</td><td class="num">0%</td><td><span class="tag lose">負け筋</span></td></tr>
+</table></div>
+
+<h2>3. 要因分離 — 経過日数を統制した重回帰（n=368・R²=0.23）</h2>
+<div class="tablewrap"><table>
+<tr><th>要因</th><th class="num">独立効果</th><th class="num">95%信頼区間</th><th>判定</th></tr>
+<tr><td>テオ君・身体検証</td><td class="num"><b>×2.19</b></td><td class="num">[×1.59 – ×3.07]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>共感性羞恥いじり</td><td class="num"><b>×2.00</b></td><td class="num">[×1.51 – ×2.61]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>視聴者DM・投稿ネタ</td><td class="num">×1.41</td><td class="num">[×1.08 – ×1.83]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>30分超の長尺</td><td class="num">×1.25</td><td class="num">[×1.08 – ×1.44]</td><td><span class="tag win">有意（論評は長いほど効く）</span></td></tr>
+<tr><td>騒動・解散・炎上の報道/論評</td><td class="num">×1.21</td><td class="num">[×1.09 – ×1.35]</td><td><span class="tag win">有意・基盤</span></td></tr>
+<tr><td>記念ライブ・ニュースまとめ</td><td class="num">×0.49</td><td class="num">[×0.30 – ×0.77]</td><td><span class="tag lose">有意（負）</span></td></tr>
+<tr><td><b>2026年</b></td><td class="num"><b>×0.80</b></td><td class="num">[×0.65 – ×0.97]</td><td><span class="tag lose">有意（軽い減速）</span></td></tr>
+</table></div>
+<div class="callout">
+<p><b>この分析が変える結論</b>：チャンネルの見た目は「騒動報道の量産工場」だが、<b>独立効果の上位は全て自前企画</b>（テオ君検証×2.19・共感性羞恥×2.00）——報道は毎日の基盤（×1.21で確実に勝つ）、爆発は自前企画という二層構造。②30分超×1.25＝論評は長いほど効く（ドキュメンタリー型の雷獣×0.62と逆・「語り」の商売）。③2026年×0.80は「他人の騒動」への依存リスクの表出——騒動がない週を自前企画で埋める設計が必要になり始めている。</p>
+</div>
+
+<h2>4. 負けパターン</h2>
+<div class="grid2">
+<div class="panel lose"><h4>負け筋①：記念ライブ・ニュースまとめ（×0.49・勝率0%）</h4>
+<ul><li>記念配信10〜20万・まとめ番組28〜35万——単独の騒動深掘り（60万前後）の半分以下</li><li>「複数ニュースの詰め合わせ」は1本の重さが出ない。当ラボ実測則（棚の汚染）と同型</li></ul></div>
+<div class="panel lose"><h4>負け筋②：2026年の軽い減速（×0.80）</h4>
+<ul><li>コンテンツソースが「界隈の騒動供給」に依存する他給自足構造——大きな騒動がない期間は基盤枠が痩せる</li><li>対策は§8処方①：自前企画（検証・いじり）の比率引き上げ</li></ul></div>
+</div>
+
+<h2>5. なぜこの再生数になるのか — コメント14,605件の定量検証</h2>
+<h3>バズ回を見分ける語彙</h3>
+<div class="tablewrap"><table>
+<tr><th>語彙群</th><th class="num">バズ回(/1000件)</th><th class="num">不発回</th><th class="num">倍率</th><th>解釈</th></tr>
+<tr><td><b>的確/正論/代弁</b>（よく言った/その通り/言語化）</td><td class="num">8.6</td><td class="num">0.0</td><td class="num"><b>×86</b></td><td><b>バズの引き金＝世論の代弁</b></td></tr>
+<tr><td>公平/中立への信頼</td><td class="num">2.4</td><td class="num">0.0</td><td class="num">×24</td><td>報道機関としての信用がバズ条件</td></tr>
+<tr><td>報道番組扱い（ニュース/記者）</td><td class="num">5.4</td><td class="num">0.7</td><td class="num">×7.4</td><td>視聴者が「番組」として受容</td></tr>
+<tr><td>対象への辛辣</td><td class="num">13.2</td><td class="num">2.9</td><td class="num">×4.5</td><td>審判欲求の燃料</td></tr>
+<tr><td>笑い</td><td class="num">302.8</td><td class="num">331.9</td><td class="num">×0.91</td><td>最大母数だが差がない＝日常の空気であってバズ因子ではない</td></tr>
+</table></div>
+<h3>快感の型 — 高評価コメントの実引用から</h3>
+<div class="grid2">
+<div class="panel win"><h4>①大喜利への参加（いじり回の主反応）</h4>
+<blockquote>床見てた方がおもろい<span class="src">👍28,016 / スカイピースBBBB回（チャンネル最多高評価）</span></blockquote>
+<blockquote>真ん中に立ってるマイクが1番おもろい<span class="src">👍14,477 / コムドット漫才回</span></blockquote>
+<p class="small">いじり回のコメント欄は視聴者の大喜利大会になる——番組と客席の共犯関係。</p></div>
+<div class="panel win"><h4>②審判・代弁への喝采（×86の実体）</h4>
+<blockquote>これ擁護してる人に分かりやすく例えていうなら…<span class="src">👍12,834 / 中町兄妹炎上回（長文の倫理解説コメント）</span></blockquote>
+<blockquote>よくやった！！そしてお帰りなさい<span class="src">👍21,164 / メンバークビ回（263万）</span></blockquote></div>
+<div class="panel win"><h4>③報道対象からの公認（このchだけの資産）</h4>
+<blockquote>いつも、フォーエイトの動画を使って頂きありがとうございます😂 良かったら個人チャンネルでも使える動画があれば是非使ってくださいw いつかコラボしましょう！<span class="src">👍11,684 / フォーエイトいじり回に本人降臨</span></blockquote>
+<blockquote>TikTokからきました。フォーエイトファンとして不快に思いません。最高です。<span class="src">👍19,284</span></blockquote>
+<p class="small"><b>いじられる側が公認・感謝する</b>——「愛あるいじり」ポジションが確立しており、誹謗中傷リスクの緩衝材にもなっている。「取り上げてもらうために陸上の話してるだろ」（👍5,381）と、<b>報道されること自体が界隈のステータス化</b>。</p></div>
+<div class="panel"><h4>④取材網としての視聴者</h4>
+<blockquote>JPの個人も見てほしい取り上げてほしい。<span class="src">👍1,872 / DM・リクエスト文化（視聴者DM×1.41の実体）</span></blockquote></div>
+</div>
+<h3>ファン構造の実測</h3>
+<p>ユニーク投稿者9,222人・2本以上に出現23%・ヘビー層331人が高評価の19%。エンゲージ逆相関（下位20%の高評価率1.83% vs 上位1.32%）。</p>
+<h3>ID照合 — 「界隈ウォッチャー圏」という新プロファイル</h3>
+<div class="tablewrap"><table>
+<tr><th>照合先</th><th class="num">重複率</th><th>意味</th></tr>
+<tr><td>雨来ズ</td><td class="num">2.26%</td><td rowspan="3"><b>特定の1chに偏らず、多数のファンダムに薄く広く重複</b>——当ラボ9ch分析で初のプロファイル。報道対象のファンが横断的に流入している</td></tr>
+<tr><td>いだちゃんねる / 雷獣</td><td class="num">1.84% / 1.08%</td></tr>
+<tr><td>相馬/がーどまん/東海 ほか</td><td class="num">0.6〜0.8%</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>判定：「横断ウォッチャー圏」</b>。箱推し型（雨来ズ97.6%排他）とも衛星型（青柳→ヒカル16.6%）とも違う第3の型で、<b>あらゆるチャンネルのファンの上に薄く乗る「界隈のインフラ」ポジション</b>。報道番組を名乗る戦略とファン構造が完全に一致している。含意：特定チャンネルと運命を共にしない=リスク分散済み。ただし界隈全体の熱量が下がると連動して下がる（2026×0.80はその兆候の可能性）。</p>
+</div>
+
+<h2>6. シリーズの代数 — 「擦り」の実測</h2>
+<div class="tablewrap"><table>
+<tr><th>シリーズ</th><th>実績</th><th>法則</th></tr>
+<tr><td>共感性羞恥</td><td>4年で<b>140本</b>・直近も76万〜203万</td><td>チャンネルの背骨。対象を替え続ける限り消耗しない（対象は界隈が無限供給）</td></tr>
+<tr><td>テオ君</td><td>21本・初回440万→以降38万〜92万で安定</td><td>初回の爆発後、定常枠として安定。「テオ君は何を頑張るべきなのか」というタイトル芸も資産（👍12,979）</td></tr>
+<tr><td>あきら/あきプロ</td><td>47本・30万〜132万</td><td>新キャラ枠として機能中だが×0.93と基準線割れ——頻度過多の兆候</td></tr>
+</table></div>
+<div class="callout gold"><p><b>法則</b>：このchのシリーズは「ネタ元を界隈が供給し続ける」ため構造的に枯れない——ただし同一人物枠（あきら47本）は頻度を上げると基準線を割る。<b>人物枠は月2まで、フォーマット枠（共感性羞恥）は無制限</b>が実測上の運用則。</p></div>
+
+<h2>7. 同ジャンル比較 — 報道・暴露系界隈の現在地（直近1年実測）</h2>
+<div class="tablewrap"><table>
+<tr><th>チャンネル</th><th class="num">登録</th><th class="num">長尺中央値</th><th class="num">ペース/月</th><th class="num">中央値÷登録者</th><th>型</th></tr>
+<tr><td><b>ステゴロパンチャーズ</b></td><td class="num">87.9万</td><td class="num">573,360</td><td class="num"><b>11.5</b></td><td class="num">0.65</td><td><b>界隈報道×代弁</b></td></tr>
+<tr><td>コレコレ</td><td class="num">246万</td><td class="num">1,750,217</td><td class="num">2.1</td><td class="num">0.71</td><td>暴露×生配信（月2の厳選型）</td></tr>
+<tr><td>スーパーノヴァ</td><td class="num">59.9万</td><td class="num">593,226</td><td class="num">12.8</td><td class="num">0.99</td><td>調査報道×共感</td></tr>
+<tr><td>がーどまん</td><td class="num">308万</td><td class="num">746,835</td><td class="num">10.8</td><td class="num">0.24</td><td>報道される側の大手</td></tr>
+<tr><td>雨来ズ</td><td class="num">57.6万</td><td class="num">297,261</td><td class="num">3.9</td><td class="num">0.52</td><td>制裁エンタメ</td></tr>
+</table></div>
+<p><b>発見①</b>：報道・暴露系は効率が高い（ステゴロ0.65・コレコレ0.71・ノヴァ0.99）——「審判欲求」は登録の外から人を呼ぶ構造。<b>発見②</b>：月11.5本×57万を両立する量産報道はコレコレ（月2.1本）と正反対の戦略で、<b>「毎日のニュース番組」ポジションはステゴロの独占</b>。<b>発見③</b>：コレコレの1本あたり175万は「厳選・独占スクープ型」の上限を示す——ステゴロが単価を上げる余地は「独自スクープ/本人出演」の追加にある（フォーエイト公認関係はその入口）。</p>
+
+<h3>未回収の企画案 — コメント欄からの発掘</h3>
+<ul>
+<li><b>いじり対象との公認対面回</b>——「リアルで会って共感性羞恥感じたらガチ帰宅してほしい」👍3,126＋フォーエイト本人の「いつかコラボしましょう」👍11,684。<b>需要と供給が両方コメント欄に揃っている</b>最優先案件</li>
+<li><b>陸上検証の定期化</b>——「定期的にやってほしい。需要しかない」👍1,576。テオ君×2.19の実証済みフォーマットの横展開（他の自称記録系YouTuber検証）</li>
+<li><b>視聴者DM取材網の公式化</b>——DM経由回×1.41。「取り上げてほしい」文化を投稿フォーム化し、報道番組の取材網として制度化する</li>
+<li><b>中町JP個人回</b>——「JPの個人も取り上げてほしい」👍1,872の具体的リクエスト</li>
+</ul>
+
+<h2>8. 成長処方 — 優先順つき</h2>
+<ol class="formula">
+<li><b>自前企画（検証・いじり）の比率を上げる</b>独立効果上位は自前企画（×2.19/×2.00）で、報道（×1.21）は基盤。×0.80の減速対策としても「騒動がない週の自給装置」が急務。週の設計を「報道3＋自前1」から「報道3＋自前2」へ。</li>
+<li><b>公認いじりを対面コラボに昇格させる</b>フォーエイト本人の公認（👍11,684）は界隈で唯一の資産。「いじってきた本人と会う」回はコメント欄が既に企画書を書いている（👍3,126）。</li>
+<li><b>論評は30分超でよい</b>×1.25。語りの深さが単価を上げる——短くまとめる圧力に抗ってよい。</li>
+<li><b>記念ライブ・まとめ番組の棚を分ける</b>×0.49。ライブは限定公開、まとめはShorts化で本編の棚を守る。</li>
+<li><b>人物枠は月2まで</b>あきら47本×0.93の実測則。フォーマット枠（共感性羞恥）は無制限、人物枠は希少性で守る。</li>
+<li><b>DM取材網を制度化する</b>×1.41。投稿フォーム＋「今週の視聴者スクープ」定常枠で、他給自足から「視聴者取材網を持つ報道機関」へ構造を進化させる。</li>
+<li><b>Shorts の単価改善</b>中央値18.7万は本編の1/3で9ch中では弱め。論評の「結論60秒版」型を実験する価値がある。</li>
+</ol>
+
+<h2>9. データの注記（正直ベース）</h2>
+<ul class="small">
+<li>再生数は累積値。回帰は直近2年・ln(経過日数)統制済み・R²=0.23。共感性羞恥は§2表では直近2年のタイトル明記分n=10のみ（シリーズ全体は4年で140本・§6）。テーマ間の重複計上あり。突撃・現場凸はn=1のため参考値。</li>
+<li>コメントは層化サンプル200本×コメ欄上位100件＝14,605件。ID照合は2026-07-31取得の同日パネル24ch・下限推定。</li>
+<li>比較表は各chの直近アップロード200本のうち直近1年・投稿14日超で算出。</li>
+<li>本レポートの指標はYouTube公式の提供指標ではなく公開データからの独自算出。視聴維持率・CTR等の非公開データは未使用。</li>
+</ul>
+
+<footer>ステゴロパンチャーズ (@sutegoropanch) 分析レポート ｜ データ取得: 2026-07-31 / YouTube Data API v3 ｜ 全1,299本＋コメント14,605件＋24ch ID照合＋同ジャンル4ch実測比較</footer>
+</div>
+
+</body>
+</html>

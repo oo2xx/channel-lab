@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>えびじゃ / EvisJxp — チャンネル分析レポート（完全版）</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="えびじゃ / EvisJxp — チャンネル分析レポート（完全版）">
+<meta property="og:description" content="全652本＋コメント18,273件＋28chファンID照合＋連合圏実測比較。勝ちパターンの言語化と再現フォーマット。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Channel Analysis Report / 2026-07-31</div>
+  <h1>えびじゃ / EvisJxp — 勝ちパターンの言語化と再現フォーマット（共有版）</h1>
+  <p class="hero-sub">対象: <b>@EvisJxp</b>（登録65.7万人）｜ 全<b>652本</b>を全量取得・統計処理 ｜ コメント<b>18,273件</b>の定量スキャン ｜ 経過日数を統制した重回帰（直近2年n=125・ブートストラップ4,000回） ｜ 28chとの投稿者<b>ID実測照合</b>＋同ジャンル4ch実測比較</p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">3.11億</div><div class="l">総再生数（7年半・652本）</div></div>
+  <div class="kpi"><div class="n">20.4万</div><div class="l">本編再生中央値（直近2年・登録者比0.31）</div></div>
+  <div class="kpi"><div class="n">4.15%</div><div class="l">雨来ズとのファン実測重複（チャラ男連合圏の発見）</div></div>
+  <div class="kpi"><div class="n">1/5</div><div class="l">2019年→2026年の中央値長期減衰（81万→15.2万）</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：このチャンネルは<b>「ナンパ全盛期の遺産の上で、恋愛バラエティのホスト局へ転生中」</b>である。2019年のナンパ・お持ち帰り全盛期（中央値81万）から7年で1/5（15.2万）まで下がった長期減衰は当ラボ12ch分析で最深——ただし直近2年に限れば2026年ダミー×0.99＝<b>底打ちして横ばい</b>で、転生の勝ち筋も既に実測されている：<b>ゲスト滞在型×1.74（ライリー/かっぱ/いだ/やまと・勝率75%）と恋愛リアリティ×1.65（になに回47万）</b>。旧路線（ナンパ実践）はプラットフォーム規制的にも戻れないが、「恋愛を語り・観察する場のホスト」という新ポジションは既に数字が付いてきている。最大の眠れる資産は自社恋愛リアリティ「スコラー」（12本・52〜180万）で、S3のリクエストがコメント欄に実在する（👍1,309）。ファンは<b>雨来ズと4.15%を共有するチャラ男グループ連合圏</b>の箱推し型。</p>
+  <p class="small"><b>根拠の検証方法</b>：①経過日数統制の重回帰（R²=0.27）②コメント18,273件の語彙・人物言及定量＋五分位分析 ③28chとの投稿者ID照合＋同ジャンル4ch実測比較。</p>
+</div>
+
+<h2>1. チャンネル構造と現在地</h2>
+<div class="tablewrap"><table>
+<tr><th>レイヤー</th><th>定義</th><th class="num">本数</th><th class="num">再生中央値</th><th class="num">総再生</th></tr>
+<tr><td><b>本編</b></td><td>8分以上</td><td class="num">477本</td><td class="num">392,402（直近2年20.4万）</td><td class="num">2.33億</td></tr>
+<tr><td>Shorts</td><td>61秒以下</td><td class="num">116本</td><td class="num">178,108</td><td class="num">0.49億</td></tr>
+<tr><td>クリップ</td><td>1〜8分</td><td class="num">59本</td><td class="num">268,040</td><td class="num">0.25億</td></tr>
+</table></div>
+<div class="tablewrap"><table>
+<tr><th>年</th><th class="num">本編n</th><th class="num">中央値</th><th>備考</th></tr>
+<tr><td>2019〜2020（全盛期）</td><td class="num">88</td><td class="num"><b>78〜81万</b></td><td>ナンパ・Tinder・お持ち帰り検証の時代</td></tr>
+<tr><td>2021〜2022</td><td class="num">163</td><td class="num">51〜54万</td><td>規制強化・路線の軟化開始</td></tr>
+<tr><td>2023〜2024</td><td class="num">132</td><td class="num">28.5万前後</td><td>バラエティ移行期</td></tr>
+<tr><td>2025</td><td class="num">64</td><td class="num">20.7万</td><td>ゲスト滞在型の発見（ライリー襲来39万）</td></tr>
+<tr><td>2026（7月まで）</td><td class="num">30</td><td class="num">15.2万</td><td>直近2年内では×0.99＝底打ち横ばい</td></tr>
+</table></div>
+<p><b>重要な事実</b>：①7年で中央値1/5の長期減衰は12ch分析で最深だが、性質は「実力の崩壊」ではなく<b>「主力商品（ナンパ実践）の市場消滅」</b>——同種のナンパ系チャンネルはプラットフォーム規制でジャンルごと消えており、生き残って転生を試みていること自体が稀有。②登録者比0.31は全盛期に積んだ65.7万の登録が休眠している状態＝<b>掘り起こしの内部市場を持っている</b>。③直近2年の回帰で2026年×0.99——減衰は既に止まっており、いま打つ施策は「下げ止め」でなく「新しい柱の増築」でよい局面。</p>
+
+<div class="callout lose">
+<p><b>リスク台帳（正直ベース）</b>：①<b>旧動画の在庫リスク</b>——全盛期のナンパ系アーカイブは現行基準では収益化・表示制限の対象になりうる（非公開化320本の判断は正しかった）。残存分の棚卸しを推奨。②<b>「恋愛」ジャンルの規制動向</b>——恋愛リアリティも出演者保護の文脈で基準が動く領域。スコラー再開時は出演者ケア（誹謗中傷対策・アフターフォロー）の体制を明文化してから。コメント欄に自治文化（👍2,902「誹謗中傷はやめてね」）が既にあるのは追い風。③<b>転生の中途半端さ</b>——旧路線でも新路線でもない「その他」が直近2年で64本（51%）を占める。柱への集中が遅れるほど休眠登録者の忘却が進む。</p>
+</div>
+
+<h2>2. 勝ちパターン — テーマ別勝率（本編・直近2年125本・投稿14日超）</h2>
+<p class="small">勝率 = 28.5万再生（直近2年中央値の約1.4倍）を超えた割合。</p>
+<div class="tablewrap"><table>
+<tr><th>テーマ</th><th class="num">n</th><th class="num">再生中央値</th><th class="num">勝率</th><th class="barcell"></th><th>判定</th></tr>
+<tr><td><b>恋愛リアリティ・深掘り</b>（になに/恋愛観トーク）</td><td class="num">6</td><td class="num"><b>364,331</b></td><td class="num">67%</td><td class="barcell"><span class="bar win" style="width:67%"></span></td><td><span class="tag win">新しい柱・小標本</span></td></tr>
+<tr><td><b>ゲスト滞在・コラボ</b>（ライリー/かっぱ/いだ/やまと）</td><td class="num">8</td><td class="num">335,683</td><td class="num"><b>75%</b></td><td class="barcell"><span class="bar win" style="width:75%"></span></td><td><span class="tag win">最高勝率</span></td></tr>
+<tr><td>挑戦・検証企画</td><td class="num">21</td><td class="num">254,668</td><td class="num">38%</td><td class="barcell"><span class="bar mid" style="width:38%"></span></td><td><span class="tag mid">中位</span></td></tr>
+<tr><td>メンバー日常・関係性</td><td class="num">14</td><td class="num">234,749</td><td class="num">29%</td><td class="barcell"><span class="bar mid" style="width:29%"></span></td><td><span class="tag mid">コア向け</span></td></tr>
+<tr><td>大食い・飲食</td><td class="num">14</td><td class="num">199,531</td><td class="num">29%</td><td class="barcell"><span class="bar mid" style="width:29%"></span></td><td><span class="tag mid">中位安定</span></td></tr>
+<tr><td><b>語り・Vlog・雑談</b></td><td class="num">13</td><td class="num"><b>155,140</b></td><td class="num">23%</td><td class="barcell"><span class="bar lose" style="width:23%"></span></td><td><span class="tag lose">負け筋</span></td></tr>
+</table></div>
+<h3>勝ち動画の共通条件（統計）</h3>
+<div class="tablewrap"><table>
+<tr><th>要素</th><th>あり</th><th>なし</th><th>示唆</th></tr>
+<tr><td>外部の人物が「滞在」する（襲来/連れて行く/鍋パ）</td><td class="num">×1.74（§3）</td><td class="num">—</td><td>単発コラボでなく生活圏に入れる構図が勝つ</td></tr>
+<tr><td>40分超の長尺</td><td class="num">×1.21（§3）</td><td class="num">—</td><td>滞在・リアリティ型は長さが没入になる</td></tr>
+<tr><td>恋愛という主題</td><td class="num">×1.65（§3）</td><td class="num">—</td><td>ナンパは死んだが「恋愛」は生きている</td></tr>
+<tr><td>語り・雑談だけの回</td><td class="num">155,140</td><td class="num">—</td><td>事件も他者もいない回は沈む</td></tr>
+</table></div>
+<h3>歴代トップ層の構図</h3>
+<div class="tablewrap"><table>
+<tr><th class="num">再生</th><th>タイトル</th><th>勝った構図</th></tr>
+<tr><td class="num">2,588,259</td><td>コリドー街で即日お持ち帰りチャレンジ（2019）</td><td>全盛期の型：実践×検証×タブー——現在は規制的に再現不可</td></tr>
+<tr><td class="num">1,803,768</td><td>【スコラー第1話】7人の女性がイケメンを奪い合う（2020）</td><td><b>自社恋愛リアリティ——「実践」から「観察」への転換に成功した原型</b></td></tr>
+<tr><td class="num">1,696,693</td><td>日本一接客態度の悪い店で女性店員を口説いて（2023）</td><td>店公認の「口説き」＝規制後も成立する演出付き恋愛ショー（店員本人がコメ欄降臨👍979）</td></tr>
+<tr><td class="num">1,667,390</td><td>先日の動画について（2021）</td><td>炎上対応——注目の裏返し</td></tr>
+<tr><td class="num">472,503</td><td>【になに】25年間彼氏できたことない女の恋愛深掘ったら泣いた（2025）</td><td>現行期最高値：素人の恋愛の物語を「聞く側」に回った回</td></tr>
+<tr><td class="num">414,868</td><td>最終回はいだちゃんねるとお送りします in沖縄（2025）</td><td>連合圏コラボ（いだ1.87%重複の実利化）</td></tr>
+<tr><td class="num">363,415</td><td>コムドットやまとと君の人生を変える神対談（2025）</td><td>大物対談——やまと人間性の再発見コメント👍635</td></tr>
+</table></div>
+<p class="note">⚠ 上の表は単変量の比較でありテーマ・時期が交絡している。独立効果は§3の重回帰を参照。</p>
+
+<h2>3. 要因分離 — 「何が独立に効くのか」を重回帰で切り分ける</h2>
+<p class="small">直近2年の本編n=125の log(再生数) を目的変数に、テーマ＋形式＋ln(経過日数)を同時投入（R²=0.27）。信頼区間はブートストラップ4,000回。</p>
+<div class="tablewrap"><table>
+<tr><th>要因</th><th class="num">独立効果</th><th class="num">95%信頼区間</th><th>判定</th></tr>
+<tr><td><b>ゲスト滞在・コラボ</b></td><td class="num"><b>×1.74</b></td><td class="num">[×1.33 – ×2.27]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td><b>恋愛リアリティ・深掘り</b></td><td class="num"><b>×1.65</b></td><td class="num">[×1.27 – ×2.14]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>挑戦・検証企画</td><td class="num">×1.22</td><td class="num">[×0.99 – ×1.52]</td><td><span class="tag mid">正方向</span></td></tr>
+<tr><td>40分超の長尺</td><td class="num">×1.21</td><td class="num">[×1.01 – ×1.43]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>メンバー日常・関係性</td><td class="num">×1.05</td><td class="num">[×0.84 – ×1.30]</td><td><span class="tag mid">中立＝コア維持枠</span></td></tr>
+<tr><td>大食い・飲食</td><td class="num">×1.04</td><td class="num">[×0.79 – ×1.39]</td><td><span class="tag mid">中立</span></td></tr>
+<tr><td>語り・Vlog・雑談</td><td class="num">×0.92</td><td class="num">[×0.72 – ×1.19]</td><td><span class="tag lose">負方向</span></td></tr>
+<tr><td>2026年（地力）</td><td class="num">×0.99</td><td class="num">[×0.78 – ×1.35]</td><td><span class="tag mid">底打ち横ばい</span></td></tr>
+</table></div>
+<div class="callout">
+<p><b>この分析が変える結論</b>：①転生の方向は既に数字が答えている——<b>ゲスト滞在×1.74と恋愛リアリティ×1.65だけが有意なプラス</b>で、この2つを合成した「外部の人物の恋愛を、えびじゃの生活圏で観察する」型（になに回・ライリー滞在回）が現行の最強構図。②40分超×1.21＝滞在型は長さが没入になる（雷獣×0.62とは逆・ヒカル型に近い）。③2026年×0.99——長期減衰は直近2年内では止まっており、守りでなく攻めの局面。</p>
+<p>もう1点：語り・雑談×0.92が示す通り、「メンバーだけで喋る回」は転生の柱にならない。柱は常に「外部の誰か」を含む——全盛期も現在も、このchの商品は「他者との化学反応」で一貫している。</p>
+</div>
+
+<h2>4. 負けパターン — 何をやると落ちるか</h2>
+<div class="grid2">
+<div class="panel lose"><h4>負け筋①：語り・Vlog・雑談（13本・中央値15.5万・×0.92）</h4>
+<ul><li>「これからの日本について語ってみた」9.9万・「平成Vlog」10.2万・「仕事の悩みに応える」10.4万——事件も他者もいない回は沈む</li><li>下位8本のうち6本がこの型＋内輪企画</li></ul></div>
+<div class="panel lose"><h4>負け筋②：旧路線の亡霊（構造的な制約）</h4>
+<ul><li>全盛期の型（ナンパ実践）は規制で再現不可——「あの頃」語彙が不発回に×0.32で沈殿しており、懐古はコアの傷になっている</li><li>戻れない過去をぼかしたまま中途半端な企画（大食い・ポーカー等の借り物バラエティ）を打つと7〜10万に沈む</li></ul></div>
+</div>
+<div class="callout lose">
+<p><b>負けの本質</b>：負けるのは「えびじゃである必要がない動画」。大食いもVlogも時事語りも、他の誰がやってもいい企画では65.7万の休眠登録者は起きない——起きるのは「恋愛×他者×この4人の空気」が揃った時だけ。</p>
+</div>
+
+<h2>5. なぜこの再生数・この高評価数になるのか — メカニズムの言語化と定量検証</h2>
+<p>高評価コメント上位の精読で快感の型を抽出し（①〜④）、コメント18,273件の語彙・人物言及・五分位・ID照合で全量検証した。</p>
+<h3>① 「なりたい人生」の代理体験（全盛期の核・今も残る）</h3>
+<blockquote>ママ、僕この人たちになりたい<span class="src">👍2,301 / クラブVIP回（245万）</span></blockquote>
+<blockquote>本物のイケメンがやりたい放題してるのみるの楽しすぎる<span class="src">👍2,864 / 同回</span></blockquote>
+<p class="small">全盛期の商品は「モテる人生の窃視」だった。この憧れの残滓が今も休眠登録者65.7万として残っている。</p>
+<h3>② 観察と考察の快感（スコラー＝転生の原型）</h3>
+<blockquote>みんな森山に恋愛しにきてるのに森山だけ抱く人必死に探してるの面白い笑<span class="src">👍2,651 / スコラー第2話（139万）</span></blockquote>
+<blockquote>森山『僕もドライブデートしたいです。』視聴者『森山は免許持ってません。』<span class="src">👍2,005 / スコラー第1話（180万）</span></blockquote>
+<p class="small">自社恋愛リアリティのコメント欄は考察とツッコミの大会になる——「実践する側」から「観察の場を提供する側」への転換が成立した証拠。視聴者のモラル自治（「誹謗中傷はやめてね」👍2,902）まで発生しており、番組運営の土壌が既にある。</p>
+<h3>③ 当事者の降臨（コメント欄が舞台の一部）</h3>
+<blockquote>まってわたしでてる 4人目のおっけーの人です笑<span class="src">👍5,342 / Tinder1000人検証回（チャンネル最多高評価）</span></blockquote>
+<blockquote>御来店ありがとうございます😭「マツちゃん大好き」は全私がよろこび散らかして…また来てください！<span class="src">👍979 / 接客態度の悪い店回（店員本人）</span></blockquote>
+<p class="small">出演相手・ゲスト・店員が本人としてコメント欄に現れる文化——動画の「その後」がコメント欄で続く。12ch分析でこの密度は唯一。</p>
+<h3>④ 人生の物語への共感（新しい柱の燃料）</h3>
+<blockquote>ついに自分のダサい過去を語ってしまった！…これからも俺らを応援してくれると嬉しい！<span class="src">👍2,513 / しゅんの人生語り回（本人コメント）</span></blockquote>
+<blockquote>やまとくんの人間性も考え方も尊敬レベル<span class="src">👍635 / コムドットやまと対談</span></blockquote>
+<h3>数字で見る「2層オーディエンス」構造</h3>
+<div class="tablewrap"><table>
+<tr><th>再生五分位</th><th class="num">再生中央値</th><th class="num">高評価率</th><th class="num">コメント率(/千)</th></tr>
+<tr><td>Q1（バズ帯＝主に全盛期）</td><td class="num">894,154</td><td class="num">1.06%</td><td class="num">0.79</td></tr>
+<tr><td>Q2</td><td class="num">569,413</td><td class="num">1.24%</td><td class="num">1.06</td></tr>
+<tr><td>Q3</td><td class="num">392,578</td><td class="num">1.35%</td><td class="num">1.16</td></tr>
+<tr><td>Q4</td><td class="num">263,545</td><td class="num">1.27%</td><td class="num">1.21</td></tr>
+<tr><td>Q5（不発帯＝主に現行期）</td><td class="num">156,103</td><td class="num">1.11%</td><td class="num">1.20</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>核心</b>：他chの綺麗な逆相関と違い、Q5で高評価率が落ちる山型——不発帯（現行期の小規模回）は「コアが濃く支える」のでなく<b>「コアもまだ熱狂していない」</b>。つまり現行路線はコアの再点火が済んでいない移行期であり、メンバー好意語彙が不発回に221/千件と溜まっている（×0.64）のは、コアが「待っている」状態の表れと読める。スコラー級の熱源が入れば、この待機層が最初に燃える。転生期のチャンネルにとって「コアが冷めていない」ことは最重要の生存条件であり、その点でえびじゃはまだ勝負権を失っていない。</p>
+</div>
+<h3>定量検証① 快感語彙の全量スキャン</h3>
+<div class="tablewrap"><table>
+<tr><th>語彙群</th><th class="num">バズ回(/1000件)</th><th class="num">不発回</th><th class="num">倍率</th><th>解釈</th></tr>
+<tr><td>笑い</td><td class="num">378.6</td><td class="num">225.9</td><td class="num"><b>×1.68</b></td><td>バズの弁別因子＝ノリの爆発力（いだ型のお笑い純度）</td></tr>
+<tr><td>恋愛の学び/共感</td><td class="num">15.4</td><td class="num">12.0</td><td class="num">×1.28</td><td>新しい柱の燃料・成長中</td></tr>
+<tr><td>憧れ/楽しそう/仲良し</td><td class="num">13.6</td><td class="num">12.6</td><td class="num">×1.08</td><td>基礎資産として均一</td></tr>
+<tr><td>メンバー個人への好意</td><td class="num">141.9</td><td class="num">221.2</td><td class="num">×0.64</td><td>不発回に濃い＝コアの待機層</td></tr>
+<tr><td><b>昔から/全盛期/戻って</b></td><td class="num">8.2</td><td class="num">25.5</td><td class="num"><b>×0.32</b></td><td><b>懐古は不発回の沈殿物——過去は集客装置にならない</b></td></tr>
+</table></div>
+<h3>定量検証② 人物言及の実測</h3>
+<div class="tablewrap"><table>
+<tr><th>人物</th><th class="num">全体言及率</th><th class="num">バズ回</th><th class="num">不発回</th><th>役割</th></tr>
+<tr><td>メンバー4人（合算）</td><td class="num">18%前後</td><td class="num">14.2%</td><td class="num"><b>22.1%</b></td><td>不発回＝コア回でメンバーが主語になる箱推し構造</td></tr>
+<tr><td>ジョージ（メンズコーチ）</td><td class="num">Shortsで突出</td><td class="num">302万/171万</td><td class="num">—</td><td><b>キャラ資産——Shorts の看板</b></td></tr>
+<tr><td>ゲスト（ライリー/かっぱ）</td><td class="num">本編で新出</td><td class="num">—</td><td class="num">—</td><td>滞在型の新レギュラー候補</td></tr>
+</table></div>
+<h3>定量検証③ コア層のサイズ実測</h3>
+<p>ユニーク投稿者<b>10,880人</b>・2本以上に出現26%・ヘビー層472人が高評価の22%。7年選手として健全なコア規模が残っており、崩壊はしていない。</p>
+<h3>定量検証④ ファン帰属のパネルID照合</h3>
+<div class="tablewrap"><table>
+<tr><th>照合先</th><th class="num">重複率</th><th>意味</th></tr>
+<tr><td><b>雨来ズ</b></td><td class="num"><b>4.15%</b></td><td><b>箱違い基準（0.0〜0.4%）の10倍——チャラ男グループ連合圏の発見</b></td></tr>
+<tr><td>朝倉未来 / いだ / 雷獣</td><td class="num">1.92% / 1.87% / 1.79%</td><td>複数のグループ圏に厚く接続</td></tr>
+<tr><td>桑田龍征 / ステゴロ</td><td class="num">0.96% / 0.84%</td><td>夜遊び・界隈ウォッチ圏の隣接</td></tr>
+<tr><td>【基準】同一ファン圏の別ch</td><td class="num">14.0%</td><td>感度検証の上限</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>判定：「箱推し型＋チャラ男グループ連合圏」</b>。雨来ズとの4.15%はいだ⇄雷獣（4.94%）に次ぐ当ラボ第2の連合発見で、<b>「男グループのノリを愛する視聴文化圏」が雨来ズ・えびじゃ・いだ・雷獣を横断して実在する</b>。含意：この圏内のコラボ（いだ最終回コラボは実施済み・41万）は企画でなくインフラとして機能する。雨来ズとの初コラボは相互送客の実測期待値が最も高い未実施カード。</p>
+</div>
+
+<h2>6. シリーズの代数 — 「擦り」はいつ死に、いつ育つか（全実測）</h2>
+<div class="tablewrap"><table>
+<tr><th>シリーズ</th><th>変遷（再生数）</th><th>法則</th></tr>
+<tr><td><b>スコラー（自社恋愛リアリティ）</b></td><td>180万 → 139万 →（S2）119万 → 82万 → 75万 → 69万</td><td>シーズン内は自然減衰するが<b>S2初回はS1級に戻る＝シーズン制が正解</b>。S3リクエスト実在（👍1,309）</td></tr>
+<tr><td>ライリー/かっぱ滞在</td><td>39万 → 36万 → 29万</td><td>新レギュラー枠として安定・関係の進展が次の伸び代</td></tr>
+<tr><td>メンズコーチジョージ（Shorts）</td><td>302万 → 171万</td><td>キャラ資産。本編未展開の金脈</td></tr>
+<tr><td>ナンパ検証（旧）</td><td>2019-20年に250万級を量産 → 規制で終了</td><td>市場消滅型の教訓：プラットフォーム依存の型は資産でなく借地</td></tr>
+</table></div>
+<div class="callout gold"><p><b>法則：「実践は借地、観察の場は資産」</b>。ナンパ実践は規制で消えたが、スコラー（観察の場の運営）は今も再現可能でリクエストが生きている——同じ恋愛でも「やってみせる」から「場を仕切る」への移行が、このchのシリーズ資産の生存条件。</p></div>
+
+<h2>7. 再現フォーマット — 勝ち動画の設計テンプレ</h2>
+<ol class="formula">
+<li><b>外部の人物を1人、生活圏に招く</b>×1.74。単発対談でなく「襲来・鍋パ・キャンプ・合宿」の滞在構図で、化学反応の時間を長く取る。</li>
+<li><b>主題は恋愛に寄せる</b>×1.65。ナンパはできないが、恋愛の観察・深掘り・相談は規制の外で、視聴者の学び語彙（×1.28）も付いてくる。</li>
+<li><b>素人・ゲストの物語を「聞く側」に回る</b>になに回47万（現行期最高）。4人はホスト役——全盛期の「主役」から「司会」への役割転換が現行の勝ち構図。</li>
+<li><b>尺は40分超でよい</b>×1.21。滞在・リアリティ型は長さが没入になる。</li>
+<li><b>コメント欄の降臨文化を演出に組み込む</b>出演者・ゲスト本人の降臨（👍5,342/979）はこのchの独自資産。概要欄・固定コメントで本人登場を促し、「動画のその後」をコメント欄で上演する。</li>
+<li><b>シーズン制で祭りにする</b>スコラーの実測（S2初回はS1級に復活）。恒常番組でなく「季節もの」として希少性を守る。</li>
+<li><b>ジョージのキャラをShortsから本編へ逆輸入する</b>メンズコーチ302万のキャラ資産が本編未展開。恋愛コーチ設定は新路線（恋愛バラエティ）と完全に整合する。</li>
+</ol>
+<div class="callout gold">
+<p><b>次の一手の候補（データ根拠つき）</b>：①スコラーS3——👍1,309の実リクエスト＋恋愛リアリティ×1.65＋シーズン制の実測則が全部揃った最優先カード。②雨来ズとの初コラボ——4.15%重複の実測が送客を保証する未実施カード。③メンズコーチジョージの本編化——Shorts302万のキャラを恋愛相談番組の司会に。</p>
+</div>
+
+<h2>8. 同属性チャンネル比較 — 界隈の中での現在地</h2>
+<p class="small">グループエンタメ連合圏4chの直近1年（各ch直近200本のうち投稿14日超）実測。</p>
+<div class="tablewrap"><table>
+<tr><th>チャンネル</th><th class="num">登録</th><th class="num">長尺中央値</th><th class="num">ペース/月</th><th class="num">中央値÷登録者</th><th>型</th></tr>
+<tr><td><b>えびじゃ</b></td><td class="num">65.7万</td><td class="num">176,559</td><td class="num">4.7</td><td class="num">0.27</td><td><b>恋愛バラエティへ転生中</b></td></tr>
+<tr><td>雨来ズ（連合4.15%）</td><td class="num">57.6万</td><td class="num">297,261</td><td class="num">3.9</td><td class="num">0.52</td><td>知性による制裁</td></tr>
+<tr><td>いだちゃんねる（連合1.87%）</td><td class="num">87.1万</td><td class="num">689,668</td><td class="num">4.6</td><td class="num">0.79</td><td>属人コメディ×人生実況</td></tr>
+<tr><td>雷獣（連合1.79%）</td><td class="num">44.7万</td><td class="num">505,280</td><td class="num">8.7</td><td class="num">1.13</td><td>学歴×人生ドキュメンタリー</td></tr>
+<tr><td>コムドット（対談実績）</td><td class="num">426万</td><td class="num">929,615</td><td class="num">2.6</td><td class="num">0.22</td><td>グループ関係性</td></tr>
+</table></div>
+<h3>発見① 連合圏4chの中で効率最下位（0.27）——だが構造は同じ箱推し型</h3>
+<p>連合の仲間（雨来ズ0.52・いだ0.79・雷獣1.13）はいずれも「今の企画がコンテンツ力に追いついている」チャンネル。えびじゃだけが全盛期の登録在庫を抱えて効率が下がっており、<b>差は地力でなく「現行の柱の太さ」</b>——柱（スコラー級）が立てば比は回復する。</p>
+<h3>発見② 連合圏はコラボがインフラになる唯一の界隈</h3>
+<p>当ラボ実測でコラボの送客が機能するのは重複1.5%超の関係のみ。えびじゃは雨来ズ4.15%・いだ1.87%・雷獣1.79%と<b>3枚のインフラ級カードを持つ連合圏のハブ的位置</b>にいる（いだとは実施済み・41万で実証）。</p>
+<h3>発見③ 「恋愛バラエティの座」は連合圏で空席</h3>
+<p>雨来ズ=制裁、いだ=人生実況、雷獣=学歴——連合圏に恋愛枠がない。ヘラヘラ三銃士合コン回（👍2,063）・スコラーの実績を持つえびじゃがこの座を取るのが、圏内の棲み分けとしても最適。</p>
+<h3>コメント投稿者IDの実測照合</h3>
+<p>§5④の通り。連合圏の相互送客は実測に裏づけられており、単独チャンネルの成長戦略と圏全体の回遊設計を同時に考えられる稀有な立地。</p>
+<div class="callout win">
+<p><b>取り入れる優先順</b>：①いだ式「人生の節目の実況」（メンバーの転機を隠さず動画化）→ ②雷獣式「ゲストの物語の全量インタビュー」（恋愛版=になに回の定型化）→ ③雨来ズ式「シリーズの敵替え」（スコラーのキャスト総入れ替え）。<b>真似不要</b>：コムドット式の関係性ドラマ全振り——えびじゃの資産は「外部との化学反応」にあり内向きでは沈む（語り×0.92の実測）。</p>
+</div>
+<h3>未回収の企画案 — コメント欄からの発掘</h3>
+<div class="tablewrap"><table>
+<tr><th>企画案</th><th>需要の証拠</th><th>期待レンジ</th></tr>
+<tr><td>スコラー シーズン3</td><td>👍1,309「スコラーシーズン3やりますか」</td><td>S2初回実測=119万級</td></tr>
+<tr><td>雨来ズとの初コラボ</td><td>重複4.15%の実測（インフラ級）</td><td>いだコラボ実績41万超え</td></tr>
+<tr><td>えびじゃ×ギャル企画の定常化</td><td>👍2,035「もっと見たい人はグッドボタン」への反応</td><td>31万（海の家回実績）</td></tr>
+<tr><td>メンズコーチジョージ本編化</td><td>Shorts 302万/171万のキャラ実績</td><td>Shorts→本編の転換実験</td></tr>
+</table></div>
+
+<h2>9. データの注記（正直ベース）</h2>
+<ul class="small">
+<li>再生数は累積値。回帰は直近2年n=125・ln(経過日数)統制済み・R²=0.27。恋愛リアリティn=6・ゲスト滞在n=8は小標本のため効果量の精度は粗い（方向は有意）。</li>
+<li>アップロード一覧は652本（チャンネル統計の972本との差は非公開化・削除分——全盛期のナンパ系に非公開化が多いと推定され、過去年次の中央値は現存動画ベースの参考値）。</li>
+<li>コメントは層化サンプル200本×コメ欄上位100件＝18,273件。ID照合は2026-07-31取得の同日パネル28ch・下限推定。</li>
+<li>比較表は各chの直近アップロード200本のうち直近1年・投稿14日超で算出。</li>
+<li>本レポートの指標はYouTube公式の提供指標ではなく公開データからの独自算出。視聴維持率・CTR等の非公開データは未使用。</li>
+</ul>
+
+<footer>えびじゃ / EvisJxp (@EvisJxp) 分析レポート ｜ データ取得: 2026-07-31 / YouTube Data API v3 ｜ 全652本＋コメント18,273件＋28ch ID照合＋同ジャンル4ch実測比較</footer>
+</div>
+
+</body>
+</html>

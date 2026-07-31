@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>スーパーノヴァ — チャンネル分析レポート（完全版）</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="スーパーノヴァ — チャンネル分析レポート（完全版）">
+<meta property="og:description" content="全535本＋コメント11,925件＋同ジャンル実測比較＋シリーズ代数＋未回収企画案つき完全版。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Channel Analysis Report / 2026-07-31</div>
+  <h1>スーパーノヴァ — 勝ちパターンの言語化と成長処方（共有版）</h1>
+  <p class="hero-sub">対象: <b>@SUPERR_NOVAA</b>（登録59.9万人）｜ 全<b>535本</b>を全量取得・統計処理 ｜ コメント<b>11,925件</b>の定量スキャン ｜ 経過日数を統制した重回帰（n=219・R²=0.81・ブートストラップ4,000回） ｜ 21chとのコメント投稿者<b>ID実測照合</b></p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">3.06億</div><div class="l">総再生数（うちShortsが1.59億＝52%）</div></div>
+  <div class="kpi"><div class="n">59.3万</div><div class="l">本編再生中央値（n=219・登録者比0.99）</div></div>
+  <div class="kpi"><div class="n">×6.68</div><div class="l">バズ回を見分ける「被害者への共感/涙」語彙の偏在</div></div>
+  <div class="kpi"><div class="n">×0.06</div><div class="l">生配信アーカイブの独立効果（約1/17）</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：このチャンネルの勝ちの正体は「制裁の爽快感」ではなく<b>「被害者の物語への感情移入」</b>である。コメント語彙の実測で、バズ回を最も見分けるのは「かわいそう/泣けた/幸せになって」の共感語彙<b>×6.68</b>（159.8 vs 23.9/千件）——胸糞（×1.72）→共感（×6.68）→因果応報（×1.87）という<b>メロドラマの三幕構造</b>が回った時にだけ跳ねる。番組の型は極めて確立しており（R²=0.81は当ラボ分析6chで最高＝結果が構造でほぼ説明できる）、本編中央値59.3万・登録者比0.99は大型chとして最強クラス。明確な負け筋はただ一つ：<b>生配信アーカイブ×0.06（約1/17・33本すべて勝率0%）</b>が本編と同じ棚に並んでいること。</p>
+  <p class="small"><b>根拠の検証方法</b>：①経過日数統制の重回帰（R²=0.81）②コメント11,925件の語彙定量 ③21chとの投稿者ID照合（制裁ジャンル界隈の回遊実測つき）。</p>
+</div>
+
+<h2>1. チャンネル構造と現在地</h2>
+<div class="tablewrap"><table>
+<tr><th>レイヤー</th><th>定義</th><th class="num">本数</th><th class="num">再生中央値</th><th class="num">総再生</th></tr>
+<tr><td><b>本編</b>（不倫調査ドキュメント）</td><td>8分以上</td><td class="num">225本</td><td class="num">589,880</td><td class="num">1.26億</td></tr>
+<tr><td><b>Shorts</b></td><td>61秒以下</td><td class="num">122本</td><td class="num"><b>428,941</b></td><td class="num"><b>1.59億（52%）</b></td></tr>
+<tr><td>クリップ</td><td>1〜8分</td><td class="num">188本</td><td class="num">80,349</td><td class="num">0.22億</td></tr>
+</table></div>
+<p><b>重要な事実</b>：①Shortsが総再生の52%を稼ぐ<b>二本柱構造</b>（Shorts中央値42.9万は当ラボ分析6chで最高）。②本編の月次中央値は74万（2025-08）→47万（2026-07）と見かけ下降だが、経過日数を統制すると2026年ダミー×0.89は非有意——<b>実力の低下ではなく直近動画の累積途上が主因</b>。③2025年から本編を月7→14本に倍速化しても中央値を維持しており、供給余力がまだある。</p>
+
+<h2>2. 勝ちパターン — テーマ別実測（本編219本・投稿14日超）</h2>
+<div class="tablewrap"><table>
+<tr><th>テーマ</th><th class="num">n</th><th class="num">再生中央値</th><th class="num">勝率(83万超)</th><th>判定</th></tr>
+<tr><td>説・検証（旧路線・宗教勧誘/持ち帰れる説）</td><td class="num">5</td><td class="num">1,040,149</td><td class="num">60%</td><td><span class="tag mid">小標本・再評価余地</span></td></tr>
+<tr><td><b>不倫・浮気調査ドキュメント</b>（主力）</td><td class="num">156</td><td class="num">621,158</td><td class="num">15%</td><td><span class="tag win">チャンネルの本体</span></td></tr>
+<tr><td>特殊調査/社会派（地下アイドル/ホスト等の闇）</td><td class="num">10</td><td class="num">562,870</td><td class="num">20%</td><td><span class="tag mid">中位</span></td></tr>
+<tr><td><b>生配信アーカイブ</b></td><td class="num">33</td><td class="num"><b>33,511</b></td><td class="num"><b>0%</b></td><td><span class="tag lose">棚の分離を推奨</span></td></tr>
+</table></div>
+<p class="small">主力の勝率15%は「不発」ではなく、母数156本の大半が中央値60万前後に密集する<b>超安定量産型</b>のため（バラつきが小さいと勝率は構造的に下がる）。</p>
+
+<h2>3. 要因分離 — 経過日数を統制した重回帰（n=219・R²=0.81）</h2>
+<div class="tablewrap"><table>
+<tr><th>要因</th><th class="num">独立効果</th><th class="num">95%信頼区間</th><th>判定</th></tr>
+<tr><td>説・検証（旧路線）</td><td class="num">×1.57</td><td class="num">[×1.01 – ×2.30]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td><b>感情・地獄ワード入りタイトル</b>（地獄/最悪/狂って/号泣/追放）</td><td class="num"><b>×1.27</b></td><td class="num">[×1.13 – ×1.43]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>不倫調査ドキュメント（対ベースライン）</td><td class="num">×1.06</td><td class="num">[×0.87 – ×1.31]</td><td><span class="tag mid">＝基準そのもの</span></td></tr>
+<tr><td>40分超の長尺</td><td class="num">×1.05</td><td class="num">[×0.87 – ×1.24]</td><td><span class="tag mid">効果なし（長尺化は中立）</span></td></tr>
+<tr><td><b>生配信アーカイブ</b></td><td class="num"><b>×0.06</b></td><td class="num">[×0.05 – ×0.08]</td><td><span class="tag lose">有意（約1/17）</span></td></tr>
+</table></div>
+<div class="callout">
+<p><b>この分析が変える結論</b>：R²=0.81＝このchの再生数は「何を作るか」でほぼ決まっており、運やアルゴリズムのブレが小さい<b>完成された工場</b>。その中で唯一自由に動かせるレバーが<b>タイトルの感情ワード（×1.27）</b>と<b>生配信の棚の分離（×0.06の除去）</b>。また近年40分〜77分への長尺化が進んでいるが独立効果は中立（×1.05）——<b>尺を伸ばしても再生は増えない</b>ので、収益（広告枠）と工数のバランスで決めてよい。</p>
+</div>
+
+<h2>4. 負けパターン</h2>
+<div class="grid2">
+<div class="panel lose"><h4>負け筋①：生配信アーカイブの棚の見直し（33本・×0.06）</h4>
+<ul><li>3.4万〜8万再生が本編の並びに33本＝チャンネルの見かけ中央値と推薦シグナルを汚染</li><li>コミュニティ維持機能はあるため「やめる」ではなく「棚を分ける」が正解（§6処方②）</li></ul></div>
+<div class="panel lose"><h4>負け筋②：（他に構造的な負け筋なし）</h4>
+<ul><li>当ラボ分析6chで初の「負け筋が実質1つ」のチャンネル。フォーマット規律が極めて高い</li><li>リスクは負け筋よりも「単一ジャンル依存」——不倫調査という題材の規制・飽きが唯一の構造的脆弱性</li></ul></div>
+</div>
+
+<h2>5. なぜこの再生数になるのか — コメント11,925件の定量検証</h2>
+<h3>バズ回を見分ける語彙</h3>
+<div class="tablewrap"><table>
+<tr><th>語彙群</th><th class="num">バズ回(/1000件)</th><th class="num">不発回</th><th class="num">倍率</th><th>解釈</th></tr>
+<tr><td><b>被害者への共感/涙</b>（かわいそう/泣けた/幸せになって）</td><td class="num">159.8</td><td class="num">23.9</td><td class="num"><b>×6.68</b></td><td><b>バズの最強因子＝感情移入</b></td></tr>
+<tr><td>制裁/スカッと/因果応報</td><td class="num">29.8</td><td class="num">16.0</td><td class="num">×1.87</td><td>第2因子。ただし共感の1/5の規模</td></tr>
+<tr><td>怒り/胸糞</td><td class="num">73.2</td><td class="num">42.6</td><td class="num">×1.72</td><td>第1幕（怒り）の燃料</td></tr>
+<tr><td>チーム/ノヴァへの信頼</td><td class="num">77.6</td><td class="num">87.8</td><td class="num">×0.88</td><td>全動画に均一＝ブランドの基礎体力</td></tr>
+<tr><td>笑い</td><td class="num">111.8</td><td class="num">111.7</td><td class="num">×1.00</td><td>差ゼロ＝笑いはバズの弁別因子ではない</td></tr>
+</table></div>
+<p><b>解釈</b>：バズは「怒り（×1.72）→被害者への涙（×6.68）→因果応報（×1.87）」の三幕が揃った回で起きる。<b>視聴者が買っているのは制裁ショーではなく、被害者が尊厳を取り戻す物語</b>。主婦/女性の当事者文脈コメントが178/千件と厚く、視聴者層に「明日は我が身」の当事者が多いことが感情移入の土壌。</p>
+
+<h3>快感の型 — 高評価コメントの実引用から</h3>
+<div class="grid2">
+<div class="panel win"><h4>①被害者への感情移入（最強・×6.68の実体）</h4>
+<blockquote>2年付き合ってて彼女いないって言われるのはキツいな、、可哀想<span class="src">👍5,321 / 浮気する説回（チャンネル最多高評価）</span></blockquote>
+<blockquote>自分の親の世話をさせて自分は不倫三昧ってクズの極み！<span class="src">👍2,771 / 単身赴任回</span></blockquote></div>
+<div class="panel win"><h4>②制裁ヒロイン/ヒーローへの喝采</h4>
+<blockquote>彼女さん強ええ。はっきりズバッと言ってて気持ちええ<span class="src">👍2,910 / ギャル彼女殴り込み回（歴代1位177万）</span></blockquote>
+<blockquote>あれだけビビらすぐらいの女になりたい<span class="src">👍2,887 / 同回</span></blockquote>
+<p class="small">制裁の主役は探偵ではなく<b>被害者本人</b>。被害者が強くなる瞬間に最も喝采が集まる。</p></div>
+<div class="panel"><h4>③調査員レンの「全てお見通し」感（キャラ資産）</h4>
+<blockquote>レン「理解あるフリすんなよ、加害者なんだからよ」その後の発言、ほんとその通り。レンさんには全てお見通しなんだわ<span class="src">👍757</span></blockquote></div>
+<div class="panel"><h4>④「本物の愛」への渇望（裏の需要）</h4>
+<blockquote>「彼女いるので」って言って立ち去っていく神回が全然来ない。本物の愛は一体どこにあるんだ。<span class="src">👍3,882</span></blockquote>
+<p class="small">視聴者は不倫を見ながら「裏切らなかった人」を待っている——未回収企画の最大のヒント（§7）。</p></div>
+</div>
+<h3>ファン構造の実測</h3>
+<p>ユニーク投稿者5,607人中、2本以上に出現33%・<b>ヘビー層416人が高評価の46%を生成</b>——雨来ズ型（コア48%）に匹敵するコミュニティ支配率。エンゲージ逆相関は軽微（下位1.32% vs 上位1.14%）で、バズ回もコアも同じものを見ている＝番組と客層の一致度が高い。</p>
+<h3>ID照合 — 制裁ジャンルの回遊実測</h3>
+<div class="tablewrap"><table>
+<tr><th>照合先</th><th class="num">重複率</th><th>意味</th></tr>
+<tr><td>KENZO（悪徳成敗）</td><td class="num"><b>2.00%</b></td><td>当ラボ実測の「箱違いベースレート0.0〜0.4%」を明確に超過</td></tr>
+<tr><td>桑田龍征（歌舞伎町経営）</td><td class="num">0.95%</td><td>夜の街文脈の隣接</td></tr>
+<tr><td>雨来ズ（知性制裁）</td><td class="num">0.84%</td><td>制裁エンタメの隣接</td></tr>
+<tr><td>エンタメ大手（ヒカル/東海等）</td><td class="num">0.2%以下</td><td>一般エンタメ圏とは断絶</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>判定：「独自圏の箱推し型＋制裁ジャンルの薄い回遊ハロー」</b>。97%超は他のどこにも現れない独自ファン圏だが、KENZO 2.0%は今日測った「箱違い」基準の5倍——<b>「悪を成敗する動画」の視聴習慣を持つ回遊層が実在</b>し、その層の中でスーパーノヴァは「感情移入型」という独自ポジションを占める（KENZO=迫力、雨来ズ=知性、ノヴァ=共感）。</p>
+</div>
+
+
+<h2>6. シリーズの代数 — 前後編アークの実測</h2>
+<div class="tablewrap"><table>
+<tr><th>前後編ペア</th><th>Part1 → Part2</th><th class="num">保持率</th></tr>
+<tr><td>家庭持ち女の堂々不倫（2024-10）</td><td class="num">507,774 → 840,175</td><td class="num"><b>+65%</b></td></tr>
+<tr><td>親友とハ◯撮り復讐（2025-05）</td><td class="num">986,701 → 1,076,788</td><td class="num">+9%</td></tr>
+<tr><td>GPS不倫逃亡劇（2025-05）</td><td class="num">432,601 → 601,010</td><td class="num"><b>+39%</b></td></tr>
+<tr><td>モラハラ亭主（2025-06）</td><td class="num">673,516 → 587,021</td><td class="num">−13%</td></tr>
+</table></div>
+<div class="callout gold"><p><b>法則</b>：Part2は4組中3組で成長（+9〜65%）——「続きが気になる」分割はこのchで機能している（当ラボ他ch実測の前後編×2.1と同方向）。唯一の減衰例（モラハラ亭主）はPart1時点で感情のピークを消化済みの回。<b>分割の判断基準は尺ではなく「Part1の引きに感情の未回収があるか」</b>。</p></div>
+
+<h2>7. 同ジャンル比較 — 制裁・暴露界隈の中での現在地（直近1年実測）</h2>
+<div class="tablewrap"><table>
+<tr><th>チャンネル</th><th class="num">登録</th><th class="num">長尺中央値</th><th class="num">ペース/月</th><th class="num">中央値÷登録者</th><th>勝ち方の型</th></tr>
+<tr><td><b>スーパーノヴァ</b></td><td class="num">59.9万</td><td class="num">593,226</td><td class="num">12〜14</td><td class="num"><b>0.99</b></td><td><b>共感（被害者の物語）</b></td></tr>
+<tr><td>コレコレ</td><td class="num">246万</td><td class="num">1,750,217</td><td class="num">2.1</td><td class="num">0.71</td><td>暴露×生配信（本編は月2の厳選型）</td></tr>
+<tr><td>がーどまん</td><td class="num">308万</td><td class="num">746,835</td><td class="num">10.8</td><td class="num">0.24</td><td>破壊＋連続ドラマ</td></tr>
+<tr><td>雨来ズ</td><td class="num">57.6万</td><td class="num">297,261</td><td class="num">3.9</td><td class="num">0.52</td><td>知性による制裁</td></tr>
+<tr><td>KENZO（新宿109）</td><td class="num">102万</td><td class="num">202,954</td><td class="num">4.3</td><td class="num">0.20</td><td>悪徳成敗×迫力</td></tr>
+</table></div>
+<p><b>発見①</b>：中央値÷登録者0.99は界隈5chで最高——同規模の雨来ズ（0.52）の約2倍の効率で、<b>「共感型制裁」は界隈で最も燃費の良いエンジン</b>。<b>発見②</b>：月12〜14本の高頻度×中央値59万を両立しているのは界隈で唯一（がーどまんは10.8本だが登録308万）。<b>発見③</b>：ID照合（§5）のKENZO 2.0%と合わせると、制裁界隈は「迫力・破壊・知性・共感」で棲み分けが完成しており、正面競合は不在。</p>
+
+<h3>未回収の企画案 — コメント欄からの発掘</h3>
+<ul>
+<li><b>「裏切らなかった人」特集</b>——👍3,882「『彼女いるので』って立ち去っていく神回が全然来ない。本物の愛は一体どこにあるんだ」。不倫の海の中で誠実が最大のカタルシスになる逆張り回。検証系(×1.57)との相性も良い</li>
+<li><b>調査員レンの単独回/裏側回</b>——「レンさんには全てお見通し」(👍757)。キャラ資産の回収。チーム信頼語彙は全動画に均一(87/千件)でファンダムの土台が既にある</li>
+<li><b>弁護士と学ぶ「不倫の制度」解説回</b>——「不倫されても❌つかないようにしてほしい」「病院名公表してほしい」等、制度への疑問・怒りコメントが多数。提携弁護士事務所（グラディアトル）の出番＝事業導線とも一致</li>
+<li><b>依頼者のその後（アフター）回</b>——共感×6.68の回収。§6処方③と同じ（コメント欄の「幸せになって」の熱量が需要の証明）</li>
+</ul>
+<h2>8. 成長処方 — 優先順つき</h2>
+<ol class="formula">
+<li><b>タイトルの感情・地獄ワードを標準装備にする</b>唯一の自由レバーで×1.27。「地獄/最悪/狂ってる/号泣/追放」系の感情語を全本編タイトルに1語入れる編集ルールにする。</li>
+<li><b>生配信アーカイブの棚を分ける</b>×0.06が33本、本編の並びと推薦を汚染中。限定公開＋コミュニティ投稿での告知、またはサブch/メンバー限定に移す。コミュニティ機能は守りつつ棚だけ分離する。</li>
+<li><b>「被害者の再生」を第三幕として設計する</b>共感×6.68の実証どおり、調査・制裁で終えず「依頼者のその後」まで見せる回はコメント欄が涙で埋まる。数ヶ月後のアフター回・依頼者の手紙など、<b>再生の物語を定常フォーマット化する</b>。</li>
+<li><b>尺はこれ以上伸ばさない</b>40分超×1.05＝再生への効果なし。77分回まで出ているが、工数と広告収益の最適点で止める。</li>
+<li><b>説・検証枠を月1で復活実験する</b>旧路線×1.57（n=5・小標本）。「探偵の知見で検証する説」ならブランド整合的に打てる。3本打って再計測。</li>
+<li><b>Shorts二本柱を維持・強化する</b>総再生の52%・中央値42.9万は当ラボ分析6chで最高の効率。本編の三幕構造を60秒に圧縮する現行型を崩さない。</li>
+<li><b>ヘビー層416人を依頼導線に接続する</b>高評価の46%を作る中核は「探偵事務所の見込み客コミュニティ」でもある。メンバーシップ/限定配信を依頼相談の入口として設計し、チャンネルを事業（ギルド探偵事務所）の営業装置として回収する。</li>
+</ol>
+
+<h2>9. データの注記（正直ベース）</h2>
+<ul class="small">
+<li>再生数は累積値。回帰はln(経過日数)統制済み・R²=0.81。テーマ別中央値表は未統制の記述統計。説・検証n=5は小標本のため方向のみ参考。</li>
+<li>主力156本の勝率15%は分布の密集による構造的な値であり不調の意味ではない（本文注記どおり）。</li>
+<li>コメントは層化サンプル200本×コメ欄上位100件＝11,925件。女性視聴者比率はコメント文面からの代理推定であり実測ではない。</li>
+<li>ID照合は2026-07-31取得の同日パネル21ch。コメント投稿者ベースの下限推定。</li>
+<li>本レポートの指標はYouTube公式の提供指標ではなく公開データからの独自算出。視聴維持率・CTR・メンバーシップ収益等の非公開データは未使用。</li>
+</ul>
+
+<footer>スーパーノヴァ (@SUPERR_NOVAA) 分析レポート ｜ データ取得: 2026-07-31 / YouTube Data API v3 ｜ 全535本＋コメント11,925件＋21ch ID照合＋同ジャンル4ch実測比較</footer>
+</div>
+
+</body>
+</html>

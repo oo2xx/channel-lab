@@ -7,7 +7,7 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Channel Analysis Lab (beta)">
 <meta property="og:title" content="雷獣 — チャンネル分析レポート（完全版）">
-<meta property="og:description" content="全748本＋コメント14,717件＋22chファンID照合＋同ジャンル実測比較。勝ちパターンの言語化と成長処方7項。">
+<meta property="og:description" content="全748本＋コメント14,717件＋同ジャンル実測比較。">
 <meta name="twitter:card" content="summary">
 <meta name="robots" content="noindex">
 </head>
@@ -99,8 +99,8 @@ footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font
 <div class="wrap">
 <header class="hero">
   <div class="eyebrow">Channel Analysis Report / 2026-07-31</div>
-  <h1>雷獣 — 勝ちパターンの言語化と成長処方（共有版）</h1>
-  <p class="hero-sub">対象: <b>@user-raiju</b>（登録44.7万人）｜ 全<b>748本</b>を全量取得・統計処理 ｜ コメント<b>14,717件</b>の定量スキャン ｜ 経過日数を統制した重回帰（n=396・ブートストラップ4,000回） ｜ 22chとのコメント投稿者<b>ID実測照合</b>＋同ジャンル4ch実測比較</p>
+  <h1>雷獣 — 勝ちパターンの言語化と再現フォーマット（共有版）</h1>
+  <p class="hero-sub">対象: <b>@user-raiju</b>（登録44.7万人）｜ 全<b>748本</b>を全量取得・統計処理 ｜ コメント<b>14,717件</b>の定量スキャン ｜ 経過日数を統制した重回帰（n=396・ブートストラップ4,000回） ｜ 22chとの投稿者<b>ID実測照合</b>＋同ジャンル4ch実測比較</p>
 </header>
 
 <div class="kpis">
@@ -111,8 +111,8 @@ footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font
 </div>
 
 <div class="callout">
-  <p><b>結論（30秒版）</b>：このチャンネルの勝ちの正体は<b>「天才の人生を追体験させるドキュメンタリー番組」</b>である。要因分離で独立に効くのは 神童・軌跡インタビュー×2.20／密着Vlog×1.72／実態・闇の暴露×1.42／人生ドキュメント×1.36 で、バズ回のコメント語彙は「憧れ・天才」×4.18＋「自分の受験語り」×4.07＋「感動・人生」×3.23——<b>視聴者は天才の物語に自分の受験の記憶を重ねて泣いている</b>。特筆すべきは芸能人コラボ×1.00＝<b>外部の有名人の名前が一切効かない</b>稀有なチャンネルで、資産は完全に内部の物語にある。本編中央値÷登録者1.09は比較4chの4倍超の界隈最高効率。負け筋は内輪系（記念配信・雑談×0.50）と<b>1時間超の長尺×0.62</b>の2つ。</p>
-  <p class="small"><b>根拠の検証方法</b>：①経過日数統制の重回帰（R²=0.39）②コメント14,717件の語彙定量 ③22chとの投稿者ID照合＋同ジャンル4chの直近1年実測比較。</p>
+  <p><b>結論（30秒版）</b>：このチャンネルの勝ちの正体は<b>「天才の人生を追体験させるドキュメンタリー番組」</b>である。要因分離で独立に効くのは 神童・軌跡インタビュー×2.20／密着Vlog×1.72／実態・闇の暴露×1.42／人生ドキュメント×1.36 で、バズ回のコメント語彙は「憧れ・天才」×4.18＋「自分の受験語り」×4.07＋「感動・人生」×3.23——<b>視聴者は天才の物語に自分の受験の記憶を重ねて泣いている</b>。特筆すべきは芸能人コラボ×1.00＝<b>外部の有名人の名前が一切効かない</b>稀有なチャンネルで、資産は完全に内部の物語にある。本編中央値÷登録者1.09は比較4chの4倍超の界隈最高効率で、はなおでんがん実質停止・QuizKnockはクイズ特化のため<b>「学歴×人生ドキュメンタリー」の座は独占状態</b>。負け筋は内輪系（記念配信・雑談×0.50）と<b>1時間超の長尺×0.62</b>の2つで、どちらも編成で直せる。</p>
+  <p class="small"><b>根拠の検証方法</b>：①経過日数統制の重回帰（R²=0.39）②コメント14,717件の語彙・人物言及定量＋五分位分析 ③22chとの投稿者ID照合＋同ジャンル4chの直近1年実測比較。</p>
 </div>
 
 <h2>1. チャンネル構造と現在地</h2>
@@ -122,45 +122,110 @@ footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font
 <tr><td><b>Shorts</b></td><td>61秒以下</td><td class="num">192本</td><td class="num"><b>641,242</b></td><td class="num">1.96億</td></tr>
 <tr><td>クリップ</td><td>1〜8分</td><td class="num">155本</td><td class="num">347,548</td><td class="num">0.91億</td></tr>
 </table></div>
-<p><b>重要な事実</b>：①Shorts中央値64.1万が本編を上回る三本柱構造（Shortsの強さは当ラボ分析7chでスーパーノヴァと双璧）。②本編は月8〜13本ペースで中央値50万前後を安定維持。2024年がピーク（66.4万）で以降は50万前後に落ち着くが、経過日数統制後の2025年以降ダミーは×1.00＝<b>実力の衰えではない</b>。③ln経過日数×0.88＝再生は投稿直後に集中するフロー型で、週次供給が生命線。</p>
-
-<h2>2. 勝ちパターン — テーマ別実測（本編396本・投稿14日超）</h2>
 <div class="tablewrap"><table>
-<tr><th>テーマ</th><th class="num">n</th><th class="num">再生中央値</th><th class="num">勝率(68万超)</th><th>判定</th></tr>
-<tr><td><b>神童・軌跡インタビュー</b>（◯◯への軌跡をすべて）</td><td class="num">33</td><td class="num"><b>1,040,689</b></td><td class="num"><b>79%</b></td><td><span class="tag win">看板フランチャイズ</span></td></tr>
-<tr><td><b>実態・闇の暴露解説</b>（鉄緑会/官僚/業界のリアル）</td><td class="num">31</td><td class="num">860,407</td><td class="num">55%</td><td><span class="tag win">勝ち筋</span></td></tr>
-<tr><td>密着/再現Vlog（霞ヶ関の1日 等）</td><td class="num">19</td><td class="num">780,999</td><td class="num">53%</td><td><span class="tag win">勝ち筋</span></td></tr>
-<tr><td>人生ドキュメント（挫折/最下位/その後）</td><td class="num">53</td><td class="num">664,287</td><td class="num">47%</td><td><span class="tag win">勝ち筋</span></td></tr>
-<tr><td>ガチ挑戦・検証</td><td class="num">36</td><td class="num">529,816</td><td class="num">42%</td><td><span class="tag mid">中位</span></td></tr>
-<tr><td>芸能人・大物コラボ</td><td class="num">13</td><td class="num">450,226</td><td class="num">38%</td><td><span class="tag mid">名前は効かない（§3）</span></td></tr>
-<tr><td><b>記念配信・雑談・内輪</b></td><td class="num">45</td><td class="num"><b>170,546</b></td><td class="num"><b>9%</b></td><td><span class="tag lose">負け筋</span></td></tr>
+<tr><th>年</th><th class="num">本編n</th><th class="num">中央値</th><th>備考</th></tr>
+<tr><td>2020〜2021（灘卒無職期）</td><td class="num">31</td><td class="num">23〜31万</td><td>あるある・雑談中心</td></tr>
+<tr><td>2022〜2023</td><td class="num">127</td><td class="num">42〜47万</td><td>神童シリーズ確立</td></tr>
+<tr><td><b>2024（ピーク）</b></td><td class="num">78</td><td class="num"><b>66.4万</b></td><td>鉄緑会284万・ネギ274万・くるま212万</td></tr>
+<tr><td>2025〜2026</td><td class="num">165</td><td class="num">50〜51万</td><td>官僚シリーズが新エンジン（Vlog形式で170万）</td></tr>
 </table></div>
+<p><b>重要な事実</b>：①全レイヤーが中央値34万超・<b>Shorts中央値64.1万は本編を上回る</b>三本柱構造（Shortsの強さは当ラボ11chで最高帯）。②2024年ピーク後もln経過日数×0.88のフロー特性（投稿直後に集中）を持つため、月8〜13本の供給維持が数字の土台。2025年以降ダミー×1.00＝<b>実力の衰えはない</b>。③再生/登録者比1.09——登録者数がコンテンツ力にまだ追いついておらず、登録転換の伸び代が残っている。</p>
 
-<h2>3. 要因分離 — 経過日数を統制した重回帰（n=396・R²=0.39）</h2>
+<div class="callout lose">
+<p><b>リスク台帳（正直ベース）</b>：①<b>メンバーの人生フェーズ移行</b>——「灘卒無職」から官僚加入・医師卒業と、メンバーの社会人化が進行中。学生的な自由さが薄れる前に「社会人編」の物語設計を（隣接するいだちゃんねるでは同要因の減速×0.66が実測されている）。②<b>ゲスト供給の枯渇</b>——神童・軌跡はゲスト在庫が命。灘人脈の外（開成・筑駒・海外大・異能系）への拡張が中期の生命線。③<b>Shorts依存度</b>——総再生の38%を占めるShortsのアルゴリズム変動は総量を直撃する。本編の登録転換導線が保険。</p>
+</div>
+
+<h2>2. 勝ちパターン — テーマ別勝率（本編396本・投稿14日超）</h2>
+<p class="small">勝率 = 68万再生（本編中央値の約1.4倍）を超えた割合。</p>
+<div class="tablewrap"><table>
+<tr><th>テーマ</th><th class="num">n</th><th class="num">再生中央値</th><th class="num">勝率</th><th class="barcell"></th><th>判定</th></tr>
+<tr><td><b>神童・軌跡インタビュー</b>（◯◯への軌跡をすべて）</td><td class="num">33</td><td class="num"><b>1,040,689</b></td><td class="num"><b>79%</b></td><td class="barcell"><span class="bar win" style="width:79%"></span></td><td><span class="tag win">看板フランチャイズ</span></td></tr>
+<tr><td><b>実態・闇の暴露解説</b>（鉄緑会/官僚/業界のリアル）</td><td class="num">31</td><td class="num">860,407</td><td class="num">55%</td><td class="barcell"><span class="bar win" style="width:55%"></span></td><td><span class="tag win">勝ち筋</span></td></tr>
+<tr><td>密着/再現Vlog（霞ヶ関の1日 等）</td><td class="num">19</td><td class="num">780,999</td><td class="num">53%</td><td class="barcell"><span class="bar win" style="width:53%"></span></td><td><span class="tag win">勝ち筋</span></td></tr>
+<tr><td>人生ドキュメント（挫折/最下位/その後）</td><td class="num">53</td><td class="num">664,287</td><td class="num">47%</td><td class="barcell"><span class="bar win" style="width:47%"></span></td><td><span class="tag win">勝ち筋</span></td></tr>
+<tr><td>ガチ挑戦・検証</td><td class="num">36</td><td class="num">529,816</td><td class="num">42%</td><td class="barcell"><span class="bar" style="width:42%"></span></td><td><span class="tag mid">中位</span></td></tr>
+<tr><td>芸能人・大物コラボ</td><td class="num">13</td><td class="num">450,226</td><td class="num">38%</td><td class="barcell"><span class="bar" style="width:38%"></span></td><td><span class="tag mid">名前は効かない（§3）</span></td></tr>
+<tr><td><b>記念配信・雑談・内輪</b></td><td class="num">45</td><td class="num"><b>170,546</b></td><td class="num">9%</td><td class="barcell"><span class="bar lose" style="width:9%"></span></td><td><span class="tag lose">負け筋</span></td></tr>
+</table></div>
+<h3>勝ち動画の共通条件（統計）</h3>
+<div class="tablewrap"><table>
+<tr><th>要素</th><th>あり</th><th>なし</th><th>示唆</th></tr>
+<tr><td>「すべて聞きました/語ります」の全量宣言</td><td class="num">神童系の定型・中央値104万</td><td class="num">—</td><td>網羅性の約束が保存・長時間視聴を生む</td></tr>
+<tr><td>尺20〜50分</td><td class="num">上位帯の主戦場</td><td class="num">1時間超は×0.62</td><td>密度が命（ヒカル型の長尺プラスとは逆）</td></tr>
+<tr><td>実在の制度・組織名（鉄緑会/経産省/理三）</td><td class="num">暴露系の勝ち条件</td><td class="num">—</td><td>検索需要と「本物感」の両取り</td></tr>
+<tr><td>ゲストの偏差値的希少性</td><td class="num">灘トップ/理三/首席</td><td class="num">芸能人の知名度は×1.00</td><td>希少なのは有名さでなく「頭脳の桁」</td></tr>
+</table></div>
+<h3>歴代トップ層の構図</h3>
+<div class="tablewrap"><table>
+<tr><th class="num">再生</th><th>タイトル</th><th>勝った構図</th></tr>
+<tr><td class="num">2,842,208</td><td>超エリート進学塾「鉄緑会」の実態を元東大理3受験生が全て教えます</td><td>ベールに包まれた組織×当事者の暴露——検索需要の最大回収</td></tr>
+<tr><td class="num">2,747,421</td><td>灘中トップ合格の怪物・ネギに首席への軌跡を全て聞きました</td><td>神童×全量インタビュー——看板フォーマットの完成形</td></tr>
+<tr><td class="num">2,125,199</td><td>令和ロマン・くるまさんに慶應合格→M1優勝への軌跡</td><td>芸能人でも「軌跡」の構造に載せた時だけ勝つ（×1.00の例外則）</td></tr>
+<tr><td class="num">1,795,312</td><td>一橋卒エリート社会人のブラックすぎる1日</td><td>密着Vlog——「エリートの実生活」の窃視</td></tr>
+<tr><td class="num">1,777,642</td><td>永遠、東大理三に逆転不合格の軌跡をすべて語る【浪人編】</td><td>挫折の全量語り——成功譚より深い感情移入</td></tr>
+<tr><td class="num">1,707,621</td><td>経済産業省の灘卒キャリア官僚の霞ヶ関でのハードすぎる1日</td><td>官僚シリーズ×Vlog形式——形式替えで最高値更新の実例</td></tr>
+<tr><td class="num">1,674,460</td><td>灘高最下位の男に人生のリアルな話をすべて聞いてみた</td><td>「天才集団の中の敗者」——学歴の影の物語</td></tr>
+</table></div>
+<p class="note">⚠ 上の表は単変量の比較でありテーマ・尺・時期が交絡している。独立効果は§3の重回帰を参照。</p>
+
+<h2>3. 要因分離 — 「何が独立に効くのか」を重回帰で切り分ける</h2>
+<p class="small">本編n=396の log(再生数) を目的変数に、テーマ＋形式＋ln(経過日数)を同時投入（R²=0.39）。信頼区間はブートストラップ4,000回。</p>
 <div class="tablewrap"><table>
 <tr><th>要因</th><th class="num">独立効果</th><th class="num">95%信頼区間</th><th>判定</th></tr>
 <tr><td>神童・軌跡インタビュー</td><td class="num"><b>×2.20</b></td><td class="num">[×1.73 – ×2.77]</td><td><span class="tag win">有意</span></td></tr>
 <tr><td>密着/再現Vlog</td><td class="num"><b>×1.72</b></td><td class="num">[×1.33 – ×2.23]</td><td><span class="tag win">有意</span></td></tr>
 <tr><td>実態・闇の暴露解説</td><td class="num">×1.42</td><td class="num">[×1.11 – ×1.81]</td><td><span class="tag win">有意</span></td></tr>
 <tr><td>人生ドキュメント</td><td class="num">×1.36</td><td class="num">[×1.16 – ×1.62]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>ガチ挑戦・検証</td><td class="num">×1.12</td><td class="num">[×0.87 – ×1.42]</td><td><span class="tag mid">中立</span></td></tr>
 <tr><td>芸能人・大物コラボ</td><td class="num">×1.00</td><td class="num">[×0.68 – ×1.47]</td><td><span class="tag mid">独立効果ゼロ</span></td></tr>
 <tr><td><b>1時間超の長尺</b></td><td class="num"><b>×0.62</b></td><td class="num">[×0.47 – ×0.78]</td><td><span class="tag lose">有意（負）</span></td></tr>
 <tr><td>記念配信・雑談・内輪</td><td class="num">×0.50</td><td class="num">[×0.36 – ×0.66]</td><td><span class="tag lose">有意（負）</span></td></tr>
+<tr><td>2025年以降（地力）</td><td class="num">×1.00</td><td class="num">[×0.82 – ×1.20]</td><td><span class="tag mid">減速なし</span></td></tr>
 </table></div>
 <div class="callout">
 <p><b>この分析が変える結論</b>：①<b>有名人の名前は独立効果ゼロ（×1.00）</b>——くるま回212万・やまと回139万が勝ったのは「名前」でなく「軌跡を聞く/入試を解かせる」という雷獣の構造に載せたから。コラボは相手選びより構造設計が全て。②<b>1時間超×0.62はヒカル（2時間超×1.21）と正反対</b>——ドキュメンタリー型は密度が命で、生活実況型と違い長さが薄める。20〜50分帯が最適。③記念配信×0.50はスーパーノヴァの生配信×0.06と同型の「棚の汚染」。</p>
+<p>もう1点：2025年以降×1.00＝地力の減速はない。2024年ピークとの差は「鉄緑会・ネギ級の特大題材」の有無であり、実力でなく題材在庫の問題——§8の未回収案がその補充リストになる。鉄緑会級の「ベールに包まれた組織」の在庫（開成・筑駒・医学部の内部・外資の選考・司法試験界隈）はまだ厚く、暴露解説×1.42の弾は尽きていない。</p>
 </div>
 
-<h2>4. 負けパターン</h2>
+<h2>4. 負けパターン — 何をやると落ちるか</h2>
 <div class="grid2">
 <div class="panel lose"><h4>負け筋①：記念配信・内輪雑談（45本・勝率9%・×0.50）</h4>
 <ul><li>おめでとう配信10〜19万・エセ対談10.7万・駒井王29万——コア向けの栄養だが本編の棚を薄める</li><li>コメントの「笑い」語彙は不発回に多い（×0.73）＝内輪ノリはコアの言語で、新規には閉じている</li></ul></div>
 <div class="panel lose"><h4>負け筋②：1時間超の長尺化（×0.62）</h4>
-<ul><li>近年120〜200分回が増えているが、統計上は明確なマイナス</li><li>神童274万（50分）vs 神童2作目216万（77分）vs 官僚Vlog170万（121分）——例外はあるが中央値では50分以下が勝つ</li></ul></div>
+<ul><li>近年120〜200分回が増えているが、統計上は明確なマイナス</li><li>長い素材は前後編分割でなく「解説版＋Vlog版」の形式分割にするのが官僚シリーズで実証済みの正解</li></ul></div>
+</div>
+<div class="callout lose">
+<p><b>負けの本質</b>：負けるのは「憧れも自分事も発生しない動画」。内輪回は憧れがなく、冗長な長尺は自分事化の密度を薄める——このchの再生関数は「憧れ×自分の記憶」の積であり、どちらかがゼロになると沈む。</p>
 </div>
 
-<h2>5. なぜこの再生数になるのか — コメント14,717件の定量検証</h2>
-<h3>バズ回を見分ける語彙</h3>
+<h2>5. なぜこの再生数・この高評価数になるのか — メカニズムの言語化と定量検証</h2>
+<p>高評価コメント上位の精読で快感の型を抽出し（①〜④）、コメント14,717件の語彙・人物言及・五分位・ID照合で全量検証した。</p>
+<h3>① 自分の受験の記憶が蘇る（×4.07の実体）</h3>
+<blockquote>遅刻したことある者からの意見なんですけど、大学関係者さんが遅刻した人には着いてくるようになってて…主人公はやはり私<span class="src">👍13,022 / 東大入試遅刻検証回（チャンネル最多高評価）</span></blockquote>
+<blockquote>入試初日にお腹痛くて家出るの遅れて…あの時の絶望感思い出した。<span class="src">👍3,656 / 同回</span></blockquote>
+<p class="small">バズ回のコメント欄は視聴者の受験体験談大会になる。「学歴」は日本人の共通記憶＝最強の共感インフラであり、天才の話でも視聴者は自分の物語として消費する。この「憧れ×自分事」の二重構造が×2.20の正体であり、単なる天才礼賛や単なる受験あるあるでは片翼しか回らない——両方を1本に同居させる編集がフォーマットの核心であり、ゲスト選定（憧れ側）と質問設計（自分事側）を別工程として管理する価値がある。</p>
+<h3>② 人生が実際に動いた報告（このchだけの反応）</h3>
+<blockquote>かぼすです！御三方のおかげで合格できました！！本当にありがとうございました😭😭<span class="src">👍11,750 / 受験生ガチ授業回</span></blockquote>
+<p class="small">視聴者の合格報告に1万超の祝福が集まる——エンタメchでなく「人生に介入する番組」として信頼されている証拠。11ch分析で唯一の反応型であり、受験シーズンの定常番組化（毎年の風物詩）はこの信頼の最大の回収装置になりうる。「雷獣の受験直前授業」が毎年1月の恒例になれば、視聴者の人生周期とチャンネルが同期し、卒業していく視聴者を毎年の新受験生が置き換える持続機構になる。</p>
+<h3>③ 知的ツッコミ文化（コメント欄の偏差値）</h3>
+<blockquote>「それ、睡眠相後退症候群ちゃう？」って一般常識みたいに言ってしまいそうになることが、ある。<span class="src">👍6,691 / 寝すぎて病院回</span></blockquote>
+<blockquote>前世で働かなかった人が送られる地獄<span class="src">👍7,168 / 官僚の生活Shorts</span></blockquote>
+<h3>④ キャラの物語の目撃（箱推しの燃料）</h3>
+<blockquote>とうとう雷獣も国家の天下り先になったか<span class="src">👍6,450 / 官僚メンバー加入回</span></blockquote>
+<blockquote>正直今んとこカリスマにしか見えん。このかんじ好きだから普通にまた出て欲しい<span class="src">👍1,908 / 灘高最下位の男回</span></blockquote>
+<h3>数字で見る「2層オーディエンス」構造</h3>
+<div class="tablewrap"><table>
+<tr><th>再生五分位</th><th class="num">再生中央値</th><th class="num">高評価率</th><th class="num">コメント率(/千)</th></tr>
+<tr><td>Q1（バズ帯）</td><td class="num">1,080,481</td><td class="num">1.07%</td><td class="num">0.67</td></tr>
+<tr><td>Q2</td><td class="num">663,415</td><td class="num">1.27%</td><td class="num">1.00</td></tr>
+<tr><td>Q3</td><td class="num">487,069</td><td class="num">1.43%</td><td class="num">1.04</td></tr>
+<tr><td>Q4</td><td class="num">378,066</td><td class="num">1.42%</td><td class="num">1.15</td></tr>
+<tr><td>Q5（不発帯）</td><td class="num">154,735</td><td class="num"><b>1.57%</b></td><td class="num">0.97</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>核心</b>：逆相関が成立（Q1の1.07% vs Q5の1.57%）——バズ回（神童・暴露）は一般層が薄く見る回、不発帯（内輪）はコアが濃く支える回。内輪回は「捨てる」のでなく「棚を分けてコアの配当にする」のが正解で、これは記念配信×0.50の処方（§7-6）と一体。</p>
+</div>
+<h3>定量検証① 快感語彙の全量スキャン</h3>
 <div class="tablewrap"><table>
 <tr><th>語彙群</th><th class="num">バズ回(/1000件)</th><th class="num">不発回</th><th class="num">倍率</th><th>解釈</th></tr>
 <tr><td><b>憧れ/尊敬/天才</b></td><td class="num">52.7</td><td class="num">12.6</td><td class="num"><b>×4.18</b></td><td>バズの第1因子＝憧れの物語</td></tr>
@@ -169,36 +234,29 @@ footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font
 <tr><td>メンバーへの好意</td><td class="num">170.0</td><td class="num">192.8</td><td class="num">×0.88</td><td>全動画に均一＝箱推しの基礎体力</td></tr>
 <tr><td>笑い</td><td class="num">144.6</td><td class="num">197.0</td><td class="num">×0.73</td><td><b>不発回に多い＝内輪ノリはコア向け栄養</b></td></tr>
 </table></div>
-<h3>快感の型 — 高評価コメントの実引用から</h3>
-<div class="grid2">
-<div class="panel win"><h4>①自分の受験の記憶が蘇る（×4.07の実体）</h4>
-<blockquote>遅刻したことある者からの意見なんですけど、大学関係者さんが遅刻した人には着いてくるようになってて…主人公はやはり私<span class="src">👍13,022 / 東大入試遅刻検証回（チャンネル最多高評価）</span></blockquote>
-<blockquote>入試初日にお腹痛くて家出るの遅れて…あの時の絶望感思い出した。<span class="src">👍3,656 / 同回</span></blockquote>
-<p class="small">バズ回のコメント欄は視聴者の受験体験談大会になる。「学歴」は日本人の共通記憶＝最大の共感インフラ。</p></div>
-<div class="panel win"><h4>②人生が実際に動いた報告（このchだけの反応）</h4>
-<blockquote>かぼすです！御三方のおかげで合格できました！！本当にありがとうございました😭😭<span class="src">👍11,750 / 受験生ガチ授業回</span></blockquote>
-<p class="small">視聴者の合格報告に1万超の祝福が集まる——エンタメchでなく「人生に介入する番組」として信頼されている証拠。</p></div>
-<div class="panel"><h4>③知的ツッコミ文化（コメント欄の偏差値）</h4>
-<blockquote>「それ、睡眠相後退症候群ちゃう？」って一般常識みたいに言ってしまいそうになることが、ある。<span class="src">👍6,691 / 寝すぎて病院回</span></blockquote>
-<blockquote>前世で働かなかった人が送られる地獄<span class="src">👍7,168 / 官僚の生活Shorts</span></blockquote></div>
-<div class="panel"><h4>④キャラの物語の目撃（箱推しの燃料）</h4>
-<blockquote>とうとう雷獣も国家の天下り先になったか<span class="src">👍6,450 / 官僚メンバー加入回</span></blockquote>
-<blockquote>正直今んとこカリスマにしか見えん。このかんじ好きだから普通にまた出て欲しい<span class="src">👍1,908 / 灘高最下位の男回</span></blockquote></div>
-</div>
-<h3>ファン構造の実測</h3>
-<p>ユニーク投稿者9,310人・2本以上に出現23%・ヘビー層318人が高評価の24%。エンゲージ逆相関あり（下位20%の高評価率1.58% vs 上位1.07%）＝内輪回はコアが支える構造。</p>
-<h3>ID照合 — 「学歴ジャンルのファンダム」は存在しない</h3>
+<h3>定量検証② 人物言及の実測</h3>
+<div class="tablewrap"><table>
+<tr><th>人物</th><th class="num">全体言及率</th><th class="num">バズ回</th><th class="num">不発回</th><th class="num">高評価加重</th><th>役割</th></tr>
+<tr><td>永遠</td><td class="num">8.8%</td><td class="num">9.3%</td><td class="num">5.8%</td><td class="num"><b>9.8%</b></td><td>バズ・加重とも最上位＝物語の主役格（理三逆転不合格の当事者）</td></tr>
+<tr><td>かべ</td><td class="num">7.1%</td><td class="num">4.1%</td><td class="num">8.8%</td><td class="num">5.7%</td><td>不発回（内輪）の主язык＝コアの接着剤</td></tr>
+<tr><td>ベテランち</td><td class="num">4.8%</td><td class="num">3.3%</td><td class="num">5.8%</td><td class="num">4.9%</td><td>司会者・番組の背骨</td></tr>
+<tr><td>ネギ（ゲスト）</td><td class="num">0.9%</td><td class="num">1.8%</td><td class="num">0.0%</td><td class="num">1.4%</td><td>バズ専用の神童キャラ</td></tr>
+</table></div>
+<h3>定量検証③ コア層のサイズ実測</h3>
+<p>ユニーク投稿者<b>9,310人</b>・2本以上に出現23%・ヘビー層318人が高評価の24%。中規模のコア支配で、世論は「受験を経験した一般層」の共感が主導する。</p>
+<h3>定量検証④ ファン帰属のパネルID照合</h3>
 <div class="tablewrap"><table>
 <tr><th>照合先</th><th class="num">重複率</th><th>意味</th></tr>
 <tr><td>雨来ズ（グループエンタメ）</td><td class="num">1.18%</td><td>グループ箱推し文化圏のかすかな回遊（最大値）</td></tr>
 <tr><td><b>QuizKnock（学歴・知性系）</b></td><td class="num"><b>0.31%</b></td><td><b>同じ「学歴」ジャンルでもファンは共有されていない</b></td></tr>
 <tr><td>東海オンエア/ヒカキン等の大手</td><td class="num">0.2〜0.3%</td><td>箱違いベースレート水準</td></tr>
+<tr><td>【基準】同一ファン圏の別ch</td><td class="num">14.0%</td><td>感度検証の上限</td></tr>
 </table></div>
 <div class="callout gold">
 <p><b>判定：「独自圏の箱推し型」</b>。97%超はどこにも現れない排他的ファン圏で、学歴ジャンル最大手QuizKnockとすら0.31%しか重ならない——<b>「学歴コンテンツのファン」がいるのではなく「雷獣という番組のファン」がいる</b>。含意は雨来ズと同じ：メンバーと物語が資産であり、企画（ゲスト・テーマ）は自由に入れ替えてよい。</p>
 </div>
 
-<h2>6. シリーズの代数 — 「擦り」の実測</h2>
+<h2>6. シリーズの代数 — 「擦り」はいつ死に、いつ育つか（全実測）</h2>
 <div class="tablewrap"><table>
 <tr><th>シリーズ</th><th>変遷（再生数）</th><th>法則</th></tr>
 <tr><td><b>官僚シリーズ</b></td><td>49万 → 74万 → 61万 → 79万 → 117万 → 103万 → <b>Vlog形式で170万</b></td><td><b>形式を替えるたびに最高値更新する成長シリーズ</b>。テーマは4年擦っても消耗していない</td></tr>
@@ -206,37 +264,51 @@ footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font
 <tr><td>ネギ（同一人物の深掘り）</td><td>274万 → 216万 → 99万 → 60万</td><td>同一人物の続編は2作目79%→以降急減。<b>深掘りは2作まで</b></td></tr>
 <tr><td>鉄緑会</td><td>284万 → 146万</td><td>同一テーマの真正面続編は51%——次は「形式替え」（Vlog/対決など）で</td></tr>
 </table></div>
-<div class="callout gold"><p><b>法則：「ゲストと形式は資産、同一人物の深掘りは2作まで」</b>。官僚シリーズ（解説→密着Vlogで最高値更新）が模範解答——テーマの寿命は形式の数だけ延びる。</p></div>
+<div class="callout gold"><p><b>法則：「ゲストと形式は資産、同一人物の深掘りは2作まで」</b>。官僚シリーズ（解説→密着Vlogで最高値更新）が模範解答——テーマの寿命は形式の数だけ延びる。当ラボの一般則「構造と敵は資産、再放送は借金」の変奏で、雷獣の場合の「敵」はゲストと形式にあたる。</p></div>
 
-<h2>7. 同ジャンル比較 — 知的グループエンタメ界隈の現在地（直近1年実測）</h2>
+<h2>7. 再現フォーマット — 勝ち動画の設計テンプレ</h2>
+<ol class="formula">
+<li><b>ゲストは「頭脳の桁」で選ぶ</b>灘トップ・理三・首席——芸能人の知名度は×1.00で効かない。希少性の軸を間違えない。</li>
+<li><b>「すべて聞きました/語ります」の全量宣言をタイトルに入れる</b>神童系の定型。網羅性の約束が保存と長時間視聴を生む。</li>
+<li><b>構成は「幼少期→挫折→転機→現在」の年表順</b>軌跡フォーマットの背骨。挫折パート（永遠の浪人編177万）が最も感情移入を生むため薄くしない。</li>
+<li><b>視聴者の記憶を呼ぶトリガーを入れる</b>入試当日・模試・塾のあるある——×4.07の「自分の受験語り」を誘発する具体ディテールが共感の着火点。</li>
+<li><b>尺は20〜50分・1時間超にしない</b>×0.62。素材が長い時は前後編でなく「解説版＋Vlog版」の形式分割（官僚方式）。</li>
+<li><b>同一人物の深掘りは2作で止める</b>ネギの実測則。3作目は数字が1/3になる。</li>
+<li><b>当たったテーマは形式を替えて再訪する</b>官僚方式（解説→Vlogで最高値更新）。次の再訪候補は鉄緑会（284万→Vlog未実施）。</li>
+</ol>
+<div class="callout gold">
+<p><b>次の一手の候補（データ根拠つき・全て実リクエスト）</b>：①かべキッザニア（職業体験）シリーズ化——👍1,598「楽しすぎる」・密着Vlog×1.72と合流可能。②アイ官の飯シリーズ——👍1,543・新メンバーのキャラ資産化。③灘高最下位の男・再出演——👍1,908。④「ゲストの幼馴染が証言する」新形式——しが数回に幼馴染の長文証言（👍1,936）が自然発生済み。</p>
+</div>
+
+<h2>8. 同属性チャンネル比較 — 界隈の中での現在地</h2>
+<p class="small">知的グループエンタメ界隈4chの直近1年（各ch直近200本のうち投稿14日超）実測。</p>
 <div class="tablewrap"><table>
 <tr><th>チャンネル</th><th class="num">登録</th><th class="num">長尺中央値</th><th class="num">ペース/月</th><th class="num">中央値÷登録者</th><th>型</th></tr>
-<tr><td><b>雷獣</b></td><td class="num">44.7万</td><td class="num">486,218</td><td class="num">9.5</td><td class="num"><b>1.09</b></td><td><b>学歴×人生ドキュメンタリー</b></td></tr>
+<tr><td><b>雷獣</b></td><td class="num">44.7万</td><td class="num">505,280</td><td class="num">8.7</td><td class="num"><b>1.13</b></td><td><b>学歴×人生ドキュメンタリー</b></td></tr>
 <tr><td>QuizKnock</td><td class="num">267万</td><td class="num">674,802</td><td class="num">7.9</td><td class="num">0.25</td><td>クイズ・知的ゲーム特化</td></tr>
 <tr><td>東海オンエア</td><td class="num">725万</td><td class="num">1,861,309</td><td class="num">16.0</td><td class="num">0.26</td><td>企画装置（グループ）</td></tr>
 <tr><td>コムドット</td><td class="num">426万</td><td class="num">929,615</td><td class="num">2.6</td><td class="num">0.22</td><td>グループ関係性</td></tr>
-<tr><td>はなおでんがん</td><td class="num">156万</td><td class="num">—（直近1年 本編0本）</td><td class="num">0</td><td class="num">—</td><td>学歴系エンタメの先行者・実質更新停止</td></tr>
+<tr><td>はなおでんがん</td><td class="num">156万</td><td class="num">—（直近1年 本編0本）</td><td class="num">0</td><td class="num">—</td><td>学歴系の先行者・実質更新停止</td></tr>
 </table></div>
-<p><b>発見①</b>：中央値÷登録者<b>1.09は比較4chの4倍超</b>——当ラボ分析7chでもケイスケ（1.30・登録1千人）を除けば最高で、この規模帯では突出。登録者数がコンテンツ力にまだ追いついていない。<b>発見②</b>：学歴エンタメの系譜で、先行者はなおでんがんは実質更新停止・QuizKnockはクイズ特化——<b>「学歴×人生ドキュメンタリー」の座は雷獣の独占</b>で正面競合が存在しない。<b>発見③</b>：ID照合0.31%が示す通りQuizKnockと客を取り合っておらず、界隈内の消耗戦リスクはゼロ。</p>
-
-<h3>未回収の企画案 — コメント欄からの発掘（全て実リクエスト）</h3>
-<ul>
-<li><b>かべキッザニア（職業体験）シリーズ化</b>——「かべキッザニアシリーズが楽しすぎる」👍1,598。コンサル回で自然発生済み。密着Vlog×1.72の勝ち筋と合流できる</li>
-<li><b>アイ官の飯シリーズ</b>——「グルメなアイ官がご飯の話だけするシリーズも見たすぎる」👍1,543。新メンバーのキャラ資産化</li>
-<li><b>灘高最下位の男・再出演</b>——「カリスマにしか見えん。また出てほしい」👍1,908。人生ドキュメント枠の続編需要</li>
-<li><b>「ゲストの幼馴染が証言する」新形式</b>——しが数回に幼馴染の長文証言（👍1,936）が自然発生。軌跡インタビューに第三者証言を足す進化形のヒント</li>
-</ul>
-
-<h2>8. 成長処方 — 優先順つき</h2>
-<ol class="formula">
-<li><b>神童・軌跡は新ゲストで回し続ける</b>×2.20・勝率79%・ゲスト替えなら減衰なし。同一人物の深掘りは2作で止める（ネギの実測則）。</li>
-<li><b>「官僚方式」を他エリート職業に横展開する</b>解説→密着Vlogの形式替えで最高値更新（49万→170万）が実証済み。医師・弁護士・商社・外銀で同じ縦深を掘る。</li>
-<li><b>1時間超をやめ、20〜50分帯に編集を寄せる</b>×0.62。素材が長い時は前後編でなく「解説版＋Vlog版」の形式分割にする（官僚方式）。</li>
-<li><b>記念配信・内輪雑談の棚を分ける</b>×0.50・45本。コミュニティ資産として限定公開・メン限に移し、本編の棚と推薦を守る。</li>
-<li><b>コラボは名前でなく構造に載せる</b>コラボ自体は×1.00だが、やまと回139万（入試を解かせる）・くるま回212万（軌跡を聞く）のように<b>雷獣のフォーマットに乗せた時だけ勝つ</b>。オファー基準を「誰か」から「どの型に載せるか」に変える。</li>
-<li><b>未回収4案を順に打つ</b>かべキッザニア→アイ官飯→最下位の男→幼馴染証言形式（全てコメント欄で需要実証済み）。</li>
-<li><b>Shorts三本柱を維持する</b>中央値64.1万は本編超え。知的ツッコミ1行で完結する現行型（官僚の生活7,168👍等）を崩さない。</li>
-</ol>
+<h3>発見① 中央値÷登録者1.13は比較4chの4倍超</h3>
+<p>当ラボ分析11chでもトップ帯で、この規模（40万人台）では突出。登録者数がコンテンツ力にまだ追いついておらず、Shorts→本編の転換導線が効けば規模はまだ伸びる。Shorts中央値64.1万は新規接触の網として11ch最強帯であり、あとは網にかかった視聴者を本編の「軌跡」に流す設計（Shorts末尾の本編誘導・シリーズ再生リストの整備・チャンネルトップの神童入門導線）だけが未整備で、ここが登録転換の主戦場になる。</p>
+<h3>発見② 「学歴×人生ドキュメンタリー」の座は雷獣の独占</h3>
+<p>先行者はなおでんがんは実質更新停止・QuizKnockはクイズ特化——学歴エンタメの系譜で「人生を掘る」ポジションに正面競合が存在しない。ID照合0.31%が示す通り、QuizKnockと客を取り合ってもいない。</p>
+<h3>発見③ 界隈標準の投稿ペース（月7.9〜16本）の中で質を維持している</h3>
+<p>月8.7本×中央値50万は、同ペース帯のQuizKnock（7.9本×67万・登録6倍）と比べても登録あたりの生産性で圧倒。供給を落とさず§7レシピの密度を守ることが最適運転。</p>
+<h3>コメント投稿者IDの実測照合</h3>
+<p>§5④の通り独自圏。雨来ズ1.18%のグループ文化圏ハロー以外に有意な接続はなく、界隈内の消耗戦リスクはゼロ。なお学歴連合圏（いだちゃんねる側から雷獣へ4.94%の重複）が実測されており、いだとの相互コラボは「企画」でなく「インフラ」として機能する数少ない相手になる。</p>
+<div class="callout win">
+<p><b>取り入れる優先順</b>：①東海式「企画アーカイブの資産化」（神童シリーズの再生リスト整備・入門導線）→ ②いだ式「本人の人生実況」（メンバー自身の進路・挑戦をアーク化）→ ③QuizKnock式「教育ブランド化」（受験生向け定常番組）。<b>真似不要</b>：コムドット式の関係性主義への全振り——雷獣の資産は関係性より「知の物語」にある。</p>
+</div>
+<h3>未回収の企画案 — コメント欄からの発掘</h3>
+<div class="tablewrap"><table>
+<tr><th>企画案</th><th>需要の証拠</th><th>期待レンジ</th></tr>
+<tr><td>かべキッザニア（職業体験）シリーズ</td><td>👍1,598の実リクエスト</td><td>密着Vlog帯=78万〜</td></tr>
+<tr><td>アイ官の飯シリーズ</td><td>👍1,543の実リクエスト</td><td>キャラ枠・中位安定</td></tr>
+<tr><td>灘高最下位の男・再出演</td><td>👍1,908「カリスマにしか見えん」</td><td>人生ドキュメント帯=66万〜167万</td></tr>
+<tr><td>幼馴染証言つき軌跡（新形式）</td><td>👍1,936の自然発生証言</td><td>神童帯の形式替え=104万〜</td></tr>
+</table></div>
 
 <h2>9. データの注記（正直ベース）</h2>
 <ul class="small">

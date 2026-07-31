@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keisuke Kai / 美しい夜を — チャンネル分析レポート</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="Keisuke Kai / 美しい夜を — チャンネル分析レポート">
+<meta property="og:description" content="全100本を全量取得・統計処理。勝ちパターンと成長処方7項。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Channel Analysis Report / 2026-07-31</div>
+  <h1>Keisuke Kai / 美しい夜を — 分析レポートと成長処方（共有版）</h1>
+  <p class="hero-sub">対象: <b>@KeisukeKai-美しい夜を</b>（登録1,090人）｜ 全<b>100本</b>を全量取得・統計処理 ｜ コメント90件の全量分析 ｜ ※小規模チャンネルのため回帰分析は標本不足で不実施（正直ベース）</p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">14.2万</div><div class="l">総再生数（1年・100本）</div></div>
+  <div class="kpi"><div class="n">6.0倍</div><div class="l">2026年3月ピボットによる中央値ジャンプ（235→1,416）</div></div>
+  <div class="kpi"><div class="n">1.30</div><div class="l">再生÷登録者比（1.0超＝登録者の外まで届いている状態）</div></div>
+  <div class="kpi"><div class="n">17,846</div><div class="l">最高再生（薬物実態回）＝登録者の16倍</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：このチャンネルは2026年3月の路線転換（バー経営ドキュメント→港区の夜の暴露トーク）で<b>再生中央値が6倍</b>になり、いまは<b>「登録者数にコンテンツ力が追いついていない」成長初動</b>にある（再生/登録者比1.30——動画が登録者数の1.3倍見られており、ブラウズ/検索経由で登録者の外に届いている）。勝ち筋は<b>「港区の闇の社会派ジャーナリズム」</b>（薬物1.8万・詐欺0.8万・性病0.6万）。一方、本数の27%を占める「即ヤレ系ハウツー」は中央値1,077と平均を下回り、収益化・規約リスクも高いため<b>役割の見直し余地が大きい</b>。</p>
+</div>
+
+<h2>1. 構造と転換点 — 2026年3月に別のチャンネルになった</h2>
+<div class="tablewrap"><table>
+<tr><th>時期</th><th>路線</th><th class="num">本数/月</th><th class="num">再生中央値</th><th class="num">高評価率</th></tr>
+<tr><td>2025-08〜2026-02</td><td>バー経営ドキュメント（BAR WHITE・社員指導・採用）</td><td class="num">2〜5本</td><td class="num">235</td><td class="num">1.8%</td></tr>
+<tr><td><b>2026-03〜（現行）</b></td><td><b>港区の夜の暴露トーク</b></td><td class="num">11〜14本</td><td class="num"><b>1,416</b></td><td class="num">1.2%</td></tr>
+</table></div>
+<p><b>読み方</b>：ピボードで再生6倍・投稿3倍化に成功。高評価率が下がったのは劣化ではなく<b>視聴者が「身内」から「一般層」に入れ替わった</b>証拠（急成長期のチャンネルに共通の現象で、バズは常にエンゲージ率を薄める）。現行路線の継続がデータ上の最適解。</p>
+
+<h2>2. 勝ちパターン — テーマ別実測（現行路線51本・投稿14日超）</h2>
+<div class="tablewrap"><table>
+<tr><th>テーマ</th><th class="num">n</th><th class="num">中央値</th><th class="num">最高</th><th>判定</th></tr>
+<tr><td><b>社会派暴露</b>（薬物/詐欺/性病/裏稼業/美人局）</td><td class="num">11</td><td class="num"><b>2,441</b></td><td class="num">17,846</td><td><span class="tag win">勝ち筋・全張り対象</span></td></tr>
+<tr><td><b>解説・一覧・分類</b>（港区女子一覧/実態/徹底解説）</td><td class="num">8</td><td class="num">2,409</td><td class="num">17,846</td><td><span class="tag win">勝ち筋</span></td></tr>
+<tr><td>実名（店・人）（ジャングル東京/ゆいぴす/桜井みづき）</td><td class="num">10</td><td class="num">1,174</td><td class="num">4,650</td><td><span class="tag mid">検索資産型</span></td></tr>
+<tr><td>即ヤレ系ハウツー（ヤリ方/攻略/お持ち帰り/サイン）</td><td class="num">9</td><td class="num">1,187</td><td class="num">2,429</td><td><span class="tag lose">見直し対象</span></td></tr>
+<tr><td>性的ワード入りタイトル全般（S◯X/ヤレ/売◯…）</td><td class="num">14</td><td class="num">1,077</td><td class="num">—</td><td><span class="tag lose">全体中央値1,416未満</span></td></tr>
+</table></div>
+<h3>タイトルの勝ち型（記述統計）</h3>
+<p>「断定＋数字＋網羅」型（<i>95%は詐欺師／100%パパ活／一覧／徹底</i>）は中央値<b>2,381 vs その他1,204（約2倍）</b>。トップ3動画のタイトルは全てこの型。<b>「港区の◯◯、実は△△です」と言い切る報道型見出し</b>がこのチャンネルの公式。</p>
+
+<h2>3. 負けパターン</h2>
+<div class="grid2">
+<div class="panel lose"><h4>負け筋① 即ヤレ系ハウツー（9本・中央値1,187）</h4>
+<ul><li>数字が平均以下な上に、広告制限・年齢制限の温床（伏字でも判定される）</li><li>「95%詐欺師」等の社会派と違い、一般層へのブラウズ配信に乗りにくい</li></ul></div>
+<div class="panel lose"><h4>負け筋② シリーズの真正面な続編</h4>
+<ul><li>「ヤリ方のススメ」年収400万(1,728)→年収1,000万(1,204) = 70%に減衰</li><li>旧路線「BAR WHITE」#1 397→#2 235→#3 197と単調減——「同一企画の真正面な続編は減衰する」一般則どおりの推移</li></ul></div>
+</div>
+
+<h2>4. なぜ伸びるのか — コメント90件が示す3種類の客</h2>
+<div class="tablewrap"><table>
+<tr><th>客層</th><th>反応の型（実コメント）</th><th>どの動画に来るか</th></tr>
+<tr><td><b>①一般の野次馬層</b>（最大・成長源）</td><td>体験談・知識の持ち寄り（「20年前から⚫︎大でお薬蔓延してた」👍15）</td><td>社会派暴露回。ニュースのコメント欄と同じ挙動＝ブラウズ配信と好相性</td></tr>
+<tr><td><b>②固有名詞ファン</b>（検索流入）</td><td>「同じくみづきちゃんファンです！」・店名検索</td><td>実名回。ロングテールで効く資産</td></tr>
+<tr><td><b>③常連（45人中11人が複数回コメント）</b></td><td>リクエスト行動（「リクエストしようと思ったらドンピシャの動画出てた」）</td><td>全般。コミュニティの芽</td></tr>
+</table></div>
+<p><b>最重要指標</b>：再生/登録者比<b>1.30</b>。動画が登録者の1.3倍見られている＝YouTubeが登録者の外に配信して受けている状態で、<b>「面白いのになんで伸びないんだろ」（実コメント）の答えは「登録転換がまだ」なだけ</b>。コンテンツ力の問題ではない。</p>
+<p class="small">※コメント投稿者のID分析は標本45人と小さいため参考値。ファン層の本格判定は登録5,000人規模で再測定を推奨。</p>
+
+<h2>5. リスク（正直ベース）</h2>
+<div class="callout lose">
+<p>①<b>収益化・表示制限</b>：性的示唆タイトル/サムネの比率が高い（現行路線の27%）。伏字は対策にならず、限定広告とブラウズ配信抑制の両方を招く。社会派への寄せは数字とリスクの両面で正解。②<b>名指しリスク</b>：実名店舗・実名嬢は検索資産だが、事実性の担保がない断定（「枕」等のコメント放置含む）は名誉毀損リスク。断定は自分の一次体験に限定し、伝聞は「噂」と明示する編集ルールを推奨。③<b>チャンネル説明文の「更新が止まった時はその時だと思ってください」は削除推奨</b>——新規が登録をためらう文言。</p>
+</div>
+
+<h2>6. 成長処方 — 優先順つき</h2>
+<ol class="formula">
+<li><b>社会派暴露に全張り</b>「港区の闇ジャーナリスト」をポジション宣言する。薬物回(17,846)の続編系＝反社と金/ぼったくり/スカウトの構造/ギャラ飲みの搾取構造など、「一般人が知らない構造の暴露」を週2本。</li>
+<li><b>タイトルを報道型に統一</b>「断定＋数字＋網羅」型（実測2倍）。例:「港区の◯◯、95%は△△です」「◯◯の実態一覧」。即ヤレ系語彙はタイトルから外す。</li>
+<li><b>即ヤレ系ハウツーを月1以下に削減</b>数字が弱くリスクだけ高い（中央値1,077・広告制限温床）。同じ知識は「構造の暴露」として言い換え可能（「お持ち帰りのコツ」→「港区で女性が持ち帰られるまでの構造」）。</li>
+<li><b>実名回は検索資産として週1定常化＋リクエスト募集</b>コメント欄に「次に暴露してほしい店」を毎回募集——リクエスト行動は既に自然発生している。固有名詞がロングテール検索を拾い続ける。</li>
+<li><b>続編は「敵・舞台を替えて」</b>真正面の続編は70%に減衰する実測則。年収別ではなく「エリア別（西麻布/銀座/歌舞伎町）」「職業別」と舞台を替えて展開。</li>
+<li><b>Shorts は本編の要約1分版に固定</b>上位Shorts3本（2,485/2,046/1,924）は全て情報一覧型。「1分でわかる港区の◯◯」テンプレで本編への導線に。</li>
+<li><b>登録CTA を「番組化」で作る</b>比1.30=見た人が登録していない。毎回同じ枠組み（例:「港区暗部通信」等の番組名＋定型オープニング5秒）で「続きがあるチャンネル」だと伝える。説明文の後ろ向き文言は今日削除。</li>
+</ol>
+
+<h2>7. データの注記（正直ベース）</h2>
+<ul class="small">
+<li>登録1,090人・コメント90件の小規模標本。重回帰・快感語彙定量・ファン帰属判定は標本不足のため不実施または参考値扱い（当ラボの品質基準による降格）。テーマ別数値は記述統計であり交絡を含む。</li>
+<li>投稿14日未満の動画は集計から除外。再生数は累積値。</li>
+<li>本レポートの指標はYouTube公式の提供指標ではない。視聴維持率・CTR・流入内訳（ブラウズ/検索比率）は非公開データのため、比1.30からの推定。Studio解析と突き合わせれば精度が上がる。</li>
+</ul>
+
+<footer>Keisuke Kai / 美しい夜を (@KeisukeKai-美しい夜を) 分析レポート ｜ データ取得: 2026-07-31 / YouTube Data API v3 ｜ 全100本＋コメント90件全量</footer>
+</div>
+
+</body>
+</html>

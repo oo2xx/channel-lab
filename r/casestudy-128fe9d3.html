@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ファン構造分析 ケーススタディ — なぜ57万人が離れないのか</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="ファン構造分析 ケーススタディ — なぜ57万人が離れないのか">
+<meta property="og:description" content="全動画1,411本とコメント33,973件をAIで全量解析したレポートの抜粋版。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Case Study / 2026-07-31</div>
+  <h1>雨来ズ。ファン構造分析 — なぜ57万人が離れないのか</h1>
+  <p class="hero-sub">YouTubeチャンネル「雨来ズ。」（登録57.6万人・総再生3.1億）の全動画<b>1,411本</b>とコメント<b>33,973件</b>をAIで全量解析したレポートの抜粋版。数字はすべて実測。</p>
+</header>
+
+<div class="callout">
+  <p><b>先に結論だけ</b>：このチャンネルの強さの正体は「面白い企画」ではありませんでした。データが示したのは、<b>ファンは企画ではなく「4人の人間」についている</b>という事実です（証明は§3）。これは夜のお店の経営で言えば——<b>「箱に客がつくか、キャストに客がつくか」問題</b>とまったく同じ構造です。YouTubeも水商売も、答えの出し方まで同じでした。</p>
+</div>
+
+<h2>1. どの企画が勝つのか — 205本の実測</h2>
+<p>直近2年半の本編205本をテーマ分類し、30万再生（平均的な当たりライン）を超えた割合を「勝率」として実測。</p>
+<div class="tablewrap"><table>
+<tr><th>テーマ</th><th class="num">再生中央値</th><th class="num">勝率</th><th>一言で</th></tr>
+<tr><td>立ちんぼ/歌舞伎町/夜の街</td><td class="num">542,204</td><td class="num"><b>87%</b></td><td>夜の街ネタは<b>鉄板</b>。18ヶ月擦っても消耗ゼロ</td></tr>
+<tr><td>マッチングアプリ検証</td><td class="num">581,692</td><td class="num">83%</td><td>タブーの疑似体験</td></tr>
+<tr><td>マルチ/詐欺/悪者成敗</td><td class="num">469,649</td><td class="num">83%</td><td>「叩いてよい相手」への制裁</td></tr>
+<tr><td>大食い/飲食</td><td class="num">216,670</td><td class="num">27%</td><td>誰でもできる企画は選ばれない</td></tr>
+<tr><td>旅/大型ロケ</td><td class="num">202,602</td><td class="num">14%</td><td>同上</td></tr>
+</table></div>
+<p><b>統計処理で分かった意外な事実</b>：「伏字タイトルで3.5倍」「30分超の長尺が有利」に見えたものは、要因を分離するとほぼ消滅。独立して効いていたのは<b>「誰を敵にするか」だけ</b>（悪者成敗×2.30・夜の街×1.94）。タイトルの小手先より、構図の設計がすべてでした。</p>
+
+<h2>2. コメント3.4万件が明かした「ウケる瞬間」の正体</h2>
+<p>バズった回と不発回で、コメント欄に出る言葉の出現率を比較しました。</p>
+<div class="tablewrap"><table>
+<tr><th>コメントの種類</th><th class="num">バズ回</th><th class="num">不発回</th><th class="num">差</th></tr>
+<tr><td><b>「モトダが来た時の安心感」系</b></td><td class="num">3.4/千件</td><td class="num">0.7/千件</td><td class="num"><b>×4.7</b></td></tr>
+<tr><td>スカッと・制裁系</td><td class="num">1.7</td><td class="num">0.9</td><td class="num">×2.0</td></tr>
+<tr><td>頭いい・論破系</td><td class="num">10.9</td><td class="num">13.0</td><td class="num">×0.8（全動画に均一）</td></tr>
+</table></div>
+<p><b>読み方</b>：バズを分けるのは「賢さの披露」ではなく<b>「トラブルの中で頼れる奴が現れる瞬間」</b>。お店で言えば、普段のトークが上手いキャストより、<b>面倒な客をさばいた瞬間に指名が入る</b>のと同じ。危機がないと、頼もしさは発生しない——だから当たる企画には必ず「トラブルが起きうる構造」が仕込まれていました。</p>
+
+<h2>3. 核心：ファンは企画につくのか、人間につくのか</h2>
+<p>コメント投稿者12,758人のIDを、同ジャンル・別ジャンル計12チャンネルのコメント欄と照合しました（おそらく普通の分析では誰もやらない検証です）。</p>
+<div class="tablewrap"><table>
+<tr><th>照合</th><th class="num">重複率</th><th>意味</th></tr>
+<tr><td>がーどまん本ch × 夜のがーどまんch（同じ人間の別ch）</td><td class="num"><b>14.0%</b></td><td>人間についたファンは「箱」を追いかける</td></tr>
+<tr><td>同ジャンルの別グループ同士</td><td class="num">0.0〜0.4%</td><td>ジャンルのファンというものは実在しない</td></tr>
+<tr><td><b>雨来ズのファン→12chのどこかに出現</b></td><td class="num"><b>2.4%</b></td><td><b>97.6%は雨来ズにしかコメントしない</b></td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>判定：「入口は企画、定着は人間」</b>。新規は過激な企画（夜の街・制裁モノ）から入ってくるが、残る理由は4人の関係性。つまり<b>企画は看板メニューで、資産は人</b>。だから企画はいくら入れ替えてもファンは壊れない——実際、当たり企画の「敵」を差し替えた続編は<b>+69%成長</b>、逆に同じ内容の擦り直しは<b>2〜3回目で再生18%まで減衰</b>していました（全実測）。</p>
+<p>夜のお店に翻訳すると：<b>集客イベントは何度でも替えていい。触ってはいけないのはキャストと店の空気だけ</b>。——57万人のチャンネルとバーの経営が、同じ法則で動いています。</p>
+</div>
+
+<h2>4. もう1つの発見：世論は1,258人が作っている</h2>
+<p>コメント欄の全高評価の<b>48.2%を、わずか1,258人のヘビー層が生成</b>していました（12,758人中の9.9%）。数十万人のチャンネルでも、空気を決めているのは実質1,300人——<b>常連が店の空気を作る</b>のと同じ構造です。この層の反応源泉（メンバーの関係性）を裏切る運営だけが、資産を毀損します。</p>
+
+<h2>5. この分析でできること</h2>
+<p>今回使ったのは、①全動画の統計処理 ②要因分離（見せかけの効果の除去） ③コメント全量の言語分析 ④他チャンネルとのファンID照合 の4層です。すべてYouTubeの公開データのみで実行でき、<b>どのチャンネルにも同じ精度で適用できます</b>。規模の大小は問いません（小規模チャンネルには小規模用の正直な基準で出します）。</p>
+
+<footer>雨来ズ。(@amekoz) ファン構造分析 ケーススタディ版 ｜ データ取得: 2026-07-31 / YouTube Data API v3（公開データのみ使用・YouTube公式指標ではない独自算出値を含む） ｜ 掲載はチャンネル本人の了承のもと</footer>
+</div>
+
+</body>
+</html>

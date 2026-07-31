@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>朝倉未来 — チャンネル分析レポート（完全版）</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="朝倉未来 — チャンネル分析レポート（完全版）">
+<meta property="og:description" content="全942本＋コメント20,000件＋26chファンID照合＋同ジャンル実測比較。勝ちパターンと成長処方7項。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Channel Analysis Report / 2026-07-31</div>
+  <h1>朝倉未来 Mikuru Asakura — 勝ちパターンの言語化と成長処方（共有版）</h1>
+  <p class="hero-sub">対象: <b>@mikuruasakura1</b>（登録354万人）｜ 全<b>942本</b>を全量取得・統計処理 ｜ コメント<b>20,000件</b>の定量スキャン ｜ 経過日数を統制した重回帰（n=198・ブートストラップ4,000回） ｜ 26chとのコメント投稿者<b>ID実測照合</b>＋同ジャンル4ch実測比較</p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">24.6億</div><div class="l">総再生数（当ラボ分析11chで最大）</div></div>
+  <div class="kpi"><div class="n">158万</div><div class="l">本編再生中央値（直近2年n=198）</div></div>
+  <div class="kpi"><div class="n">×1.93</div><div class="l">BDオーディションの独立効果（チャンネルの主軸）</div></div>
+  <div class="kpi"><div class="n">×0.49</div><div class="l">会見・AWARD系の独立効果（棚の汚染・要移管）</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：このチャンネルの現在の正体は個人チャンネルではなく<b>「BreakingDownオーディションという最強コンテンツの独占放送局」</b>である。直近2年の独立効果はBDオーディション×1.93（n=75・中央値297万）が突出し、<b>本業のはずの試合・格闘技×0.75と会見・AWARD×0.49が有意な負け筋</b>という逆転構造。バズを見分けるコメント語彙は「ブチギレ/緊張感」×3.69と「強さへの畏怖」×1.98で、<b>朝倉未来個人への好意は×0.37と不発回に沈む</b>——視聴者が買っているのは人柄ではなく「緊張の劇場」。ファン構造はヘビー層192人・高評価シェア6%の大衆野次馬型（箱推しなき巨大チャンネル）。注意信号は1つ：BDオーディションのシーズン中央値がBD10〜12の470〜530万→BD19〜20の300万へと<b>10シーズンで約4割の緩やかなフランチャイズ疲労</b>を起こしている。</p>
+  <p class="small"><b>根拠の検証方法</b>：①経過日数統制の重回帰（R²=0.50）②コメント20,000件の語彙定量 ③26chとの投稿者ID照合＋同ジャンル4ch実測比較。</p>
+</div>
+
+<h2>1. チャンネル構造と現在地</h2>
+<div class="tablewrap"><table>
+<tr><th>レイヤー</th><th>定義</th><th class="num">本数</th><th class="num">再生中央値</th><th class="num">総再生</th></tr>
+<tr><td><b>本編</b></td><td>8分以上</td><td class="num">932本</td><td class="num">1,859,930</td><td class="num">24.3億（99%）</td></tr>
+<tr><td>Shorts</td><td>61秒以下</td><td class="num"><b>4本</b></td><td class="num"><b>3,517,509</b></td><td class="num">0.15億（<b>ほぼ未開拓の金脈</b>）</td></tr>
+<tr><td>クリップ</td><td>1〜8分</td><td class="num">6本</td><td class="num">941,468</td><td class="num">0.10億</td></tr>
+</table></div>
+<p><b>重要な事実</b>：①7年間・月2〜15本で本編中央値142万〜233万を維持する超大型安定チャンネル（2026年ダミー×1.00＝地力の減速なし）。②Shortsがわずか4本で中央値352万——<b>当ラボ分析11chで唯一「Shortsをやっていない」大手</b>であり、最大の未回収資産。③かつての主軸「路上・不良系」（ぼったくりバー3,400万・喧嘩自慢シリーズ1,000万級）は現在年数本だが、直近2年でも中央値210万・×1.40と衰えていない。</p>
+
+<h2>2. 勝ちパターン — テーマ別勝率（本編・直近2年198本・投稿14日超）</h2>
+<div class="tablewrap"><table>
+<tr><th>テーマ</th><th class="num">n</th><th class="num">再生中央値</th><th class="num">勝率(222万超)</th><th>判定</th></tr>
+<tr><td><b>BDオーディション</b></td><td class="num">75</td><td class="num"><b>2,972,088</b></td><td class="num"><b>60%</b></td><td><span class="tag win">主軸・独占コンテンツ</span></td></tr>
+<tr><td><b>路上・不良系（旧勝ち筋）</b></td><td class="num">7</td><td class="num">2,096,716</td><td class="num">43%</td><td><span class="tag win">眠れる資産</span></td></tr>
+<tr><td>メンバー・日常企画</td><td class="num">2</td><td class="num">1,746,645</td><td class="num">50%</td><td><span class="tag mid">小標本</span></td></tr>
+<tr><td>試合・格闘技本業</td><td class="num">26</td><td class="num">793,852</td><td class="num">12%</td><td><span class="tag lose">本業が負け筋という逆説</span></td></tr>
+<tr><td><b>BD運営・会見・AWARD・密着</b></td><td class="num">25</td><td class="num">755,847</td><td class="num">4%</td><td><span class="tag lose">棚の汚染</span></td></tr>
+<tr><td>大物コラボ</td><td class="num">1</td><td class="num">514,212</td><td class="num">0%</td><td><span class="tag lose">参考値</span></td></tr>
+</table></div>
+<h3>形式要素（単変量）</h3>
+<div class="tablewrap"><table>
+<tr><th>要素</th><th>あり</th><th>なし</th><th>示唆</th></tr>
+<tr><td>尺40分超</td><td class="num">×1.00（回帰）</td><td class="num">—</td><td>尺は中立。オーディションの43〜59分は正当</td></tr>
+<tr><td>「ブチギレ」等の感情タイトル</td><td colspan="2" class="num">直近1年トップ3が全て感情型（671万/436万/435万）</td><td>審査員の感情がサムネの通貨</td></tr>
+</table></div>
+<p class="note">⚠ 単変量はテーマとの交絡を含む。独立効果は§3を参照。</p>
+
+<h2>3. 要因分離 — 経過日数を統制した重回帰（n=198・R²=0.50）</h2>
+<div class="tablewrap"><table>
+<tr><th>要因</th><th class="num">独立効果</th><th class="num">95%信頼区間</th><th>判定</th></tr>
+<tr><td>BDオーディション</td><td class="num"><b>×1.93</b></td><td class="num">[×1.69 – ×2.22]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>路上・不良系</td><td class="num">×1.40</td><td class="num">[×1.01 – ×1.86]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>試合・格闘技本業</td><td class="num">×0.75</td><td class="num">[×0.60 – ×0.95]</td><td><span class="tag lose">有意（負）</span></td></tr>
+<tr><td>BD運営・会見・AWARD</td><td class="num"><b>×0.49</b></td><td class="num">[×0.41 – ×0.60]</td><td><span class="tag lose">有意（負）</span></td></tr>
+<tr><td>大物コラボ</td><td class="num">×0.32</td><td class="num">[×0.26 – ×1.00]</td><td><span class="tag lose">負方向・n=1参考</span></td></tr>
+<tr><td>2026年（地力）</td><td class="num">×1.00</td><td class="num">[×0.79 – ×1.26]</td><td><span class="tag mid">減速なし</span></td></tr>
+</table></div>
+<div class="callout">
+<p><b>この分析が変える結論</b>：①<b>「格闘家の本業コンテンツ」が有意な負け筋（×0.75）</b>——視聴者はプロの試合ではなく「素人の緊張と粗暴の劇場」を見に来ている。②会見・AWARD×0.49はBD公式ch（30.7万人）に移すべき棚の汚染。③2026年×1.00＝チャンネル地力は落ちていない——落ちているのはBDフランチャイズのシーズン単価だけ（§6）で、問題の切り分けが可能。</p>
+</div>
+
+<h2>4. 負けパターン</h2>
+<div class="grid2">
+<div class="panel lose"><h4>負け筋①：BD運営系の棚混在（25本・×0.49）</h4>
+<ul><li>会見58〜67万・AWARD59万・当日密着60万——本編中央値158万の1/3〜1/2</li><li>BD公式ch（中央値10万）が受け皿として機能していない——コンテンツの棚割りが未設計</li></ul></div>
+<div class="panel lose"><h4>負け筋②：本業（試合・格闘技）×0.75</h4>
+<ul><li>試合関連・練習・スパー系は勝率12%</li><li>「本業の真剣勝負」より「素人の本気」が数字になる——チャンネルのアイデンティティと収益構造のねじれとして認識しておくべき事実</li></ul></div>
+</div>
+
+<h2>5. なぜこの再生数になるのか — コメント20,000件の定量検証</h2>
+<h3>バズ回を見分ける語彙</h3>
+<div class="tablewrap"><table>
+<tr><th>語彙群</th><th class="num">バズ回(/1000件)</th><th class="num">不発回</th><th class="num">倍率</th><th>解釈</th></tr>
+<tr><td><b>ブチギレ/緊張感</b></td><td class="num">11.8</td><td class="num">3.2</td><td class="num"><b>×3.69</b></td><td><b>バズの引き金＝緊張の劇場</b></td></tr>
+<tr><td>強さへの畏怖/かっこいい</td><td class="num">128.2</td><td class="num">64.8</td><td class="num">×1.98</td><td>第2因子・最大母数</td></tr>
+<tr><td>出場者への論評/審査参加</td><td class="num">14.0</td><td class="num">10.2</td><td class="num">×1.37</td><td>視聴者が審査員化する</td></tr>
+<tr><td>朝倉未来個人への信頼/好意</td><td class="num">6.8</td><td class="num">18.4</td><td class="num"><b>×0.37</b></td><td><b>人格回はコア向け＝バズ因子ではない</b></td></tr>
+<tr><td>古参/昔から</td><td class="num">1.8</td><td class="num">4.0</td><td class="num">×0.45</td><td>古参は不発回（原点系・人格系）に集まる</td></tr>
+</table></div>
+<h3>快感の型 — 高評価コメントの実引用から</h3>
+<div class="grid2">
+<div class="panel win"><h4>①「見てはいけないもの」の教材化</h4>
+<blockquote>最近反抗期の息子に「勉強しないとこんな大人になるよ」って見せたら泣きながら計算ドリルやっています。本当に最高の教育動画です。<span class="src">👍38,825 / BD6オーディション（チャンネル最多高評価）</span></blockquote>
+<p class="small">オーディションは「反面教師の劇場」として消費されている——粗暴さの陳列が皮肉な公共性を獲得。</p></div>
+<div class="panel win"><h4>②視聴者の審査員化（参加型の熱）</h4>
+<blockquote>田中雄士いらないボタン🔘<span class="src">👍27,494 / BD18 Vol.4（直近1年最大671万）</span></blockquote>
+<blockquote>10人ニキ飽きないから次も出してほしい。絶対視聴率取れる<span class="src">👍1,653 / BD5</span></blockquote>
+<p class="small">「いらないボタン」文化＝コメント欄が第二の審査会場。人気キャスト（10人ニキ・飯田さん）はコメント欄が発見する。</p></div>
+<div class="panel"><h4>③制裁ヒーローの伝説（旧路線の遺産）</h4>
+<blockquote>シバター悪役として優秀すぎる<span class="src">👍31,052 / シバター回（3,112万）</span></blockquote>
+<blockquote>ぼくには通用しないですよ ↑かっけー<span class="src">👍13,730 / ぼったくりバー回（3,400万・歴代1位）</span></blockquote></div>
+<div class="panel"><h4>④無限需要の表明</h4>
+<blockquote>無限にオーディションして欲しい<span class="src">👍13,170 / BD6</span></blockquote></div>
+</div>
+<h3>ファン構造の実測</h3>
+<p>ユニーク投稿者15,820人（当ラボ最大）・2本以上に出現14%・<b>ヘビー層192人が高評価のわずか6%</b>——箱推しなき大衆野次馬型。高評価率も上位20%で0.64%と全ch最低＝「見るが推さない」巨大なライト層の海。エンゲージ逆相関あり（下位1.02% vs 上位0.64%）。</p>
+<h3>ID照合 — 大衆野次馬圏の横断性</h3>
+<div class="tablewrap"><table>
+<tr><th>照合先</th><th class="num">重複率</th><th>意味</th></tr>
+<tr><td>桑田龍征（格闘・歌舞伎町圏）</td><td class="num">1.69%</td><td>喧嘩・不良文化圏の隣接が最大</td></tr>
+<tr><td>雨来ズ/ぷろたん/いだ/ステゴロ 等</td><td class="num">0.5〜1.1%</td><td>特定圏に依存せず広く薄い——ステゴロ型の「横断野次馬圏」の超大型版</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>判定：「劇場型・大衆野次馬圏」</b>。ファンは朝倉未来個人でもBD出場者でもなく「緊張と暴力性の劇場」そのものに集まる。含意：①推し文化がないため出演者交代・路線変更への耐性が高い ②その代わり劇場の品質（緊張感の演出）が唯一の生命線 ③個人の人格回は数字にならないが、コア層（古参×0.45が沈む先）への配当として低頻度で必要。</p>
+</div>
+
+<h2>6. シリーズの代数 — BDフランチャイズの実測</h2>
+<div class="tablewrap"><table>
+<tr><th>シーズン</th><th class="num">オーディション中央値</th><th>状態</th></tr>
+<tr><td>BD10〜12（2024年前半）</td><td class="num">474万〜530万</td><td>フランチャイズ最盛期</td></tr>
+<tr><td>BD13〜16</td><td class="num">357万〜421万</td><td>高原状態</td></tr>
+<tr><td>BD17〜18</td><td class="num">358万〜369万</td><td>維持</td></tr>
+<tr><td><b>BD19〜20（直近）</b></td><td class="num"><b>300万〜303万</b></td><td><b>最盛期比−40%の緩やかな疲労</b></td></tr>
+</table></div>
+<div class="callout gold"><p><b>法則</b>：BDオーディションは「キャスト総入れ替え×構造固定」の理想形（当ラボ実測則の最良実装）で10シーズン持続——ただし<b>シーズン単価は最盛期比−40%</b>。減衰要因の候補は常連キャストの固定化（新鮮な狂気の供給減）。コメント欄が人気キャストを発見する構造（10人ニキ・飯田）を持っているので、<b>「新キャラの物語化」を毎シーズン意図的に仕込む</b>のが対処法。</p></div>
+
+<h2>7. 同ジャンル比較 — 格闘・BD圏の現在地（直近1年実測）</h2>
+<div class="tablewrap"><table>
+<tr><th>チャンネル</th><th class="num">登録</th><th class="num">長尺中央値</th><th class="num">ペース/月</th><th class="num">中央値÷登録者</th><th>型</th></tr>
+<tr><td><b>朝倉未来</b></td><td class="num">354万</td><td class="num">1,582,933</td><td class="num">7.2</td><td class="num">0.45</td><td><b>BD劇場の放送局</b></td></tr>
+<tr><td>朝倉海</td><td class="num">139万</td><td class="num">462,448</td><td class="num">5.7</td><td class="num">0.33</td><td>弟・格闘家個人ch</td></tr>
+<tr><td>BreakingDown公式</td><td class="num">30.7万</td><td class="num">100,259</td><td class="num">6.5</td><td class="num">0.33</td><td>受け皿として未活用</td></tr>
+<tr><td>ヒカル</td><td class="num">489万</td><td class="num">1,084,962</td><td class="num">17.9</td><td class="num">0.22</td><td>人生実況（参考: メガ帯）</td></tr>
+<tr><td>相馬トランジスタ</td><td class="num">85.2万</td><td class="num">231,351</td><td class="num">10.5</td><td class="num">0.27</td><td>ファイト系エンタメ</td></tr>
+</table></div>
+<p><b>発見①</b>：中央値÷登録者0.45はメガ帯（ヒカル0.22）の2倍——354万人規模でこの効率は異常で、BDオーディションの集客力が規格外であることの証明。<b>発見②</b>：BD公式ch（中央値10万）が完全に育っていない——会見・AWARD・裏側系（本chの負け筋×0.49）を移管すれば、本chの棚が締まり公式が育つ一石二鳥の棚割りが可能。<b>発見③</b>：兄弟チャンネル（海139万・0.33）との分業も未設計——試合・練習系（本chの負け筋×0.75）は格闘技純度の高い海ch側の文化と相性が良い。</p>
+
+<h3>未回収の企画案 — コメント欄からの発掘</h3>
+<ul>
+<li><b>Shorts本格参入</b>——4本で中央値352万の実測。BDオーディションの「緊張の瞬間」60秒切り抜きは、11ch分析で最大の未回収資産</li>
+<li><b>「いらないボタン」の公式化</b>——👍27,494の視聴者審査文化をコミュニティ投票・出場者総選挙として制度化。参加型の熱をデータ資産に変える</li>
+<li><b>人気キャストのドキュメンタリー</b>——「10人ニキ毎回出してほしい」「飯田さん復活まじ待ってた」。BD人気キャストの掘り下げ回はコメント欄が既に発注している</li>
+<li><b>路上系の原点回帰 年2〜3本</b>——×1.40・中央値210万が眠っている。古参（×0.45で不発回に沈む層）への配当にもなる</li>
+</ul>
+
+<h2>8. 成長処方 — 優先順つき</h2>
+<ol class="formula">
+<li><b>Shortsを今日から始める</b>4本・中央値352万の実測がある11ch唯一の「Shorts空白大手」。BDの緊張の瞬間は60秒フォーマットと最高の相性。</li>
+<li><b>棚割りを設計する</b>会見・AWARD・密着（×0.49）はBD公式chへ、試合・練習系（×0.75）は朝倉海chまたはShortsへ。本chは「オーディション劇場＋路上系＋厳選企画」に純化する。</li>
+<li><b>毎シーズン「新キャラの物語」を1人仕込む</b>シーズン単価−40%への対処。コメント欄のキャスト発見力（10人ニキ・飯田）を編集で増幅し、オーディション→本戦→ドキュメンタリーの縦導線を作る。</li>
+<li><b>路上系を年2〜3本復活させる</b>×1.40。「原点回帰」は数字と古参配当の両取り。</li>
+<li><b>視聴者審査の制度化</b>「いらないボタン」文化を公式投票に。参加型の熱がBDの本体。</li>
+<li><b>人格回は月1以下でコアに配る</b>好意語彙×0.37の実測どおり数字にはならないが、ヘビー層192人と古参の維持装置として必要。</li>
+<li><b>大物コラボは構造がある時だけ</b>×0.32（参考値）。名前でなく「オーディション審査員として招く」等、劇場の文脈に載せる。</li>
+</ol>
+
+<h2>9. データの注記（正直ベース）</h2>
+<ul class="small">
+<li>再生数は累積値。回帰は直近2年n=198・ln(経過日数)統制済み・R²=0.50。路上系n=7・メンバー企画n=2・コラボn=1は小標本のため方向のみ参考。</li>
+<li>BDシーズン別中央値（§6）は全期間の実測（累積値のため直近シーズンほど不利だが、BD10と19の投稿時期差は約1.5年で経過日数弾性×0.96より影響は限定的）。</li>
+<li>コメントは層化サンプル200本×コメ欄上位100件＝20,000件。ID照合は2026-07-31取得の同日パネル26ch・下限推定。</li>
+<li>本レポートの指標はYouTube公式の提供指標ではなく公開データからの独自算出。視聴維持率・CTR・BD本体の興行収益等は未使用。</li>
+</ul>
+
+<footer>朝倉未来 Mikuru Asakura (@mikuruasakura1) 分析レポート ｜ データ取得: 2026-07-31 / YouTube Data API v3 ｜ 全942本＋コメント20,000件＋26ch ID照合＋同ジャンル4ch実測比較</footer>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BUDDICAの中野クン — チャンネル分析レポート</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="BUDDICAの中野クン — チャンネル分析レポート">
+<meta property="og:description" content="全410本＋コメント9,580件＋21chファンID照合。勝ちパターンの言語化と成長処方7項。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Channel Analysis Report / 2026-07-31</div>
+  <h1>BUDDICAの中野クン — 勝ちパターンの言語化と成長処方（共有版）</h1>
+  <p class="hero-sub">対象: <b>@BUDDICA-nakanokun</b>（登録20.9万人）｜ 全<b>410本</b>を全量取得・統計処理 ｜ コメント<b>9,580件</b>の定量スキャン ｜ 経過日数を統制した重回帰（n=288・ブートストラップ4,000回） ｜ メインch含む21chとのコメント投稿者<b>ID実測照合</b></p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">5,667万</div><div class="l">総再生数（2年11ヶ月・410本）</div></div>
+  <div class="kpi"><div class="n">10.4万</div><div class="l">本編再生中央値（n=288）</div></div>
+  <div class="kpi"><div class="n">×2.70</div><div class="l">バズ回を見分ける「中野個人への好意」語彙の偏在</div></div>
+  <div class="kpi"><div class="n">×0.18</div><div class="l">経営相談シリーズの独立効果（約1/5.5・要判断）</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：「サブチャンネル」という位置づけに反して、実態は<b>「中野優作という人間と会社のドラマ」を売る独立メディア</b>である。要因分離で独立に効くのは 対談×2.11・社内ドラマ（ブチギレ/社員回）×1.97・説教マインド×1.30。バズ回を見分けるコメント語彙は<b>「中野個人への好意」×2.70と「社員言及」×1.97</b>で、逆に「学び・刺さった」語彙は不発回に多い（×0.85）——<b>ノウハウは定着装置でありバズ装置ではない</b>。メインch（車販売・54.6万人）とのファン重複はわずか4.5%＝車の客とマインドの客は別人。そして最大の負け筋は経営相談ガチ指南シリーズ：<b>独立効果×0.18・16本全てが勝率0%</b>。</p>
+  <p class="small"><b>根拠の検証方法</b>：①経過日数統制の重回帰（R²=0.32）②コメント9,580件の語彙定量 ③メインch＋panel20chとのID照合。</p>
+</div>
+
+<h2>1. チャンネル構造と現在地</h2>
+<div class="tablewrap"><table>
+<tr><th>レイヤー</th><th>定義</th><th class="num">本数</th><th class="num">再生中央値</th><th class="num">総再生</th></tr>
+<tr><td><b>本編</b></td><td>8分以上</td><td class="num">291本</td><td class="num">104,823</td><td class="num">4,244万（75%）</td></tr>
+<tr><td>クリップ</td><td>1〜8分</td><td class="num">76本</td><td class="num">54,511</td><td class="num">1,097万</td></tr>
+<tr><td>Shorts</td><td>61秒以下</td><td class="num">43本</td><td class="num">36,474</td><td class="num">331万</td></tr>
+</table></div>
+<p><b>重要な事実</b>：月8〜9本ペースで中央値10万前後を安定維持（2025-11は27.6万のピーク＝働き方時事×大物対談×幹部論が同月に揃った回）。再生/登録者比0.50は健全圏。ただし回帰のln経過日数×0.88が示す通り<b>再生は投稿直後に集中し、カタログが複利しにくい</b>——週次の新作供給が生命線のフロー型チャンネル。</p>
+
+<h2>2. 勝ちパターン — テーマ別実測（本編288本・投稿14日超）</h2>
+<div class="tablewrap"><table>
+<tr><th>テーマ</th><th class="num">n</th><th class="num">再生中央値</th><th class="num">勝率(14.5万超)</th><th>判定</th></tr>
+<tr><td><b>対談/大物ゲスト</b>（元GS田中渓 等）</td><td class="num">5</td><td class="num"><b>258,507</b></td><td class="num"><b>80%</b></td><td><span class="tag win">最強・増枠余地大</span></td></tr>
+<tr><td><b>社内ドラマ/感情回</b>（ブチギレ/ひなチャン/社員）</td><td class="num">12</td><td class="num">244,172</td><td class="num">58%</td><td><span class="tag win">勝ち筋</span></td></tr>
+<tr><td>社会派/時事解説（香川体育館の闇/USJ炎上）</td><td class="num">27</td><td class="num">156,830</td><td class="num">56%</td><td><span class="tag win">勝ち筋</span></td></tr>
+<tr><td>説教/マインド/自己啓発</td><td class="num">67</td><td class="num">116,614</td><td class="num">40%</td><td><span class="tag mid">基礎材</span></td></tr>
+<tr><td>採用/組織/マネジメント</td><td class="num">36</td><td class="num">94,586</td><td class="num">28%</td><td><span class="tag mid">中位</span></td></tr>
+<tr><td>車/BUDDICA事業</td><td class="num">28</td><td class="num">94,136</td><td class="num">21%</td><td><span class="tag lose">サブchでは弱い</span></td></tr>
+<tr><td><b>経営相談ガチ指南シリーズ</b>（『◯◯したい』経営者に…）</td><td class="num">16</td><td class="num"><b>14,070</b></td><td class="num"><b>0%</b></td><td><span class="tag lose">要改修</span></td></tr>
+</table></div>
+
+<h2>3. 要因分離 — 経過日数を統制した重回帰（n=288・R²=0.32）</h2>
+<div class="tablewrap"><table>
+<tr><th>要因</th><th class="num">独立効果</th><th class="num">95%信頼区間</th><th>判定</th></tr>
+<tr><td>対談/大物ゲスト</td><td class="num"><b>×2.11</b></td><td class="num">[×1.21 – ×3.85]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>社内ドラマ/感情回</td><td class="num"><b>×1.97</b></td><td class="num">[×1.08 – ×3.53]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>説教/マインド/自己啓発</td><td class="num">×1.30</td><td class="num">[×1.01 – ×1.65]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>社会派/時事解説</td><td class="num">×1.21</td><td class="num">[×0.91 – ×1.61]</td><td><span class="tag mid">正方向</span></td></tr>
+<tr><td>車/BUDDICA事業</td><td class="num">×0.79</td><td class="num">[×0.59 – ×1.07]</td><td><span class="tag mid">負方向</span></td></tr>
+<tr><td><b>経営相談ガチ指南シリーズ</b></td><td class="num"><b>×0.18</b></td><td class="num">[×0.13 – ×0.26]</td><td><span class="tag lose">有意（強い負）</span></td></tr>
+<tr><td>30分超の長尺</td><td class="num">×0.90</td><td class="num">[×0.73 – ×1.11]</td><td><span class="tag mid">効果なし</span></td></tr>
+</table></div>
+<div class="callout">
+<p><b>この分析が変える結論</b>：経営相談シリーズの×0.18は交絡ではなく<b>フォーマット自体の独立した失敗</b>（他要因を統制しても約1/5.5）。視聴者が来る理由は「中野の話・中野の会社の話」であり、<b>見知らぬ経営者の事業相談はその動機と正面からズレている</b>。一方、対談×2.11は n=5 しか打っていない——最も効く型が最も使われていないのが現状の最大の機会損失。</p>
+</div>
+
+<h2>4. 負けパターン</h2>
+<div class="grid2">
+<div class="panel lose"><h4>負け筋①：経営相談ガチ指南シリーズ（16本・勝率0%・×0.18）</h4>
+<ul><li>下位10本を独占（7,900〜15,200再生）。令和の虎型フォーマットの移植だが、虎と違い「審査の緊張感」も「金が動く瞬間」もない</li><li>ゲスト経営者は視聴者にとって無名＝誰の物語でもない（青柳ch分析の「文脈なし社内企画」と同型の死に方）</li></ul></div>
+<div class="panel lose"><h4>負け筋②：サブchでの車・事業紹介（×0.79）</h4>
+<ul><li>コメントの車/顧客語彙はバズ・不発で差ゼロ（×1.00）＝車の見込み客はこのchに居ない</li><li>メインchとのファン重複4.5%が裏付け——<b>サブchの客は「車を買う人」ではなく「中野に学ぶ/中野を見る人」</b></li></ul></div>
+</div>
+
+<h2>5. なぜこの再生数になるのか — コメント9,580件とID照合による実証</h2>
+<h3>バズ回を見分ける語彙</h3>
+<div class="tablewrap"><table>
+<tr><th>語彙群</th><th class="num">バズ回(/1000件)</th><th class="num">不発回</th><th class="num">倍率</th><th>解釈</th></tr>
+<tr><td><b>中野個人への好意/信頼</b>（男気/尊敬/かっこいい）</td><td class="num">10.7</td><td class="num">4.0</td><td class="num"><b>×2.70</b></td><td><b>バズの最強因子＝人</b></td></tr>
+<tr><td>社員/ひなチャン言及</td><td class="num">58.6</td><td class="num">29.8</td><td class="num">×1.97</td><td>会社の人間ドラマが第2因子</td></tr>
+<tr><td>共感/自分も</td><td class="num">66.4</td><td class="num">45.6</td><td class="num">×1.46</td><td>働く人の自分事化</td></tr>
+<tr><td>車/バディカ顧客</td><td class="num">59.6</td><td class="num">59.5</td><td class="num">×1.00</td><td>差ゼロ＝販促に効いていない</td></tr>
+<tr><td><b>刺さった/学び/行動宣言</b></td><td class="num">74.4</td><td class="num">87.3</td><td class="num"><b>×0.85</b></td><td><b>学び語彙は不発回に多い＝定着装置でありバズ装置ではない</b></td></tr>
+</table></div>
+<h3>ファン構造の実測</h3>
+<div class="tablewrap"><table>
+<tr><th>測定</th><th class="num">値</th><th>意味</th></tr>
+<tr><td>ユニークコメ投稿者</td><td class="num">6,038人</td><td>2本以上に出現21%・ヘビー層215人が高評価の16%</td></tr>
+<tr><td><b>メインch（中野優作/CAR and LIFE. 54.6万人）との重複</b></td><td class="num"><b>4.5%</b></td><td>兄弟chなのに客が別＝サブは独立メディアとして自立済み</td></tr>
+<tr><td>桑田龍征ch（歌舞伎町経営者系）との重複</td><td class="num">2.1%</td><td>「経営者ドキュメント」ジャンルの回遊層が存在</td></tr>
+<tr><td>エンタメ系17chとの重複</td><td class="num">0.5%以下</td><td>エンタメ圏とは断絶</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>判定：「入口は人間ドラマ、定着は学び」</b>。バズは中野個人と社員の物語（×2.70/×1.97）で起き、コア層は学びの語彙で定着する（不発回=コア向け栄養回の学び語彙が高い）。当ラボの他ch実測と比較すると、この構造は<b>雨来ズ型（入口=企画/定着=人間）のちょうど逆</b>で、経営者チャンネル特有の型。含意：<b>人間ドラマ回を止めると新規が止まり、学び回を止めるとコアが痩せる</b>——両輪であり、どちらかへの全振りは誤り。</p>
+</div>
+
+<h2>6. 成長処方 — 優先順つき</h2>
+<ol class="formula">
+<li><b>対談枠を月2本に増やす</b>独立効果×2.11・勝率80%が n=5 しか使われていない最大の機会損失。人選の型は「肩書の権威×実務の具体」（元GS田中渓型）。守るべきは「中野が対等に斬り込む」構図で、聞き役に回ると説教マインド回の強みが消える。</li>
+<li><b>経営相談シリーズは現形式を止める</b>×0.18・16本とも勝率0%。素材を活かすなら「無名経営者の相談」でなく<b>「中野が自腹・自社で実際にやって結果の数字まで見せる」介入ドキュメント</b>に改修する（このchのファンは中野の実話にだけ金を払う時間を払う）。</li>
+<li><b>社内ドラマを月1の定常枠にする</b>×1.97。ブチギレ・ひなチャン・幹部との衝突は既にコメント欄の第2言語（社員言及×1.97）。社員に名前とキャラを与え、「BUDDICAという連続ドラマ」の登場人物を増やす。</li>
+<li><b>社会派解説は「経営者の目」を差別化軸に月1固定</b>香川体育館49.9万・USJ44.7万。ニュースの後追いでなく「経営と金の構造で斬る」ポジションが勝率56%の源泉。</li>
+<li><b>車販促はサブchでやらない</b>×0.79・顧客語彙フラット。車はメインchの仕事。サブchのKPIは「中野個人の信頼資産」に置き、採用・講演・法人取引への波及で回収する設計に割り切る。</li>
+<li><b>週次ペースを死守する</b>ln経過日数×0.88＝カタログが複利しないフロー型。投稿が止まると資産も止まる。月8本の現行ペースは正しい。</li>
+<li><b>Shorts は社内ドラマ切片に特化</b>Shorts上位はX炎上63.6万・お金がなかった時35.4万と全て人間ドラマ系。マインド要約型より「感情の瞬間」を切る。</li>
+</ol>
+
+<h2>7. データの注記（正直ベース）</h2>
+<ul class="small">
+<li>再生数は累積値。回帰はln(経過日数)統制済み・R²=0.32（残りはサムネ・時事性等の未観測要因）。テーマ別中央値表は未統制の記述統計。対談n=5・社内ドラマn=12は小標本のため効果量の精度は粗い（方向は有意）。</li>
+<li>コメントは層化サンプル200本×コメ欄上位100件＝9,580件。投稿14日未満の動画は集計除外。</li>
+<li>ID照合は2026-07-31取得の同日パネル（メインch＋20ch）。コメント投稿者ベースの下限推定。</li>
+<li>本レポートの指標はYouTube公式の提供指標ではなく公開データからの独自算出。視聴維持率・CTR・流入内訳は未使用。</li>
+</ul>
+
+<footer>BUDDICAの中野クン (@BUDDICA-nakanokun) 分析レポート ｜ データ取得: 2026-07-31 / YouTube Data API v3 ｜ 全410本＋コメント9,580件＋21ch ID照合</footer>
+</div>
+
+</body>
+</html>

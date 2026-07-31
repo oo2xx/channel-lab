@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>コムドット — チャンネル分析レポート（完全版）</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="コムドット — チャンネル分析レポート（完全版）">
+<meta property="og:description" content="全3,108本＋コメント19,941件＋29chファンID照合＋グループ大手4ch実測比較。勝ちパターンの言語化。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Channel Analysis Report / 2026-07-31</div>
+  <h1>コムドット — 勝ちパターンの言語化と再現フォーマット（共有版）</h1>
+  <p class="hero-sub">対象: <b>@comdot</b>（登録426万人）｜ 全<b>3,108本</b>を全量取得・統計処理 ｜ コメント<b>19,941件</b>の定量スキャン ｜ 経過日数を統制した重回帰（直近2年n=334・ブートストラップ4,000回） ｜ 29chとの投稿者<b>ID実測照合</b>＋グループ大手4ch実測比較</p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">54.7億</div><div class="l">総再生数（当ラボ分析13chで2位）</div></div>
+  <div class="kpi"><div class="n">140万</div><div class="l">本編再生中央値（直近2年n=334）</div></div>
+  <div class="kpi"><div class="n">×10.3</div><div class="l">バズ回を見分ける「青春/尊い/絆」語彙の偏在</div></div>
+  <div class="kpi"><div class="n">×0.56</div><div class="l">「やまと偉人化」系の独立効果（最大の負け筋）</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：このチャンネルの勝ちの正体は<b>「青春の目撃」</b>である。バズ回を見分けるコメント語彙は「青春/尊い/絆」<b>×10.32</b>（31.2 vs 3.0/千件）と「地元・友達感」×2.78——視聴者が買っているのは企画の面白さではなく<b>「地元の友達5人の青春がまだ続いている」という物語の続き</b>。メンバー個人への好意語彙371/千件は当ラボ13ch分析で最濃の箱推し密度。要因分離では大食い・ゲーム×1.35／旅行・合宿×1.19／90分超×1.14が有意プラスで、最大の負け筋は<b>「やまと偉人化」系（講演・執筆・MV密着）×0.56</b>——ファンが見たいのは「偉人やまと」ではなく「地元の友達のやまと」。2021年ピーク（中央値349万）比では30%まで下がったが、直近2年は×0.96で<b>安定期に軟着陸済み</b>。ln経過日数×1.20のロングテール型で、過去の名作が伸び続けるカタログ資産を持つ。</p>
+  <p class="small"><b>根拠の検証方法</b>：①経過日数統制の重回帰（R²=0.37）②コメント19,941件の語彙・人物言及定量＋五分位分析 ③29chとの投稿者ID照合＋グループ大手4ch実測比較。</p>
+</div>
+
+<h2>1. チャンネル構造と現在地</h2>
+<div class="tablewrap"><table>
+<tr><th>レイヤー</th><th>定義</th><th class="num">本数</th><th class="num">再生中央値</th><th class="num">総再生</th></tr>
+<tr><td><b>本編</b></td><td>8分以上</td><td class="num">1,887本</td><td class="num">1,889,070（直近2年140万）</td><td class="num">45.3億（83%）</td></tr>
+<tr><td>Shorts</td><td>61秒以下</td><td class="num">945本</td><td class="num">288,683</td><td class="num">7.1億</td></tr>
+<tr><td>クリップ</td><td>1〜8分</td><td class="num">276本</td><td class="num">203,879</td><td class="num">2.0億</td></tr>
+</table></div>
+<div class="tablewrap"><table>
+<tr><th>年</th><th class="num">本編n</th><th class="num">中央値</th><th>備考</th></tr>
+<tr><td>2019〜2020（下積み〜ブレイク）</td><td class="num">625</td><td class="num">45万→119万</td><td>「地元ノリ」の型が完成</td></tr>
+<tr><td><b>2021（全盛期）</b></td><td class="num">346</td><td class="num"><b>349万</b></td><td>200万人記念2,106万・赤組シリーズ1,300〜1,900万</td></tr>
+<tr><td>2022〜2023</td><td class="num">483</td><td class="num">215〜300万</td><td>球技大会1,829万・騒動と炎上を挟む</td></tr>
+<tr><td>2024〜2025</td><td class="num">338</td><td class="num">148〜173万</td><td>安定期へ移行</td></tr>
+<tr><td>2026（7月まで）</td><td class="num">92</td><td class="num">104万</td><td>直近2年回帰×0.96＝軟着陸済み</td></tr>
+</table></div>
+<p><b>重要な事実</b>：①ピーク比30%への減衰はあるが、月12〜15本×中央値100万超を7年目でも維持——勢いを失ったのではなく<b>ブーム期から定常期への軟着陸</b>に成功している（2026年×0.96・非有意）。②ln経過日数×1.20は13ch分析で最も強いロングテール——<b>過去の名作（赤組・球技大会）が今も伸び続けるカタログ資産型</b>で、フロー型の報道系と対極。③登録者比0.33はブーム期に積んだ426万の一部が休眠中であることを示すが、Q5でも高評価率2.20%とコアの下支えは全ch最強クラス。</p>
+
+<h2>2. 勝ちパターン — テーマ別勝率（本編・直近2年334本・投稿14日超）</h2>
+<p class="small">勝率 = 196万再生（中央値の約1.4倍）を超えた割合。</p>
+<div class="tablewrap"><table>
+<tr><th>テーマ</th><th class="num">n</th><th class="num">再生中央値</th><th class="num">勝率</th><th class="barcell"></th><th>判定</th></tr>
+<tr><td><b>大食い・飲食・ゲーム</b>（赤から人狼/回転寿司）</td><td class="num">29</td><td class="num">1,993,834</td><td class="num">52%</td><td class="barcell"><span class="bar win" style="width:52%"></span></td><td><span class="tag win">勝ち筋・意外の主力</span></td></tr>
+<tr><td><b>恋愛コンテンツ</b>（今日好き/恋愛企画）</td><td class="num">20</td><td class="num"><b>1,992,767</b></td><td class="num"><b>55%</b></td><td class="barcell"><span class="bar win" style="width:55%"></span></td><td><span class="tag win">新しい柱</span></td></tr>
+<tr><td>旅行・合宿・イベント</td><td class="num">39</td><td class="num">1,761,411</td><td class="num">36%</td><td class="barcell"><span class="bar win" style="width:36%"></span></td><td><span class="tag win">青春の型・有意</span></td></tr>
+<tr><td>外部コラボ（むくえな/平フラ/貸し出し）</td><td class="num">13</td><td class="num">1,651,640</td><td class="num">38%</td><td class="barcell"><span class="bar" style="width:38%"></span></td><td><span class="tag mid">中位</span></td></tr>
+<tr><td>やまと個人企画（ドッキリ/幹事/色盲）</td><td class="num">31</td><td class="num">1,361,406</td><td class="num">16%</td><td class="barcell"><span class="bar" style="width:16%"></span></td><td><span class="tag mid">基準線</span></td></tr>
+<tr><td><b>やまと偉人化</b>（講演/執筆/MV/演技）</td><td class="num">11</td><td class="num"><b>719,757</b></td><td class="num">0%</td><td class="barcell"><span class="bar lose" style="width:2%"></span></td><td><span class="tag lose">最大の負け筋</span></td></tr>
+<tr><td>メンシプ・総集編・報告</td><td class="num">9</td><td class="num">691,572</td><td class="num">11%</td><td class="barcell"><span class="bar lose" style="width:11%"></span></td><td><span class="tag lose">棚の汚染</span></td></tr>
+</table></div>
+<h3>勝ち動画の共通条件（統計）</h3>
+<div class="tablewrap"><table>
+<tr><th>要素</th><th>あり</th><th>なし</th><th>示唆</th></tr>
+<tr><td>90分超の長尺</td><td class="num">×1.14（§3）</td><td class="num">—</td><td>青春の没入は長さが正義（ヒカル型）</td></tr>
+<tr><td>5人全員＋αの「わちゃわちゃ」構図</td><td class="num">赤組・球技大会が歴代上位独占</td><td class="num">個人フィーチャーは基準線以下</td><td>商品は個人でなく集団の空気</td></tr>
+<tr><td>タイトル定型（【】＋wwwwww）</td><td class="num">7年間一貫</td><td class="num">偉人化系は「...」で終わる</td><td>様式の変化自体が負け筋のシグナルになっている</td></tr>
+<tr><td>外部の女性グループとの共同生活・対抗戦</td><td class="num">平フラ編集合宿1,797万</td><td class="num">—</td><td>「男女の友情」の目撃も青春の一種</td></tr>
+</table></div>
+<h3>歴代トップ層の構図</h3>
+<div class="tablewrap"><table>
+<tr><th class="num">再生</th><th>タイトル</th><th>勝った構図</th></tr>
+<tr><td class="num">21,062,745</td><td>200万人記念・気絶するまで質問に答え続けた</td><td>記念×耐久×全員——祭りの最大化</td></tr>
+<tr><td class="num">19,307,907</td><td>赤組メンバーで賞金100万グランピング旅行</td><td><b>「赤組」＝拡張ファミリーの青春——絆語彙×10.32の源泉</b></td></tr>
+<tr><td class="num">18,285,401</td><td>総勢37名のチャンネル登録球技大会</td><td>界隈の運動会——コムドットが「場」を主催する側</td></tr>
+<tr><td class="num">17,973,149</td><td>平成フラミンゴと編集合宿（地獄）</td><td>男女グループの共同生活——コラボ相手が「友達」になる過程の目撃</td></tr>
+<tr><td class="num">14,038,811</td><td>地元の公園に超高級カブトムシいるドッキリ</td><td>少年心——「地元の友達」の原点画</td></tr>
+<tr><td class="num">12,601,176</td><td>ドッキリのはずがメンバーガチギレで最悪の展開</td><td>関係の危機——絆は揺らぐ瞬間に最も見える（👍32,672「いつまでも大好きです」）</td></tr>
+<tr><td class="num">4,297,558</td><td>今日好きメンバーと宝探し鬼ごっこ（2025）</td><td>現行期最高値：旧勝ち構造（鬼ごっこ）×新キャスト（恋愛番組出演者）の合成</td></tr>
+</table></div>
+<p class="note">⚠ 上の表は単変量の比較でありテーマ・時期が交絡している。独立効果は§3の重回帰を参照。</p>
+
+<h2>3. 要因分離 — 「何が独立に効くのか」を重回帰で切り分ける</h2>
+<p class="small">直近2年の本編n=334の log(再生数) を目的変数に、テーマ＋形式＋ln(経過日数)を同時投入（R²=0.37）。信頼区間はブートストラップ4,000回。</p>
+<div class="tablewrap"><table>
+<tr><th>要因</th><th class="num">独立効果</th><th class="num">95%信頼区間</th><th>判定</th></tr>
+<tr><td><b>大食い・飲食・ゲーム</b></td><td class="num"><b>×1.35</b></td><td class="num">[×1.20 – ×1.52]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>恋愛コンテンツ（今日好き等）</td><td class="num">×1.22</td><td class="num">[×0.99 – ×1.50]</td><td><span class="tag mid">正方向・惜しくも非有意</span></td></tr>
+<tr><td>旅行・合宿・イベント</td><td class="num">×1.19</td><td class="num">[×1.05 – ×1.33]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>90分超の長尺</td><td class="num">×1.14</td><td class="num">[×1.05 – ×1.23]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>外部コラボ</td><td class="num">×1.12</td><td class="num">[×0.88 – ×1.45]</td><td><span class="tag mid">中立</span></td></tr>
+<tr><td>やまと個人企画</td><td class="num">×1.00</td><td class="num">[×0.90 – ×1.10]</td><td><span class="tag mid">基準線＝個人では動かない</span></td></tr>
+<tr><td>メンシプ・総集編・報告</td><td class="num">×0.68</td><td class="num">[×0.47 – ×1.00]</td><td><span class="tag lose">負方向</span></td></tr>
+<tr><td><b>やまと偉人化（講演/執筆/MV）</b></td><td class="num"><b>×0.56</b></td><td class="num">[×0.46 – ×0.68]</td><td><span class="tag lose">有意（強い負）</span></td></tr>
+<tr><td>2026年（地力）</td><td class="num">×0.96</td><td class="num">[×0.84 – ×1.10]</td><td><span class="tag mid">軟着陸・横ばい</span></td></tr>
+</table></div>
+<div class="callout">
+<p><b>この分析が変える結論</b>：①最大の伸びしろは意外にも足元にある——<b>やまと偉人化×0.56</b>。講演・執筆・MV・演技はどれも「地元の友達」から「仰ぎ見る対象」への転換を試みる企画であり、ファンが求める体験（青春の目撃）とズレやすい。個人の活動としては価値が高いぶん、本編の棚とは導線を分けるのが得策。②大食い・ゲーム×1.35が意外の主力——「5人でくだらないことをする」だけの回が最も安定して勝つ。豪華さより「地元ノリ」の純度。③やまと個人企画×1.00＝<b>個人では動かない。5人セットが商品</b>という箱推し構造の統計的証明。</p>
+<p>もう1点：ln経過日数×1.20＝古い動画ほど累積が伸び続けるカタログ型。全盛期の資産が今も再生を生んでおり、新作の役割は「カタログへの入口の維持」と捉えるのが正確。</p>
+</div>
+
+<h2>4. 負けパターン — 何をやると落ちるか</h2>
+<div class="grid2">
+<div class="panel lose"><h4>負け筋①：やまと偉人化（11本・勝率0%・×0.56）</h4>
+<ul><li>講演密着60万・執筆密着64.9万・MV制作55.1万・演技67.9万——本編中央値140万の半分以下</li><li>タイトル様式まで変わる（wwwwww→「...」）＝作り手自身が青春の文法を捨てている自覚の表れ</li></ul></div>
+<div class="panel lose"><h4>負け筋②：メンシプ・総集編・報告（9本・×0.68）</h4>
+<ul><li>メンシプ切り出し44〜49万・総決算48.8万——当ラボ実測則「棚の汚染」と同型</li><li>コアには価値があるためメンバーシップ内・コミュニティ投稿へ移すのが正解</li></ul></div>
+</div>
+<div class="callout lose">
+<p><b>負けの本質</b>：負けるのは「5人の対等な地元ノリ」から外れた動画。偉人化は上下関係を、総集編は過去を持ち込む——どちらも「今も続いている対等な青春」という商品の文法違反であり、品質の問題ではない。</p>
+</div>
+
+<h2>5. なぜこの再生数・この高評価数になるのか — メカニズムの言語化と定量検証</h2>
+<p>高評価コメント上位の精読で快感の型を抽出し（①〜④）、コメント19,941件の語彙・人物言及・五分位・ID照合で全量検証した。</p>
+<h3>① 青春の目撃（×10.32の実体）</h3>
+<blockquote>赤組大好きだから、視聴者の人の憶測とか切り抜きとか気にしないで、純粋にみんなが楽しんでわちゃわちゃしてる動画をこれからも見たいです！<span class="src">👍2,631 / 赤組プチ旅行（1,328万）</span></blockquote>
+<blockquote>いつまでも大好きです<span class="src">👍32,672 / メンバーガチギレ回（1,260万）——関係の危機の回にこそ愛の表明が集まる</span></blockquote>
+<p class="small">バズ回のコメント欄は「尊い」「泣けた」「青春」で埋まる。絆が試される回（ガチギレ・最終回・記念）ほど愛の表明が濃くなる——<b>絆は揺らぐ瞬間に最も見える</b>。</p>
+<h3>② コラボ相手が「友達」になって帰っていく（このchの発明）</h3>
+<blockquote>1週間だったけど、2年分ぐらいの気持ちでした。毎秒楽しくて、でも落ち着く。本当にマブみたいなコムドット。ありがとう！！これからも突き進もうな。<span class="src">👍35,719 / 平成フラミンゴ編集合宿の打ち上げ回（本人降臨）</span></blockquote>
+<blockquote>今日からふぉまえらは私たちのかわいい弟に認定させていただく🤫<span class="src">👍41,623 / 米米倶楽部コラボ（本人降臨）</span></blockquote>
+<p class="small">コラボ相手の降臨コメントが高評価上位を独占する——コラボが「共演」でなく<b>「友達が増える物語」</b>として消費されており、外部コラボの本当の価値は再生数（×1.12）でなくこの物語の供給にある。</p>
+<h3>③ 地元・友達感への郷愁</h3>
+<blockquote>ママ、僕この人たちになりたい——型の憧れではなく「こんな友達関係が欲しい」という渇望が地元語彙×2.78に表れる。<span class="src">地元・友達感語彙 バズ回28.0/千件 vs 不発回10.1</span></blockquote>
+<h3>④ 騒動と再起の当事者性（炎上耐性の質）</h3>
+<blockquote>全てが落ち着いたら呑み行こうな！<span class="src">👍53,156 / スカイピース飲み会ドッキリ回（チャンネル最多高評価・騒動後）</span></blockquote>
+<blockquote>車まで買ってもらって…HIKAKINの気持ちを踏み躙った可能性があることだけは忘れないで下さい。<span class="src">👍30,142 / 謝罪動画——批判も高評価上位に並ぶ</span></blockquote>
+<p class="small">騒動時は擁護と批判が同じコメント欄で最高評価を取り合う——ヒカル型の「審判の劇場」と違い、コムドットの炎上は「身内の不祥事に対する家族会議」の空気で消費される。</p>
+<h3>数字で見る「2層オーディエンス」構造</h3>
+<div class="tablewrap"><table>
+<tr><th>再生五分位</th><th class="num">再生中央値</th><th class="num">高評価率</th><th class="num">コメント率(/千)</th></tr>
+<tr><td>Q1（バズ帯）</td><td class="num">4,605,947</td><td class="num">1.62%</td><td class="num">0.97</td></tr>
+<tr><td>Q2</td><td class="num">2,849,689</td><td class="num">1.85%</td><td class="num">1.26</td></tr>
+<tr><td>Q3</td><td class="num">1,904,779</td><td class="num">1.81%</td><td class="num">1.30</td></tr>
+<tr><td>Q4</td><td class="num">1,224,096</td><td class="num">1.85%</td><td class="num">1.44</td></tr>
+<tr><td>Q5（不発帯）</td><td class="num">505,665</td><td class="num"><b>2.20%</b></td><td class="num">1.08</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>核心</b>：全帯域で高評価率1.6〜2.2%という高原状態（426万人規模でこの水準は異例）——<b>どの動画も「推している人」が見ている</b>。逆相関はあるが緩やかで、バズ帯すら箱推しが分厚い。この構造では「新規獲得」より「コアの青春の続きを絶やさない」ことが数字の生命線になる。</p>
+</div>
+<h3>定量検証① 快感語彙の全量スキャン</h3>
+<div class="tablewrap"><table>
+<tr><th>語彙群</th><th class="num">バズ回(/1000件)</th><th class="num">不発回</th><th class="num">倍率</th><th>解釈</th></tr>
+<tr><td><b>青春/尊い/絆</b></td><td class="num">31.2</td><td class="num">3.0</td><td class="num"><b>×10.32</b></td><td><b>バズの引き金＝青春の目撃</b></td></tr>
+<tr><td>地元・友達感</td><td class="num">28.0</td><td class="num">10.1</td><td class="num">×2.78</td><td>第2因子＝「こんな友達が欲しい」</td></tr>
+<tr><td>応援/これからも</td><td class="num">38.3</td><td class="num">29.7</td><td class="num">×1.29</td><td>伴走型ファンダムの基礎</td></tr>
+<tr><td>メンバー個人への好意</td><td class="num">371.3</td><td class="num">324.7</td><td class="num">×1.14</td><td><b>全帯域で13ch最濃＝箱推し密度の最高記録</b></td></tr>
+<tr><td>古参/あの頃/戻って</td><td class="num">15.8</td><td class="num">24.4</td><td class="num">×0.65</td><td>懐古は不発回の沈殿物（えびじゃと同型）</td></tr>
+<tr><td>笑い</td><td class="num">265.2</td><td class="num">427.4</td><td class="num"><b>×0.62</b></td><td><b>笑いは不発回に多い＝内輪の笑いはコア向け栄養</b></td></tr>
+</table></div>
+<p><b>解釈</b>：笑い語彙が不発回側に濃い×0.62は重要な逆説——「面白い回」がバズるのではなく<b>「感情が動く回（青春・絆・危機）」がバズる</b>。日常のふざけ合いはコアの主食であり、感情のイベントが新規と休眠層を呼び戻す特番になる。</p>
+<h3>定量検証② 人物言及の実測</h3>
+<div class="tablewrap"><table>
+<tr><th>人物</th><th class="num">言及の特徴</th><th>役割</th></tr>
+<tr><td>メンバー5人（合算）</td><td class="num">371/千件（全帯域）</td><td>13ch最濃の箱推し。全員が主語になる均等性も特徴</td></tr>
+<tr><td>やまと</td><td class="num">個人企画×1.00・偉人化×0.56</td><td>リーダーだが「単独商品」にはならない——5人の文脈でのみ機能</td></tr>
+<tr><td>コラボ相手（平フラ/むくえな/今日好き勢）</td><td class="num">降臨コメントが高評価上位常連</td><td>「友達が増える物語」の登場人物</td></tr>
+</table></div>
+<h3>定量検証③ コア層のサイズ実測</h3>
+<p>ユニーク投稿者<b>12,315人</b>・2本以上に出現17%・ヘビー層397人が高評価の10%。個々の言及密度は最濃だがヘビー層の世論支配は弱い——<b>「浅く広く、しかし全員が推している」大衆箱推し型</b>という珍しい分布。</p>
+<h3>定量検証④ ファン帰属のパネルID照合</h3>
+<div class="tablewrap"><table>
+<tr><th>照合先</th><th class="num">重複率</th><th>意味</th></tr>
+<tr><td>雨来ズ</td><td class="num">1.40%</td><td rowspan="2">チャラ男グループ連合圏（雨来ズ⇄えびじゃ4.15%圏）に接続</td></tr>
+<tr><td>えびじゃ</td><td class="num">1.16%</td></tr>
+<tr><td>エスポワール / スカイピース</td><td class="num">0.84% / 0.74%</td><td>先輩・同期グループ圏との回遊</td></tr>
+<tr><td>【基準】同一ファン圏の別ch</td><td class="num">14.0%</td><td>感度検証の上限</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>判定：「最濃箱推し型＋グループ連合圏の中心格」</b>。本体は独自圏（97%超が排他）だが、グループエンタメ連合（雨来ズ・えびじゃ・エスポ・スカイピース）に満遍なく1%前後で接続しており、<b>「男グループ文化圏の盟主」の位置</b>。かつての「NextStage」構想が数字の上では今も生きている——連合圏の運動会（球技大会1,829万）を主催できる唯一のチャンネル。</p>
+</div>
+
+<h2>6. シリーズの代数 — 「擦り」はいつ死に、いつ育つか（全実測）</h2>
+<div class="tablewrap"><table>
+<tr><th>シリーズ</th><th>変遷（再生数）</th><th>法則</th></tr>
+<tr><td>カブトムシドッキリ</td><td>1,403万（2021）→ 265万（2023）→ 204万（2025最終回）</td><td>同ネタ再訪は15〜19%——ただし「最終回」として畳む価値はあった（記念碑化）</td></tr>
+<tr><td><b>宝探し鬼ごっこ（構造）</b></td><td>1,434万（2021）→ 417万 → <b>429万（2025今日好き版）</b></td><td><b>構造を残しキャストを替えると現行期最高値に復活</b>——当ラボ実測則の教科書</td></tr>
+<tr><td>周年旅行（年中行事）</td><td>190万 → 262万 → 207万 → 129万 → 208万</td><td>年1の祭りは7年間安定——行事化の成功例</td></tr>
+<tr><td>今日好きコラボ</td><td>417万 → 208万 → 429万</td><td>新しい柱として定着中（恋愛×1.22）</td></tr>
+<tr><td>赤組（拡張ファミリー）</td><td>2021-22年に1,300〜1,900万を連発 → 休眠中</td><td><b>最大の眠れる資産——絆語彙×10.32の最大源泉が5年眠っている</b></td></tr>
+</table></div>
+<div class="callout gold"><p><b>法則：「構造とキャストの原則はここでも成立、そして最高の構造（赤組）が休眠中」</b>。宝探し鬼ごっこが今日好きキャストで復活した実測は、赤組構造も新世代キャストで復活しうることを示している。</p></div>
+
+<h2>7. 再現フォーマット — 勝ち動画の設計テンプレ</h2>
+<ol class="formula">
+<li><b>5人全員を1フレームに入れる</b>個人企画×1.00・偉人化×0.56の実測——商品は集団の空気。個人回を打つなら他4人の視点を必ず混ぜる。</li>
+<li><b>「くだらないこと×全力」を軸にする</b>大食い・ゲーム×1.35が意外の主力。豪華さや意義より地元ノリの純度が数字になる。</li>
+<li><b>感情のイベントを月1で設計する</b>バズは笑いでなく感情（×10.32）。旅行の夜・記念・別れ・和解——絆が見える瞬間を意図的に作る。</li>
+<li><b>尺は90分超でよい</b>×1.14。青春の没入は長さが正義。</li>
+<li><b>コラボは「友達になる過程」を撮る</b>共演でなく合宿・共同生活型（平フラ1,797万）。相手の降臨コメントまでが作品。</li>
+<li><b>勝った構造はキャストを替えて再利用する</b>宝探し鬼ごっこ×今日好き＝429万の実測。赤組構造の新世代版が次の本命。</li>
+<li><b>偉人化・総集編は棚から外す</b>×0.56/×0.68。講演や書籍はコミュニティ投稿・サブ導線で告知し、本編の棚は青春に純化する。</li>
+</ol>
+<div class="callout gold">
+<p><b>次の一手の候補（データ根拠つき）</b>：①赤組の新世代復活——絆語彙×10.32の最大源泉×「構造×キャスト替え」実測則。連合圏（えびじゃ1.16%・雨来ズ1.40%接続）から新赤組を編成すれば圏全体の祭りになる。②今日好き文脈の拡張（恋愛×1.22・現行期最高値429万の実績）。③球技大会の再開催——1,829万の「界隈の運動会」主催権はコムドットだけが持つ。</p>
+</div>
+
+<h2>8. 同属性チャンネル比較 — 界隈の中での現在地</h2>
+<p class="small">グループ大手4chの直近1年（各ch直近200本のうち投稿14日超）実測。</p>
+<div class="tablewrap"><table>
+<tr><th>チャンネル</th><th class="num">登録</th><th class="num">長尺中央値</th><th class="num">ペース/月</th><th class="num">中央値÷登録者</th><th>型</th></tr>
+<tr><td><b>コムドット</b></td><td class="num">426万</td><td class="num">1,192,373</td><td class="num">12.8</td><td class="num">0.28</td><td><b>青春の目撃（最濃箱推し）</b></td></tr>
+<tr><td>東海オンエア</td><td class="num">725万</td><td class="num">1,861,309</td><td class="num">16.0</td><td class="num">0.26</td><td>企画装置</td></tr>
+<tr><td>ヒカル</td><td class="num">489万</td><td class="num">1,084,962</td><td class="num">17.9</td><td class="num">0.22</td><td>人生実況</td></tr>
+<tr><td>いだちゃんねる</td><td class="num">87.1万</td><td class="num">689,668</td><td class="num">4.6</td><td class="num">0.79</td><td>属人コメディ</td></tr>
+<tr><td>えびじゃ（連合1.16%）</td><td class="num">65.7万</td><td class="num">176,559</td><td class="num">4.7</td><td class="num">0.27</td><td>恋愛バラエティへ転生中</td></tr>
+</table></div>
+<h3>発見① 大手グループ帯の効率は0.22〜0.28に収束——その中で箱推し密度だけが突出</h3>
+<p>再生効率は東海・ヒカルと同水準だが、メンバー好意語彙371/千件と全帯域高評価1.6〜2.2%は大手帯で唯一——<b>規模は同じでもファンの質が違う</b>。グッズ・イベント・メンバーシップ等の「推し課金」への変換効率は大手帯最強と推定される（朝倉未来型の広告特化と対照的）。</p>
+<h3>発見② 「青春」ポジションはグループ大手帯で空きつつある</h3>
+<p>東海は企画装置化・コムドット自身も8年目——「今まさに青春している男グループ」の座は世代交代圏。コムドットの選択肢は「青春の主役を続ける」か「青春の場を主催する側（球技大会・赤組の胴元）に回る」かで、後者は誰にも取られていない。</p>
+<h3>発見③ 連合圏の盟主ポジションが実測で確認された</h3>
+<p>雨来ズ1.40%・えびじゃ1.16%・エスポ0.84%・スカイピース0.74%——特定の1chと深く繋がるのでなく、グループ文化圏全体に均等接続する分布は「盟主・ハブ」の形。次世代グループ（雨来ズ級）を招く側に回る施策はこの立地を収益化する。</p>
+<h3>コメント投稿者IDの実測照合</h3>
+<p>§5④の通り。かつての「NextStage」構想圏＋新世代連合圏の中心に位置し、コラボの送客実効性が実測で担保される稀有な立地。</p>
+<div class="callout win">
+<p><b>取り入れる優先順</b>：①ヒカル式「特番と日常の階級分け」（感情イベント＝特番のサムネ言語統一）→ ②いだ式「人生の節目の実況」（メンバーの転機を青春の文法で）→ ③えびじゃ式「シーズン制」（赤組をシーズン番組として復活）。<b>真似不要</b>：ヒカル式の私生活切り売り——箱推しの対等な空気と相性が悪く、偉人化×0.56と同じ轍になる。</p>
+</div>
+<h3>未回収の企画案 — コメント欄からの発掘</h3>
+<div class="tablewrap"><table>
+<tr><th>企画案</th><th>需要の証拠</th><th>期待レンジ</th></tr>
+<tr><td>赤組・新世代版の復活</td><td>👍2,631「純粋にわちゃわちゃしてる動画をこれからも見たい」＋絆語彙×10.32</td><td>旧実績1,300〜1,900万・現行なら400万級</td></tr>
+<tr><td>球技大会の再開催（連合圏の運動会）</td><td>1,829万の実績・盟主立地の実測</td><td>圏全体の祭り＝300万超</td></tr>
+<tr><td>ペア企画のリクエスト回収</td><td>👍2,128「ひゅうがくんとエアちゃんのペア見たい」等の具体名指し</td><td>今日好き帯=200〜430万</td></tr>
+<tr><td>平フラとの再共同生活</td><td>👍35,719/32,507/2,392「また元の関係に戻るって信じてる」</td><td>旧実績1,797万</td></tr>
+</table></div>
+
+<h2>9. データの注記（正直ベース）</h2>
+<ul class="small">
+<li>再生数は累積値。回帰は直近2年n=334・ln(経過日数)統制済み・R²=0.37。ln経過日数×1.20のカタログ特性により、テーマ別中央値表（§2）は古い動画ほど有利なバイアスを含む。</li>
+<li>アップロード一覧3,108本（チャンネル統計3,361本との差は非公開・削除分）。</li>
+<li>コメントは層化サンプル200本×コメ欄上位100件＝19,941件。ID照合は2026-07-31取得の同日パネル29ch・下限推定。</li>
+<li>比較表は各chの直近アップロード200本のうち直近1年・投稿14日超で算出。</li>
+<li>本レポートの指標はYouTube公式の提供指標ではなく公開データからの独自算出。視聴維持率・CTR・メンバーシップ/グッズ収益等の非公開データは未使用。</li>
+</ul>
+
+<footer>コムドット (@comdot) 分析レポート ｜ データ取得: 2026-07-31 / YouTube Data API v3 ｜ 全3,108本＋コメント19,941件＋29ch ID照合＋グループ大手4ch実測比較</footer>
+</div>
+
+</body>
+</html>

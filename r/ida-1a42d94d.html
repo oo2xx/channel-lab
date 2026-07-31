@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>いだちゃんねる — チャンネル分析レポート（完全版）</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="いだちゃんねる — チャンネル分析レポート（完全版）">
+<meta property="og:description" content="全484本＋コメント19,679件＋23chファンID照合＋学歴界隈実測比較。勝ちパターンと成長処方7項。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Channel Analysis Report / 2026-07-31</div>
+  <h1>いだちゃんねる — 勝ちパターンの言語化と成長処方（共有版）</h1>
+  <p class="hero-sub">対象: <b>@ida_channel</b>（登録87.1万人）｜ 全<b>484本</b>を全量取得・統計処理 ｜ コメント<b>19,679件</b>の定量スキャン ｜ 経過日数を統制した重回帰（n=305・ブートストラップ4,000回） ｜ 23chとのコメント投稿者<b>ID実測照合</b>＋同ジャンル4ch実測比較</p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">7.12億</div><div class="l">総再生数（6年・484本）</div></div>
+  <div class="kpi"><div class="n">100.7万</div><div class="l">本編再生中央値（n=305・<b>登録者比1.16</b>）</div></div>
+  <div class="kpi"><div class="n">4.94%</div><div class="l">雷獣とのファン実測重複（学歴連合圏の発見）</div></div>
+  <div class="kpi"><div class="n">×0.66</div><div class="l">2025年以降の独立効果（実測された減速・要対処）</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：このチャンネルの正体は<b>「属人コメディ×人生実況の学生版」</b>である。重回帰のR²=0.20は当ラボ分析8chで最低＝<b>テーマでは説明できず、「いだ達が何をやっても面白い」属人型</b>（分類外212本が中央値100万で回っている）。コメントの笑い語彙334/千件は全ch最高。ただし重大な警告が1つ：<b>2025年以降ダミー×0.66が経過日数統制後も有意</b>——当ラボ分析8chで初めて「本当に減速している」チャンネルであり、その正体はコメント欄に写っている：メンバーの就職・卒業（「実家が太過ぎたため池田素人が辞めます」👍13,729）。<b>「大学生活」という舞台は時限資産</b>であり、社会人編への舞台転換の設計が急務。もう1つの大発見は<b>雷獣とのファン重複4.94%</b>（箱違い基準0.0〜0.4%の12倍）——学歴グループ圏は実際に客を共有する「連合圏」として機能している。</p>
+  <p class="small"><b>根拠の検証方法</b>：①経過日数統制の重回帰 ②コメント19,679件の語彙定量 ③23chとの投稿者ID照合＋同ジャンル4ch実測比較。</p>
+</div>
+
+<h2>1. チャンネル構造と現在地</h2>
+<div class="tablewrap"><table>
+<tr><th>レイヤー</th><th>定義</th><th class="num">本数</th><th class="num">再生中央値</th><th class="num">総再生</th></tr>
+<tr><td><b>本編</b></td><td>8分以上</td><td class="num">307本</td><td class="num">1,006,556</td><td class="num">3.44億</td></tr>
+<tr><td><b>Shorts</b></td><td>61秒以下</td><td class="num">149本</td><td class="num"><b>1,525,340</b></td><td class="num">3.33億</td></tr>
+<tr><td>クリップ</td><td>1〜8分</td><td class="num">28本</td><td class="num">1,089,039</td><td class="num">0.32億</td></tr>
+</table></div>
+<p><b>重要な事実</b>：①全レイヤーが中央値100万超という異常な地力（Shorts中央値152.5万は当ラボ分析8chで最高）。②ただし年次推移は2023年132.6万（73本）→2025年86.1万（58本）→2026年60.3万（月4本ペース）と<b>供給と中央値が同時に減衰中</b>。経過日数を統制しても2025年以降×0.66が残るため、これは見かけではなく実測の減速。③数字のピーク（2023年）は供給のピーク（年73本）と一致——属人型チャンネルの燃料は企画ではなく登場回数。</p>
+
+<h2>2. 勝ちパターン — テーマ別実測（本編305本・投稿14日超）</h2>
+<div class="tablewrap"><table>
+<tr><th>テーマ</th><th class="num">n</th><th class="num">再生中央値</th><th class="num">勝率(141万超)</th><th>判定</th></tr>
+<tr><td>質問コーナー・ぶっちゃけ</td><td class="num">6</td><td class="num">1,635,937</td><td class="num">50%</td><td><span class="tag win">高勝率・低頻度</span></td></tr>
+<tr><td>コラボ（学歴系: wakatte/河野玄斗/雷獣）</td><td class="num">3</td><td class="num">1,341,552</td><td class="num">33%</td><td><span class="tag win">勝ち筋・小標本</span></td></tr>
+<tr><td><b>事件・人生ドキュメント</b>（200万事件/留年/暴露）</td><td class="num">19</td><td class="num">1,123,316</td><td class="num">42%</td><td><span class="tag win">唯一の有意テーマ</span></td></tr>
+<tr><td>学歴・試験検証</td><td class="num">36</td><td class="num">1,082,749</td><td class="num">25%</td><td><span class="tag mid">基礎材</span></td></tr>
+<tr><td>旅・ロケ</td><td class="num">25</td><td class="num">1,005,148</td><td class="num">36%</td><td><span class="tag mid">中位</span></td></tr>
+<tr><td>耐久・帰れまテン</td><td class="num">10</td><td class="num">745,159</td><td class="num">20%</td><td><span class="tag mid">頻度の法則あり（§6）</span></td></tr>
+<tr><td>日常・ペット・その他</td><td class="num">4</td><td class="num">441,319</td><td class="num">0%</td><td><span class="tag lose">負け筋</span></td></tr>
+<tr><td>ゲーム配信</td><td class="num">3</td><td class="num">400,352</td><td class="num">0%</td><td><span class="tag lose">棚の汚染</span></td></tr>
+</table></div>
+
+<h2>3. 要因分離 — 経過日数を統制した重回帰（n=305・R²=0.20）</h2>
+<div class="tablewrap"><table>
+<tr><th>要因</th><th class="num">独立効果</th><th class="num">95%信頼区間</th><th>判定</th></tr>
+<tr><td>コラボ（学歴系）</td><td class="num">×1.65</td><td class="num">[×1.00 – ×2.79]</td><td><span class="tag mid">正方向・小標本</span></td></tr>
+<tr><td>耐久・帰れまテン</td><td class="num">×1.47</td><td class="num">[×0.83 – ×3.32]</td><td><span class="tag mid">正方向・分散大</span></td></tr>
+<tr><td><b>事件・人生ドキュメント</b></td><td class="num"><b>×1.29</b></td><td class="num">[×1.01 – ×1.69]</td><td><span class="tag win">有意</span></td></tr>
+<tr><td>日常・ペット・その他</td><td class="num">×0.53</td><td class="num">[×0.42 – ×0.65]</td><td><span class="tag lose">有意（負）</span></td></tr>
+<tr><td>ゲーム配信</td><td class="num">×0.37</td><td class="num">[×0.15 – ×1.07]</td><td><span class="tag lose">負方向</span></td></tr>
+<tr><td><b>2025年以降</b></td><td class="num"><b>×0.66</b></td><td class="num">[×0.55 – ×0.79]</td><td><span class="tag lose">有意（実測の減速）</span></td></tr>
+</table></div>
+<div class="callout">
+<p><b>この分析が変える結論</b>：R²=0.20の低さ自体が最大の発見——このchの再生数はテーマでほぼ決まらない。<b>視聴者はテーマでなく「いだ達の登場」を買っている</b>（分類外212本が中央値100万の異常値がその証明）。属人型の含意は2つ：①企画会議で悩む価値が低い＝<b>出演回数を増やすことが最強の施策</b> ②唯一有意な事件・人生ドキュメント×1.29は「いだ達の人生に起きた本物の事件」であり、作れないが逃さないこと。</p>
+</div>
+
+<h2>4. 負けパターン</h2>
+<div class="grid2">
+<div class="panel lose"><h4>負け筋①：実測された減速（2025年以降×0.66）</h4>
+<ul><li>供給の減少（年73本→月4本）と数字の減衰が同時進行</li><li>正体はメンバーの社会人化：池田素人の脱退（👍13,729「3番目に好きやったのに悲しい」）・就職回（👍3,957「またいつでも遊びに来てくれよな」）——<b>「大学生活」という舞台の賞味期限</b>が構造要因</li></ul></div>
+<div class="panel lose"><h4>負け筋②：棚の汚染（ゲーム配信・日常回）</h4>
+<ul><li>ポケモン配信16〜43万・愛犬43万・古銭45万——中央値100万の棚に混在</li><li>当ラボ実測則（ノヴァの生配信×0.06・雷獣の記念配信×0.50）と同型</li></ul></div>
+</div>
+
+<h2>5. なぜこの再生数になるのか — コメント19,679件の定量検証</h2>
+<h3>バズ回を見分ける語彙</h3>
+<div class="tablewrap"><table>
+<tr><th>語彙群</th><th class="num">バズ回(/1000件)</th><th class="num">不発回</th><th class="num">倍率</th><th>解釈</th></tr>
+<tr><td>憧れ/天才</td><td class="num">27.6</td><td class="num">11.1</td><td class="num">×2.48</td><td>学歴検証回の燃料</td></tr>
+<tr><td>自分の受験/大学語り</td><td class="num">29.2</td><td class="num">18.4</td><td class="num">×1.59</td><td>共感インフラ（雷獣×4.07より穏やか）</td></tr>
+<tr><td>感動/人生/応援</td><td class="num">30.6</td><td class="num">20.7</td><td class="num">×1.48</td><td>事件・人生回の燃料</td></tr>
+<tr><td><b>笑い</b></td><td class="num"><b>334.1</b></td><td class="num">294.2</td><td class="num">×1.14</td><td><b>全動画で全ch最高水準＝お笑い純度が本体</b></td></tr>
+<tr><td>いだ個人への好意</td><td class="num">99.8</td><td class="num">78.2</td><td class="num">×1.28</td><td>属人資産のベース</td></tr>
+</table></div>
+<h3>快感の型 — 高評価コメントの実引用から</h3>
+<div class="grid2">
+<div class="panel win"><h4>①ガチの瞬間の目撃（事件・人生回の核）</h4>
+<blockquote>「一緒に稼いだ金やから」は名言すぎるよサイコ。普段こんなにも感情出さないのに本当にかっこいいよ。<span class="src">👍12,287 / 200万事件回（歴代1位339万）</span></blockquote>
+<blockquote>ガチでサイコにつられて泣いてもうた。普段はふざけたキャラだけど本当に仲間のこと想ってるんだな。<span class="src">👍6,617 / 同回</span></blockquote>
+<p class="small">普段ふざけている人間の「ガチの瞬間」が最大の爆発力。コメディの日常があるから事件が効く——落差がエンジン。</p></div>
+<div class="panel win"><h4>②メンバーの人生への当事者意識</h4>
+<blockquote>この3人の中で3番目に好きやったのに悲しい<span class="src">👍13,729 / 池田素人脱退回</span></blockquote>
+<blockquote>兄が友達の妹と付き合ってた事実だけが残った<span class="src">👍10,888 / 交際報告回（229万）</span></blockquote></div>
+<div class="panel"><h4>③コミュニティの合言葉文化</h4>
+<blockquote>「ほんまごめん、サイコまたその服着てるやん」<span class="src">👍4,770 / 帰れまテン回（他複数回に同型コメント👍3,344・2,494）</span></blockquote>
+<p class="small">「またその服着てるやん」がミーム化——コメント欄に内輪の言語を持つのはコア文化の証拠。</p></div>
+<div class="panel"><h4>④コラボの化学反応（構造で勝つ）</h4>
+<blockquote>ふーみんガチで見直した。はっきりと「会話がおもんない」って言えるのは、ちゃんとしたコミュ力が高いんだな。<span class="src">👍18,582 / wakatte.tvドッキリ回（282万・チャンネル最多高評価）</span></blockquote></div>
+</div>
+<h3>ファン構造の実測</h3>
+<p>ユニーク投稿者11,770人・2本以上に出現26%・ヘビー層504人が高評価の22%。エンゲージ逆相関あり（下位20%の高評価率1.58% vs 上位1.20%）。</p>
+<h3>ID照合 — 「学歴連合圏」の発見</h3>
+<div class="tablewrap"><table>
+<tr><th>照合先</th><th class="num">重複率</th><th>意味</th></tr>
+<tr><td><b>雷獣</b></td><td class="num"><b>4.94%</b></td><td><b>箱違い基準（0.0〜0.4%）の12倍——実際に客を共有する連合圏</b></td></tr>
+<tr><td>雨来ズ（グループエンタメ）</td><td class="num">2.07%</td><td>グループ箱推し文化圏の回遊</td></tr>
+<tr><td>東海オンエア/がーどまん等</td><td class="num">0.2〜0.4%</td><td>箱違いベースレート水準</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>判定：「属人箱推し型＋学歴連合圏」</b>。本体は独自ファン圏だが、雷獣と4.94%を共有する——当ラボが8ch測った中で「資本関係のない別チャンネル同士」としては最大の重複であり、<b>学歴グループ圏（いだ⇄雷獣）はヒカル経済圏に似た相互送客構造が自然発生している</b>。コラボ×1.65（回帰）はこの連合圏の実在の裏付け。含意：雷獣とのコラボは「企画」ではなく「インフラ」として定期運用する価値がある。</p>
+</div>
+
+<h2>6. シリーズの代数 — 「擦り」の実測</h2>
+<div class="tablewrap"><table>
+<tr><th>シリーズ</th><th>変遷（再生数）</th><th>法則</th></tr>
+<tr><td><b>帰れまテン</b></td><td>304万（2022）→ 307万（2024・2年後）→ 80万 → 52万（2025・連発）</td><td><b>2年空けると完全維持、連発すると1/6に減衰</b>——祭りは年1回だから祭り</td></tr>
+<tr><td>質問コーナー</td><td>47万 → 96万 → 235万 → 229万 → 253万（年1ペース）→ 183万 → 97万（頻度増）</td><td>年1ペースで成長、頻度を上げた途端に減衰。同上</td></tr>
+<tr><td>留年・単位ドキュメント</td><td>69万〜199万で5年間安定（9本）</td><td>本人の人生は消耗しない——ただし卒業で終わる時限資産</td></tr>
+<tr><td>200万事件</td><td>233万 → 339万（後編が+45%）</td><td>本物の事件の前後編は成長する（当ラボ実測則と一致）</td></tr>
+</table></div>
+<div class="callout gold"><p><b>法則：「定番は年1の祭りとして運用する」</b>。帰れまテンと質問コーナーが同じカーブ（間隔を空ければ維持・詰めると急減）を描いた。属人型チャンネルの定番企画は在庫ではなく年中行事。</p></div>
+
+<h2>7. 同ジャンル比較 — 学歴エンタメ界隈の現在地（直近1年実測）</h2>
+<div class="tablewrap"><table>
+<tr><th>チャンネル</th><th class="num">登録</th><th class="num">長尺中央値</th><th class="num">ペース/月</th><th class="num">中央値÷登録者</th><th>型</th></tr>
+<tr><td><b>いだちゃんねる</b></td><td class="num">87.1万</td><td class="num">689,668</td><td class="num"><b>4.6</b></td><td class="num">0.79</td><td><b>属人コメディ×人生実況</b></td></tr>
+<tr><td>雷獣</td><td class="num">44.7万</td><td class="num">505,280</td><td class="num">8.7</td><td class="num">1.13</td><td>学歴×人生ドキュメンタリー（連合相手）</td></tr>
+<tr><td>wakatte.tv</td><td class="num">77.2万</td><td class="num">328,248</td><td class="num">7.9</td><td class="num">0.43</td><td>学歴いじり街頭ロケ</td></tr>
+<tr><td>河野玄斗</td><td class="num">177万</td><td class="num">253,954</td><td class="num">7.7</td><td class="num">0.14</td><td>天才実演型</td></tr>
+<tr><td>QuizKnock</td><td class="num">267万</td><td class="num">674,802</td><td class="num">7.9</td><td class="num">0.25</td><td>クイズ・知的ゲーム</td></tr>
+</table></div>
+<p><b>発見①</b>：界隈の投稿ペース標準は月7.7〜8.7本。<b>いだの月4.6本は界隈最少</b>——属人型（出演回数が燃料）なのに供給が最少という捻れが、×0.66の減速の実務的な正体。<b>発見②</b>：それでも中央値効率は界隈2位（1位は連合相手の雷獣）——地力は落ちていない。<b>発見③</b>：登録87.1万は界隈で河野玄斗・QuizKnockに次ぐ第3位だが、直近1年の総再生では界隈上位——「登録者が多いのに過小評価されている」ゾーンにいる。</p>
+
+<h3>未回収の企画案 — コメント欄からの発掘</h3>
+<ul>
+<li><b>「社会人編」への舞台転換アーク</b>——就職・脱退回に涙のコメントが集中（👍13,729/3,957）。「卒業=終わり」でなく「社会人になった仲間の人生実況」への転換を明示的な番組として設計する。連合相手の雷獣が「灘卒のその後」型で先行実証済み（ファンも4.94%共有している＝受容確実）</li>
+<li><b>サイコの物語回</b>——「普段ふざけてる人間のガチ」が最大の爆発（👍12,287/6,617）。サイコを主役にした人生ドキュメント枠</li>
+<li><b>マルチ先輩のその後</b>——「また先輩が騙されないようにサポートしてあげてね」（👍3,524）と続報需要が自然発生</li>
+<li><b>「またその服着てるやん」公式化</b>——ミーム化した合言葉（👍4,770他）をグッズ・企画タイトルに回収してコア文化を可視化する</li>
+</ul>
+
+<h2>8. 成長処方 — 優先順つき</h2>
+<ol class="formula">
+<li><b>供給を月4→8本に戻す</b>属人型（R²=0.20）の燃料は出演回数。数字のピーク（2023年・年73本）と供給のピークは一致しており、×0.66への最初の処方は企画の改善ではなく本数の回復。</li>
+<li><b>「社会人編」を宣言してアーク化する</b>舞台の時限性が構造減衰の正体。留年ドキュメント（5年間69〜199万で安定）が実証する通り、<b>ファンはいだ達の人生そのものを見ている</b>——大学が終わっても人生は続く。</li>
+<li><b>雷獣との定期コラボ枠を作る</b>ファン重複4.94%＝相互送客が実際に機能する稀有な関係（コラボ×1.65）。単発でなく四半期の定例に。</li>
+<li><b>定番は年1の祭りに戻す</b>帰れまテン・質問コーナーの実測則。連発をやめ、年間カレンダー（春=質問/夏=旅/秋=帰れまテン/冬=事件総括）で運用する。</li>
+<li><b>本物の事件を逃さない</b>唯一の有意テーマ×1.29。200万事件・パワハラ暴露のように、人生に起きた本物のトラブルは最優先で動画化する（作り物の企画より実話）。</li>
+<li><b>ゲーム配信・日常回の棚を分ける</b>×0.37/×0.53。サブch・メン限・限定公開へ。</li>
+<li><b>Shorts資産を守る</b>中央値152.5万は全分析chで最高。現行の切り抜き型を崩さず、本編減速期の看板として維持する。</li>
+</ol>
+
+<h2>9. データの注記（正直ベース）</h2>
+<ul class="small">
+<li>再生数は累積値。回帰はln(経過日数)統制済み・R²=0.20（属人型のため構造変数の説明力が低い——本文の通りこれ自体が診断結果）。コラボ・質問コーナー等は小標本（n=3〜10）のため効果量は方向のみ参考。</li>
+<li>§7のいだ直近1年中央値は直近1年・投稿14日超の本編57本より算出。</li>
+<li>コメントは層化サンプル200本×コメ欄上位100件＝19,679件。ID照合は2026-07-31取得の同日パネル23ch・下限推定。</li>
+<li>本レポートの指標はYouTube公式の提供指標ではなく公開データからの独自算出。視聴維持率・CTR等の非公開データは未使用。</li>
+</ul>
+
+<footer>いだちゃんねる (@ida_channel) 分析レポート ｜ データ取得: 2026-07-31 / YouTube Data API v3 ｜ 全484本＋コメント19,679件＋23ch ID照合＋同ジャンル4ch実測比較</footer>
+</div>
+
+</body>
+</html>

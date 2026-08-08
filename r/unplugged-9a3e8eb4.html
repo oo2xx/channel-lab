@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unplugged podcast — チャンネル分析レポート（完全版）</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="Unplugged podcast — チャンネル分析レポート（完全版）">
+<meta property="og:description" content="全265本＋コメント438件全量＋31chファンID照合＋対談型4ch実測比較。勝ちパターンの言語化。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Channel Analysis Report / 2026-08-09</div>
+  <h1>Unplugged podcast — 勝ちパターンの言語化と再現フォーマット（共有版）</h1>
+  <p class="hero-sub">対象: <b>@unpluggedJAPAN</b>（登録8,700人・開設2025年7月＝1年目）｜ 全<b>265本</b>を全量取得・統計処理 ｜ コメント<b>438件</b>の全量スキャン ｜ フォーマット×時期×ゲスト格の層別クロス分析（重回帰は標本不足のため不実施を明記） ｜ 31chパネルとの投稿者<b>ID実測照合</b>＋対談型4ch実測比較</p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">232万</div><div class="l">1年目の総再生（うち1本のクリップが46%）</div></div>
+  <div class="kpi"><div class="n">1.28</div><div class="l">対談中央値÷登録者（PIVOTの51倍の効率）</div></div>
+  <div class="kpi"><div class="n">×4.3</div><div class="l">認知ゲスト回の対・業界人ゲスト回</div></div>
+  <div class="kpi"><div class="n">×0.06</div><div class="l">Weekly回の対・対談中央値（投稿の53%を占有）</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：このチャンネルの勝ちの正体は<b>「顔を借りて、学びで留める」</b>である。入口はゲストのファンダム——認知ゲスト回（HARUKI・JIRO・ウンパルンパ・国山ハセン等）は中央値19,747で業界人ゲスト回4,642の<b>×4.3</b>、切り抜きクリップ「東海オンエアのてつやはガチの天才」は<b>108万再生（チャンネル総再生の46%）</b>を1本で稼いだ。定着は学び——バズ回コメントの「学び・気づき」語彙は不発回で<b>検出ゼロ</b>（25.9 vs 0.0/千件）。一方、投稿の53%を占めるWeeklyニュース回は中央値648＝対談の<b>×0.06</b>で、どの時期でも死んでいる（613→942）。番組の顔である対談は8,064→15,017（×1.86）と成長局面にあり、2026年3月以降の「認知ゲスト路線」が明確に効いている。ただし借りた観客はまだ自前のファンではない——リピート率8%・コメント率0.2/千は当ラボ14ch分析の最低水準で、バズ回では<b>ホストの振る舞いへの厳しい声も上位に来る</b>（借りた観客はまだ味方ではない——流入先行型の宿命）。今の勝負は「借りた顔を、自前の信頼残高に変換できるか」の一点にある。</p>
+  <p class="small"><b>根拠の検証方法</b>：①フォーマット×時期×ゲスト格の層別クロス（n=49のため重回帰は不実施・§3） ②コメント438件の語彙・五分位の全量スキャン（参考値） ③31chパネルとの投稿者ID照合＋対談型大手4chの実測比較。</p>
+</div>
+
+<h2>1. チャンネル構造と現在地</h2>
+<div class="tablewrap"><table>
+<tr><th>レイヤー</th><th>定義</th><th class="num">本数</th><th class="num">再生中央値</th><th class="num">高評価率</th><th class="num">総再生</th></tr>
+<tr><td><b>本編</b>（対談Ep.＋Weekly）</td><td>8分以上</td><td class="num">50本</td><td class="num">2,198</td><td class="num"><b>1.52%</b></td><td class="num">42.4万</td></tr>
+<tr><td>クリップ（切り抜き）</td><td>1〜8分</td><td class="num">109本</td><td class="num">1,684</td><td class="num">0.52%</td><td class="num"><b>150.3万（65%）</b></td></tr>
+<tr><td>Shorts</td><td>61秒以下</td><td class="num">106本</td><td class="num">2,023</td><td class="num">0.44%</td><td class="num">39.9万</td></tr>
+</table></div>
+<div class="tablewrap"><table>
+<tr><th>フェーズ</th><th class="num">対談n</th><th class="num">対談中央値</th><th>何が起きたか</th></tr>
+<tr><td>2025-07〜09（立ち上げ）</td><td class="num">5</td><td class="num">2,728</td><td>初回10,185→業界人ゲストで2,000〜8,000台</td></tr>
+<tr><td>2025-10〜12（型の模索）</td><td class="num">5</td><td class="num">4,925</td><td>ど素人ホテル回42,017が最初の跳ね</td></tr>
+<tr><td>2026-01〜02（転換前夜）</td><td class="num">4</td><td class="num">7,542</td><td>鈴木おさむ11,968・HARUKI 31,707</td></tr>
+<tr><td><b>2026-03〜（認知ゲスト路線）</b></td><td class="num">11</td><td class="num"><b>15,017</b></td><td>Cody 43,499・ハセン43,238・JIRO 46,776</td></tr>
+<tr><td>Weekly全期間</td><td class="num">26</td><td class="num">648</td><td>613→942——時期によらず不発</td></tr>
+<tr><td>クリップの特異点（2026-02-15）</td><td class="num">1</td><td class="num">1,079,996</td><td>てつや切り抜き＝HARUKI回の3日後投稿</td></tr>
+</table></div>
+<p><b>重要な事実</b>：①総再生232万の46%が「てつや」クリップ1本、65%がクリップ層——<b>このチャンネルの配信網はまだ本編でなく切り抜きが担っている</b>。②対談中央値11,107÷登録8,700＝<b>1.28</b>。登録者より視聴者が多い＝再生のほとんどがブラウジング・関連からの非登録流入で、アルゴリズムが先に評価し、登録がまだ追いついていない「認知先行期」。③高評価率は本編1.52%＞クリップ0.52%＞Shorts 0.44%と3倍の勾配——ファンは本編に、通行人は切り抜きにいる。層の役割分担はすでに機能している。</p>
+
+<h2>2. 勝ちパターン — フォーマット×ゲスト格の勝率（本編・投稿14日超n=49）</h2>
+<p class="small">勝率 = 本編中央値1,951の1.4倍（2,731）超え率。取得2026-08-09。</p>
+<div class="tablewrap"><table>
+<tr><th>フォーマット</th><th class="num">n</th><th class="num">再生中央値</th><th class="num">勝率</th><th class="barcell"></th><th>判定</th></tr>
+<tr><td><b>認知ゲスト対談</b>（ファンダム保有者）</td><td class="num">12</td><td class="num"><b>19,747</b></td><td class="num">100%</td><td class="barcell"><span class="bar win" style="width:100%"></span></td><td><span class="tag win">主力・全勝</span></td></tr>
+<tr><td>業界人ゲスト対談（実績あり・顔なし）</td><td class="num">11</td><td class="num">4,642</td><td class="num">72%</td><td class="barcell"><span class="bar win" style="width:72%"></span></td><td><span class="tag win">勝ち筋・伸び代</span></td></tr>
+<tr><td>トップYouTuber話題の切り抜き</td><td class="num">—</td><td class="num">てつや108万</td><td class="num">—</td><td class="barcell"><span class="bar win" style="width:90%"></span></td><td><span class="tag win">最強の入口</span></td></tr>
+<tr><td>年末Special（ホスト2人回）</td><td class="num">1</td><td class="num">984</td><td class="num">0%</td><td class="barcell"><span class="bar lose" style="width:4%"></span></td><td><span class="tag lose">ホスト単独は動かない</span></td></tr>
+<tr><td><b>Weeklyニュース回</b>（2人・14〜28分）</td><td class="num">26</td><td class="num">648</td><td class="num">4%</td><td class="barcell"><span class="bar lose" style="width:4%"></span></td><td><span class="tag lose">最大の負け筋</span></td></tr>
+</table></div>
+<h3>勝ち動画の共通条件（統計）</h3>
+<div class="tablewrap"><table>
+<tr><th>要素</th><th>あり</th><th>なし</th><th>示唆</th></tr>
+<tr><td>60〜90分の長尺</td><td class="num">中央値11,537</td><td class="num">8〜30分は634</td><td>×18——ただし尺でなくフォーマット（対談vsWeekly）の差が本体</td></tr>
+<tr><td>ゲストの顔がサムネにある</td><td class="num">認知ゲスト12本全勝</td><td class="num">ホスト2人回は984</td><td>入口はゲストの既存ファンダム</td></tr>
+<tr><td>キャリアの転換ストーリー</td><td class="num">教員→TikTok・TBS→独立・YouTuber→CEO</td><td class="num">ニュース解説は不発</td><td>「人の物語」が学び語彙を生む</td></tr>
+<tr><td>本編公開から3日以内の切り抜き投下</td><td class="num">てつやクリップ108万</td><td class="num">—</td><td>ゲストファンダムが熱いうちに刈り取る</td></tr>
+</table></div>
+<h3>歴代トップ層の構図</h3>
+<div class="tablewrap"><table>
+<tr><th class="num">再生</th><th>タイトル（要約）</th><th>勝った構図</th></tr>
+<tr><td class="num">1,079,996</td><td>東海オンエアのてつやはガチの天才（クリップ）</td><td><b>国民的グループの内輪話を第三者が証言——ファンダム最大の井戸から汲んだ</b></td></tr>
+<tr><td class="num">46,776</td><td>JIROが感じる今と昔（Ep.19）</td><td>バブル世代YouTuberの現在地——「あの人は今」の需要</td></tr>
+<tr><td class="num">43,499</td><td>YouTuberからCoffeeブランドCEOへ Cody</td><td>転身ストーリー×Z世代論——学び語彙の最多発生源</td></tr>
+<tr><td class="num">43,238</td><td>元TBS国山ハセンとシリコンバレーAI</td><td>メディアの顔×時事テーマの掛け算</td></tr>
+<tr><td class="num">42,017</td><td>ど素人ホテル再建のSNSコンサル</td><td>ノウハウ全公開型——実用の約束</td></tr>
+<tr><td class="num">31,707</td><td>北の打ち師たちHARUKIのこれまでとこれから</td><td>現役トップの本音——てつやクリップの母体</td></tr>
+<tr><td class="num">29,508</td><td>だるまをアートへ Fumikoのブランド哲学</td><td>無名でも「哲学の強度」で勝った例外——リスペクト語彙が最濃</td></tr>
+<tr><td class="num">24,478</td><td>ウンパルンパのトップクリエイター論</td><td>認知ゲスト×方法論——「成功の秘訣は数」</td></tr>
+</table></div>
+<p class="note">⚠ 上の表は単変量の比較でありゲスト格・尺・時期が交絡している。切り分けは§3の層別クロスを参照。</p>
+
+<h2>3. 要因分離 — 何が独立に効くのか</h2>
+<p class="small"><b>重回帰は不実施</b>：本編n=49は当ラボ基準（n≥120）未満のため、係数の信頼区間が実用精度に達しない。代替として、交絡が最も疑わしい「尺×時期×フォーマット」を層別クロスで分離した。</p>
+<div class="tablewrap"><table>
+<tr><th>層</th><th class="num">〜2026-02</th><th class="num">2026-03〜</th><th>読み</th></tr>
+<tr><td><b>ゲスト対談</b></td><td class="num">8,064（n=12）</td><td class="num"><b>15,017（n=11）</b></td><td><span class="tag win">×1.86成長——本物のモメンタム</span></td></tr>
+<tr><td><b>Weekly</b></td><td class="num">613（n=22）</td><td class="num">942（n=4）</td><td><span class="tag lose">時期によらず不発＝時期でなくフォーマットの問題</span></td></tr>
+<tr><td>認知ゲスト（全期間）</td><td class="num" colspan="2">19,747（n=12）</td><td><span class="tag win">×4.3 vs 業界人</span></td></tr>
+<tr><td>業界人ゲスト（全期間）</td><td class="num" colspan="2">4,642（n=11）</td><td><span class="tag mid">基準線——それでもWeeklyの7倍</span></td></tr>
+</table></div>
+<div class="callout">
+<p><b>この分析が変える結論</b>：①§2の「尺×18」は見せかけで、正体は<b>フォーマットの差</b>——Weeklyは短いから負けているのではなく、ゲストの顔と物語がないから負けている（同じ2人が長く話す年末Special 61分も984）。②チャンネルの成長（946→11,107）も見せかけを含む——Weeklyの比率が下がり対談の比率が上がった構成効果が半分、対談自体の成長×1.86が半分。ただし後者は認知ゲスト路線の成果であり本物。③<b>業界人ゲストでも勝率72%</b>——Fumiko回29,508が示す通り、ファンダムがなくても「転換ストーリー＋哲学の強度」があれば勝てる。ゲスト選定の条件は知名度ではなく「物語の有無」まで緩められる。</p>
+<p>結論：工数を割くべきは対談の量産と切り抜き網の強化であり、Weeklyの改善ではない。</p>
+</div>
+
+<h2>4. 負けパターン — 何をやると落ちるか</h2>
+<div class="grid2">
+<div class="panel lose"><h4>負け筋①：Weeklyニュース回（26本・勝率4%・×0.06）</h4>
+<ul><li>中央値648——投稿の53%を占めながら本編総再生の6%しか稼いでいない</li><li>時期を通じて613→942と横ばい＝改善の兆候なし。高評価率1.48%とコアには読まれているが、新規を1人も連れてこない</li></ul></div>
+<div class="panel lose"><h4>負け筋②：ホスト単独回（年末Special 984）</h4>
+<ul><li>ホスト2人の顔ではまだ観客を呼べない——登録8,700人の現在地の正確な計測値</li><li>リピート投稿者8%・コメント率0.2/千（14ch最低）＝自前ファンダムは未形成</li></ul></div>
+</div>
+<div class="callout lose">
+<p><b>負けの本質</b>：伸びにくいのは「ゲストの顔も物語もない回」。このチャンネルの現在の商品は<b>「ゲストの物語への入口」</b>であり、入口のない動画は素通りされやすい——品質の問題ではなく、信頼残高を貯めている途中という段階の問題。</p>
+</div>
+<div class="callout">
+<p><b>リスク台帳（バズの副作用・実測）</b>：バズ回ほどホストへの批判コメントが高評価上位に来る——JIRO回・Cody回では聞き手の姿勢への指摘が高評価上位に入った（👍50・👍38）。流入したゲストのファンはゲストの味方であり、ホストへの信頼はこれから貯める段階——裏を返せば、聞き役に徹する回ほど定着が速い。またど素人ホテル回・きのこ伝説クリップではゲストの主張への事実検証コメントが上位——「学び」を売る番組は<b>ゲストの言説の検証責任</b>を観客から問われる。ゲスト選定の審査眼と、ホストの「聞き役への徹し方」が信頼残高の貯まる速度を決める。</p>
+</div>
+
+<h2>5. なぜこの再生数・この高評価数になるのか — メカニズムの言語化と定量検証</h2>
+<p class="small">⚠ コメント438件・投稿者373人は当ラボ基準（1,000件/500人）未満のため、本セクションの定量は<b>参考値</b>。傾向は明瞭だが率の桁は誤差を含む。</p>
+<h3>① 学びの回収（バズ回だけに現れる語彙）</h3>
+<blockquote>ストーリーで売らない っていうセクションが面白い<span class="src">👍11 / Fumiko回（29,508）</span></blockquote>
+<blockquote>最近で1番インスパイアされたトークでした。…経験値、行動力、人間性、スタンス…いろんな側面で本当にリスペクトです。私も後に続きたい！<span class="src">👍9 / Fumiko回</span></blockquote>
+<p class="small">「学び・気づき」語彙はバズ回25.9/千件に対し不発回は<b>検出ゼロ</b>——このチャンネルで唯一、勝敗を完全に分離する語彙群。視聴者は娯楽でなく「持ち帰るもの」を採点している。</p>
+<h3>② ゲストのファンダムの井戸（入口の実体）</h3>
+<blockquote>？？？「てつやのサムネはすごいよね。だって普通、人は成長しちゃうんだもん。」<span class="src">👍5,923 / てつやクリップ（1,079,996）——コメント欄はほぼ全て東海オンエアファンの大喜利</span></blockquote>
+<blockquote>東海秘話聞けるのありがたいです😂😂<span class="src">👍23 / HARUKI回（31,707）</span></blockquote>
+<p class="small">最大バズのコメント欄に番組への言及はほぼない——観客はゲストのファンダムから借りてきたもので、<b>番組はまだ「会場」であって「目的地」ではない</b>。</p>
+<h3>③ 挑戦者への応援（定着の芽）</h3>
+<blockquote>アツいなぁ！ シリコンバレーで挑戦する日本人増えてきてるし、ハセンさんめっちゃ応援してる…話が上手い人がスタートアップを語るとこんなに心動かされるのか…<span class="src">👍15 / 国山ハセン回（43,238）</span></blockquote>
+<p class="small">「応援・次回・楽しみ」語彙はむしろ不発回側に濃い（×0.65）——小さい動画のコメント欄は初期からの支持者で占められており、<b>数は少ないが核は既にある</b>（不発回の高評価率が0.67%と下げ止まるQ5現象と整合）。</p>
+<h3>④ 検証する観客（学び番組特有の緊張）</h3>
+<blockquote>うーん。90歳のアカウントは4本投稿のみで2022年くらいに終わってるよね。…その辺に何か問題ありそう<span class="src">👍22 / ど素人ホテル回（42,017）——最上位コメントが事実検証</span></blockquote>
+<p class="small">エンタメ系14chでは見ない現象。「学び」を掲げる番組の観客は、笑う前に裏を取る——ゲストの言説の質がそのまま番組の信用になる。</p>
+<h3>数字で見る「2層オーディエンス」構造</h3>
+<div class="tablewrap"><table>
+<tr><th>再生五分位（全動画）</th><th class="num">再生中央値</th><th class="num">高評価率</th><th class="num">コメント率(/千)</th></tr>
+<tr><td>Q1（バズ帯）</td><td class="num">13,102</td><td class="num">0.96%</td><td class="num">0.20</td></tr>
+<tr><td>Q2</td><td class="num">3,179</td><td class="num">0.44%</td><td class="num">0.00</td></tr>
+<tr><td>Q3</td><td class="num">1,936</td><td class="num">0.49%</td><td class="num">0.00</td></tr>
+<tr><td>Q4</td><td class="num">1,343</td><td class="num">0.44%</td><td class="num">0.00</td></tr>
+<tr><td>Q5（不発帯）</td><td class="num">725</td><td class="num">0.67%</td><td class="num">0.00</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>核心</b>：14ch分析で常態の「不発ほどエンゲージが濃い」逆相関がここでは<b>Q1が最も濃い（0.96%）</b>という逆向き——バズ帯の観客（ゲストファン＋学び目的層）が最も熱く、中間帯は素通りが多い。これは「ファン企画とバズ企画の分離」がまだ起きていない未分化期の形で、自前ファンダムが育つとQ5側が濃くなっていく。<b>コメント率は全帯域でほぼゼロ（Q2以下は中央値0）——観客はまだ「話しかけて」こない</b>。コメントを促す仕掛け（質問の投げかけ・次回ゲスト募集）が丸ごと未着手の伸び代。</p>
+</div>
+<h3>定量検証① 快感語彙の全量スキャン（参考値）</h3>
+<div class="tablewrap"><table>
+<tr><th>語彙群</th><th class="num">バズ回(/1000件)</th><th class="num">不発回</th><th class="num">倍率</th><th>解釈</th></tr>
+<tr><td><b>学び・気づき</b></td><td class="num">22.3</td><td class="num">0.0</td><td class="num"><b>∞（完全分離）</b></td><td><b>バズの引き金＝持ち帰れる学び</b></td></tr>
+<tr><td>笑い</td><td class="num">187.9</td><td class="num">85.7</td><td class="num">×2.19</td><td>てつやクリップの大喜利が主因（下の感度検証）</td></tr>
+<tr><td>ゲスト好意</td><td class="num">54.1</td><td class="num">57.1</td><td class="num">×0.95</td><td>全帯域で一定＝好意の対象はゲスト（番組ではない）</td></tr>
+<tr><td>番組品質（音・編集・質問）</td><td class="num">25.5</td><td class="num">28.6</td><td class="num">×0.89</td><td>「音が良く聴きやすい」——品質は既に信頼されている</td></tr>
+<tr><td>共感・自分事</td><td class="num">22.3</td><td class="num">28.6</td><td class="num">×0.78</td><td>小さい回ほど「私も」——初期支持者の自己投影</td></tr>
+<tr><td>続き・応援</td><td class="num">44.6</td><td class="num">85.7</td><td class="num">×0.52</td><td>応援は不発回の沈殿物＝核の所在地</td></tr>
+</table></div>
+<h3>定量検証② 語彙の感度検証（てつやクリップ除外）</h3>
+<div class="tablewrap"><table>
+<tr><th>語彙群</th><th class="num">除外前の倍率</th><th class="num">除外後</th><th>結論</th></tr>
+<tr><td>学び・気づき</td><td class="num">∞</td><td class="num">∞（25.9 vs 0.0）</td><td>特異点に依存しない——頑健</td></tr>
+<tr><td>笑い</td><td class="num">×2.19</td><td class="num">×1.81</td><td>減衰するが残る＝対談の雑談パートも効いている</td></tr>
+<tr><td>続き・応援</td><td class="num">×0.52</td><td class="num">×0.65</td><td>構図は不変</td></tr>
+</table></div>
+<h3>定量検証③ コア層のサイズ実測（参考値）</h3>
+<p>ユニーク投稿者<b>373人</b>・2本以上に出現<b>33人（8%）</b>・コメント率0.2/千——リピート率・コメント率とも当ラボ14ch分析の最低水準。<b>「観客は大勢入ったが、常連はまだ33人」</b>が1年目の正確な現在地。逆に言えば、高評価率1.52%（本編）は健全水準で、黙って聞いて高評価だけ押す「ポッドキャスト型の静かな観客」の性質も混ざっている。</p>
+<h3>定量検証④ ファン帰属のパネルID照合（参考値・n=373）</h3>
+<div class="tablewrap"><table>
+<tr><th>照合先</th><th class="num">重複率</th><th>意味</th></tr>
+<tr><td>ステゴロパンチャーズ / えびじゃ</td><td class="num">2.95% / 2.95%</td><td rowspan="3">エンタメ大手圏と軒並み2〜3%——特定の箱でなく<b>「YouTuber業界ウォッチャー圏」に広く浅く接続</b></td></tr>
+<tr><td>雨来ズ / 雷獣 / 東海オンエア</td><td class="num">2.41% / 2.14% / 2.14%</td></tr>
+<tr><td>朝倉未来 / BUDDICA中野</td><td class="num">1.88% / 1.88%</td></tr>
+<tr><td>【基準】同一箱の2ch間</td><td class="num">14.0%</td><td>感度検証の上限</td></tr>
+<tr><td>【基準】大手同士の自然重複</td><td class="num">2.9%</td><td><b>今回の観測値はほぼ全てこの水準</b></td></tr>
+<tr><td>【基準】箱違い</td><td class="num">0.0〜0.4%</td><td>感度検証の下限</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>判定：「業界ウォッチャー圏・流入先行型」</b>。登録8,700のチャンネルがエンタメ大手との重複で「大手同士の自然重複（2.9%）」と同水準を叩き出すのは異常値で、観客の実体が<b>YouTube業界そのものへの関心層（クリエイター・志望者・ウォッチャー）</b>であることを示す。固有の箱はまだないが、立地は「業界の交差点」——ゲストのファンダムを借りるたびに、この交差点の通行量が増える構造。ケイスケ・カイと同じ流入先行型だが、こちらは借りる先が毎回変わる分、依存リスクが分散されている。</p>
+</div>
+
+<h2>6. シリーズの代数 — 「擦り」はいつ死に、いつ育つか（全実測）</h2>
+<div class="tablewrap"><table>
+<tr><th>シリーズ</th><th>変遷（再生数）</th><th>法則</th></tr>
+<tr><td><b>ゲスト対談Ep.（23本）</b></td><td>2,728 → 4,925 → 7,542 → <b>15,017</b>（フェーズ中央値）</td><td><b>ゲストの顔を替え続ける限り減衰しない——「構造固定×キャスト替え」の教科書通り</b></td></tr>
+<tr><td>Weekly（26本）</td><td>613 → 942（横ばい）</td><td>キャストが固定（ホスト2人）のシリーズは初速のまま凍結</td></tr>
+<tr><td>切り抜きクリップ（109本）</td><td>てつや1,079,996 ／ 中央値1,684</td><td>宝くじ型——ゲストのファンダム井戸の深さで決まる。本編3日後投下が最良例</td></tr>
+<tr><td>Shorts（106本）</td><td>コーヒー32,611・教員→TikTok 27,766 ／ 中央値2,023</td><td>「1トピック1問」型が上振れ——対談の疑問形切り出しが機能</td></tr>
+<tr><td>年末Special</td><td>984（1本）</td><td>ホスト自身の年中行事はファンダム形成後の楽しみに温存</td></tr>
+</table></div>
+<div class="callout gold"><p><b>法則：「ゲストは資産、ホスト固定回は借金——ただし今だけ」</b>。対談は毎回キャストが替わる構造なので原理的に擦り減らない。Weeklyの不発もホスト2人の顔の問題であって、信頼残高が貯まれば同じフォーマットが動き出す（ゆる言語学ラジオはホスト2人だけで中央値25.8万）。順序の問題——先にゲストで観客を貯め、後でホストの棚を開ける。</p></div>
+
+<h2>7. 再現フォーマット — 勝ち動画の設計テンプレ</h2>
+<ol class="formula">
+<li><b>ゲストは「物語の有無」で選ぶ</b>認知ゲスト×4.3が最強だが、無名でもFumiko回29,508（転換ストーリー＋哲学）が勝った実測——「キャリアの転換点を語れる人」を条件にする。</li>
+<li><b>ファンダム保有ゲストを月1本は必ず入れる</b>認知ゲスト12本全勝・チャンネルの成長は全てこの路線から来ている。</li>
+<li><b>尺は60〜90分に固定する</b>中央値11,537 vs 8〜30分634。対談の没入は長さが正義。</li>
+<li><b>タイトルは「転換」を書く</b>「YouTuberからCEOへ」「元TBS」「教員をやめて」——勝ち回のタイトルは全て before→after 構文で書かれている。</li>
+<li><b>本編公開3日以内に切り抜きを投下する</b>てつやクリップ（HARUKI回の3日後）108万の実測——ゲストのファンダムが熱いうちに、ゲストの所属グループの固有名詞で刈る。</li>
+<li><b>Shortsは「1トピック1問」の疑問形で切る</b>「なんで教員をやめてTikTok？」27,766——対談から疑問文を抽出する。</li>
+<li><b>コメント欄に宿題を残す</b>コメント率0.2/千は仕掛けの不在が原因。「次に聞きたいゲスト」「今日の学びを一つ」を毎回問いかけ、常連33人を数百人に育てる。</li>
+</ol>
+<div class="callout gold">
+<p><b>次の一手の候補（データ根拠つき）</b>：①東海オンエア本人（てつやorメンバー）の対談出演——てつやクリップ108万で井戸の深さは実証済み、実現すれば桁が変わる。②Weekly 26本ぶんの工数を「対談の切り抜き増産」へ振り替え——切り抜きは既に総再生の65%を稼ぐ配信網でありROIが最も高い。③「検証拒否できない実績ゲスト」への寄せ——ど素人ホテル回の検証コメント問題は、実績が公開情報で裏取りできるゲスト（上場・公表数字持ち）なら起きない。</p>
+</div>
+
+<h2>8. 同属性チャンネル比較 — 界隈の中での現在地</h2>
+<p class="small">対談・学び系4chの直近1年（各ch直近200本のうち投稿14日超）実測。取得2026-08-09。</p>
+<div class="tablewrap"><table>
+<tr><th>チャンネル</th><th class="num">登録</th><th class="num">長尺中央値</th><th class="num">ペース/月</th><th class="num">中央値÷登録者</th><th>型</th></tr>
+<tr><td><b>Unplugged podcast</b></td><td class="num">8,700</td><td class="num">11,107（対談）</td><td class="num">4.1（対談）</td><td class="num"><b>1.28</b></td><td><b>顔借り×学び回収（成長期）</b></td></tr>
+<tr><td>PIVOT</td><td class="num">404万</td><td class="num">100,536</td><td class="num">5.9</td><td class="num">0.025</td><td>ビジネス報道の総合デパート</td></tr>
+<tr><td>ReHacQ</td><td class="num">195万</td><td class="num">93,307</td><td class="num">11.4</td><td class="num">0.048</td><td>論客プロレス（ホストが商品）</td></tr>
+<tr><td>ゆる言語学ラジオ</td><td class="num">55.3万</td><td class="num">257,955</td><td class="num">4.7</td><td class="num">0.47</td><td>ホスト2人の雑談が商品（最終形の見本）</td></tr>
+<tr><td>新R25</td><td class="num">62.9万</td><td class="num">64,937</td><td class="num">5.0</td><td class="num">0.10</td><td>企画編集×ゲスト</td></tr>
+</table></div>
+<h3>発見① 効率1.28は界隈の異常値——アルゴリズムは既に番組を認めている</h3>
+<p>PIVOT 0.025・ReHacQ 0.048に対し1.28は<b>51倍</b>。大手は登録者の2〜5%にしか見られていないのに対し、Unpluggedは登録者の128%が見ている——再生は実力、登録が未回収。逆算すると、現在の対談中央値11,107を大手並みの効率（0.05〜0.1）で支えるには登録10〜20万が釣り合いで、<b>登録転換の仕掛け（エンド画面・登録の呼びかけ・コメント文化）だけで1〜2桁の未回収がある</b>。</p>
+<h3>発見② 界隈の勝ち方は「ホスト商品型」と「ゲスト商品型」に割れる——今はゲスト型、目指す先はハイブリッド</h3>
+<p>ReHacQ・ゆる言語はホストが商品（キャスト固定でも減衰しない）、PIVOT・新R25はゲスト×編集が商品。Unpluggedは現在純粋ゲスト型だが、Weeklyを続けている＝ホスト型への野心がある。ゆる言語（登録55万・中央値25.8万・効率0.47）が示すのは、<b>ホスト型は完成すれば効率が桁で違う</b>ということ——ただしそこへの道は「ゲスト回で貯めた信頼残高の転換」であり、Weeklyの反復ではない。</p>
+<h3>発見③ 最大ギャップは投稿ペースでなく「切り抜き網の使い方」</h3>
+<p>対談4.1本/月は界隈標準（PIVOT 5.9・ゆる言語4.7）に既に近い。差は配信網——PIVOTはShorts中央値30,414で本編へ送客し続けている。Unpluggedの切り抜きは既に総再生の65%を稼いでいるが、てつや級の井戸（大手グループの固有名詞）を狙って掘る運用にはなっていない。<b>「ゲスト所属グループの固有名詞×疑問形」で切る編成が、今の陣容のままで最も伸びるレバー</b>。</p>
+<h3>コメント投稿者IDの実測照合</h3>
+<p>§5④の通り、エンタメ大手圏と一律2〜3%で接続する「業界の交差点」立地。対談型大手（PIVOT等）とのパネルは未保有のため、ビジネス系観客との重複は次回分析の宿題（パネルは分析のたびに増える）。</p>
+<div class="callout win">
+<p><b>取り入れる優先順</b>：①PIVOT式「Shorts送客網」（切り抜きの目的を再生でなく本編送客に再定義）→ ②ゆる言語式「コメント欄の宿題」（毎回の問いかけでコメント文化を作る——効率0.47への道）→ ③ReHacQ式「シリーズの背番号」（Ep.番号は既にある。「あのEp.19のJIROが」と過去回を資産として参照させる）。<b>真似不要</b>：PIVOT式の多番組デパート化——陣容2人で薄めると全番組がWeekly化する。今は対談一本足でいい。</p>
+</div>
+<h3>未回収の企画案 — コメント欄からの発掘</h3>
+<div class="tablewrap"><table>
+<tr><th>企画案</th><th>需要の証拠</th><th>期待レンジ</th></tr>
+<tr><td>東海オンエア（てつや/メンバー）本人回</td><td>てつやクリップ108万＋👍5,923の大喜利熱量</td><td>桁替わり（10万超）</td></tr>
+<tr><td>JIRO世代の「あの人は今」続編（ジョージ・ミノ等）</td><td>👍28「ジョージ、ジロー、そしてミノ、、みんな頑張ってて、嬉しいです」</td><td>JIRO回実績46,776</td></tr>
+<tr><td>Fumiko型「哲学の強度」ゲストの発掘継続</td><td>👍9「最近で1番インスパイアされたトーク」・リスペクト語彙最濃</td><td>25,000〜30,000</td></tr>
+<tr><td>ハセン回の続編（シリコンバレー定点観測）</td><td>👍15「めっちゃ応援してる」＋時事×顔の実績43,238</td><td>40,000級</td></tr>
+</table></div>
+
+<h2>9. データの注記（正直ベース）</h2>
+<ul class="small">
+<li>再生数は累積値。開設1年のため経過日数バイアスは小さいが、直近2週間の動画は集計から除外済み。</li>
+<li><b>降格の明記</b>：本編n=49＜120のため重回帰・ブートストラップCIは不実施（§3は層別クロスで代替）。コメント438件＜1,000・投稿者373人＜500のため§5の率とID照合は参考値。</li>
+<li>コメントは公称582件中438件（75%）を取得（相対度順・上位100件/本）。個人単位の情報は出さない。</li>
+<li>ID照合は2026-08-09取得の30日以内パネル31ch・下限推定。比較表は各chの直近アップロード200本のうち直近1年・投稿14日超で算出。</li>
+<li>本レポートの指標はYouTube公式の提供指標ではなく公開データからの独自算出。視聴維持率・CTR・登録転換率・収益等の非公開データは未使用。</li>
+</ul>
+
+<footer>Unplugged podcast (@unpluggedJAPAN) 分析レポート ｜ データ取得: 2026-08-09 / YouTube Data API v3 ｜ 全265本＋コメント438件＋31ch ID照合＋対談型4ch実測比較 ｜ 降格適用: §3重回帰不実施（n=49）・§5参考値（コメント438件）</footer>
+</div>
+
+</body>
+</html>

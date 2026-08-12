@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>雨来ズ。× マチアプ/チャット系案件 — 直近6本実測と成果予測</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Channel Analysis Lab (beta)">
+<meta property="og:title" content="雨来ズ。× マチアプ/チャット系案件 — 直近6本実測と成果予測">
+<meta property="og:description" content="お持ち帰りweek6本の実測125.6万再生＋成長カーブ実測＋成果予測モデル＋提案パッケージ雛形。">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+    --accent:#6ea3e8; --accent-soft:#1d2b40;
+    --win:#4fbf87; --win-soft:#16301f;
+    --lose:#e07070; --lose-soft:#3a1d1d;
+    --gold:#d4b45e; --gold-soft:#332b15;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#1c2430; --muted:#5c6a7d; --line:#dde3ea;
+  --accent:#2f6bc4; --accent-soft:#e3ecf9;
+  --win:#1e7f4f; --win-soft:#e2f2e9;
+  --lose:#b03a3a; --lose-soft:#f7e7e7;
+  --gold:#8a6d1f; --gold-soft:#f5eeda;
+}
+:root[data-theme="dark"]{
+  --bg:#10151c; --surface:#171e28; --ink:#e6ebf2; --muted:#93a1b3; --line:#2a3442;
+  --accent:#6ea3e8; --accent-soft:#1d2b40;
+  --win:#4fbf87; --win-soft:#16301f;
+  --lose:#e07070; --lose-soft:#3a1d1d;
+  --gold:#d4b45e; --gold-soft:#332b15;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Noto Sans JP",sans-serif;
+  line-height:1.75; font-size:15px;}
+.wrap{max-width:920px; margin:0 auto; padding:40px 20px 80px;}
+header.hero{border-bottom:3px solid var(--accent); padding-bottom:24px; margin-bottom:36px;}
+.eyebrow{font-size:11px; letter-spacing:.18em; color:var(--accent); font-weight:700; text-transform:uppercase; margin-bottom:8px;}
+h1{font-size:clamp(24px,4vw,34px); font-weight:800; margin:0 0 10px; line-height:1.35; text-wrap:balance;}
+.hero-sub{color:var(--muted); font-size:13.5px; margin:0;}
+h2{font-size:20px; font-weight:800; margin:56px 0 16px; padding-left:12px; border-left:5px solid var(--accent); line-height:1.4;}
+h3{font-size:16px; font-weight:700; margin:28px 0 10px;}
+p{margin:10px 0;}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:20px 0;}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px;}
+.kpi .n{font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:11.5px; color:var(--muted); margin-top:2px;}
+.callout{background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 18px; margin:20px 0;}
+.callout.win{background:var(--win-soft); border-color:var(--win);}
+.callout.lose{background:var(--lose-soft); border-color:var(--lose);}
+.callout.gold{background:var(--gold-soft); border-color:var(--gold);}
+.callout p{margin:6px 0;}
+.tablewrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:560px;}
+th{font-size:11.5px; letter-spacing:.05em; color:var(--muted); text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); white-space:nowrap; font-weight:700;}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap;}
+.bar{height:10px; border-radius:5px; background:var(--accent); min-width:2px; display:inline-block; vertical-align:middle;}
+.bar.win{background:var(--win);} .bar.lose{background:var(--lose);}
+.barcell{min-width:130px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.win{background:var(--win-soft); color:var(--win);}
+.tag.lose{background:var(--lose-soft); color:var(--lose);}
+.tag.mid{background:var(--accent-soft); color:var(--accent);}
+blockquote{margin:8px 0; padding:10px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:13px; color:var(--ink);}
+blockquote .src{display:block; color:var(--muted); font-size:11.5px; margin-top:4px;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin:16px 0;}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px;}
+.panel h4{margin:0 0 10px; font-size:14px; font-weight:800;}
+.panel.win h4{color:var(--win);} .panel.lose h4{color:var(--lose);}
+.panel ul{margin:0; padding-left:18px;}
+.panel li{margin:6px 0; font-size:13.5px;}
+ol.formula{counter-reset:f; list-style:none; padding:0; margin:16px 0;}
+ol.formula li{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px 14px 52px; margin:10px 0; position:relative;}
+ol.formula li::before{counter-increment:f; content:counter(f); position:absolute; left:16px; top:14px;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff;
+  font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+ol.formula b{display:block; margin-bottom:2px;}
+.note{font-size:12px; color:var(--muted);}
+.small{font-size:13px; color:var(--muted);}
+footer{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Sponsorship Performance Report / 2026-08-09</div>
+  <h1>雨来ズ。× マッチングアプリ/チャット系案件 — 直近6本の実測と成果予測</h1>
+  <p class="hero-sub">対象: <b>@amekoz</b>（登録58.1万人）｜ 直近6本「お持ち帰りweek」＝<b>マチアプ案件（mypappy）実走中の実測データ</b> ｜ コメント638件の視聴者質スキャン ｜ 7月末スナップショット差分による成長カーブ実測 ｜ 用途: マチアプ系・大人向けチャット系サービスへの案件提案書の根拠数字</p>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">125.6万</div><div class="l">直近6本の合計再生（公開10日以内の実測）</div></div>
+  <div class="kpi"><div class="n">165〜200万</div><div class="l">同6本の30日時点予測（成長カーブ実測から）</div></div>
+  <div class="kpi"><div class="n">2.2%</div><div class="l">高評価率中央値（案件企画でも通常水準を維持）</div></div>
+  <div class="kpi"><div class="n">👍367</div><div class="l">「もうマイパピーじゃなくてモトダが凄い」＝案件名の自然言及</div></div>
+</div>
+
+<div class="callout">
+  <p><b>結論（30秒版）</b>：雨来ズ。は今まさに大人向けマッチングアプリ「mypappy」の<b>企画統合型タイアップ（お持ち帰りweek・6本連続）を実走しており、その実測が最強の営業素材</b>になる。6本合計125.6万再生（10日時点）・30日予測165〜200万。高評価率2.05〜2.72%は通常企画と同水準＝<b>案件を入れても数字が落ちていない</b>。コメント欄では案件名が自然にネタ化されており（👍367）、広告が「企画の道具」として受容されている——これは単発PR動画型（7/23プム韓国Vlog：21.9万再生だがコメントの商品言及ゼロ）とは別次元の稼働。チャンネルの帰属型は「箱推し型」（コメント97.6%排他・7月の本分析）で、夜の街・恋愛文脈の語彙が勝ち筋——<b>マチアプ/大人向けチャット系との文脈適合は当ラボ15ch分析で最高クラス</b>。ただし現状の概要欄にPR表記が見当たらない点はステマ規制（景表法・2023年10月告示）上の要修正点で、次の案件から必ず担保する。</p>
+  <p class="small"><b>根拠</b>：①直近6本＋PR動画1本の実測（2026-08-09取得） ②7月末スナップショットとの差分による成長カーブ ③コメント638件の語彙スキャン ④7月実施のフル分析（全1,414本・コメント2万件級・ID照合）の帰属判定。</p>
+</div>
+
+<h2>1. 直近6本の実測パフォーマンス（お持ち帰りweek＝mypappy統合企画）</h2>
+<p class="small">全6本の概要欄にmypappyのトラッキングリンク（onelink）＋「新規登録24時間以内35%OFF」オファーを確認。取得2026-08-09。</p>
+<div class="tablewrap"><table>
+<tr><th>公開日</th><th>企画</th><th class="num">経過</th><th class="num">実測再生</th><th class="num">高評価率</th><th class="num">コメ率/千</th><th class="num">30日予測</th></tr>
+<tr><td>07-30</td><td>「何もしないよ」でお持ち帰りして本当に何もしない</td><td class="num">10日</td><td class="num">276,752</td><td class="num">2.24%</td><td class="num">3.35</td><td class="num">32〜36万</td></tr>
+<tr><td>07-31</td><td>お持ち帰りした美女とホテルプールで水泳</td><td class="num">9日</td><td class="num">203,046</td><td class="num">2.53%</td><td class="num">2.94</td><td class="num">24〜28万</td></tr>
+<tr><td>08-02</td><td>ダブルブッキング2人同時お持ち帰り検証</td><td class="num">7日</td><td class="num">274,689</td><td class="num">1.73%</td><td class="num">2.03</td><td class="num">34〜40万</td></tr>
+<tr><td>08-04</td><td>マチアプで出会った女が幼馴染だったら</td><td class="num">5日</td><td class="num">230,977</td><td class="num">2.06%</td><td class="num">3.26</td><td class="num">30〜36万</td></tr>
+<tr><td>08-07</td><td>初対面ヤリモク女子を勝手に沖縄旅行へ</td><td class="num">2日</td><td class="num">155,105</td><td class="num">2.72%</td><td class="num">2.10</td><td class="num">25〜35万</td></tr>
+<tr><td>08-09</td><td>ガード堅い女も沖縄サプライズで即日お持ち帰り説</td><td class="num">0日</td><td class="num">115,368</td><td class="num">2.05%</td><td class="num">2.92</td><td class="num">22〜38万</td></tr>
+<tr><td colspan="3"><b>合計</b></td><td class="num"><b>1,255,937</b></td><td class="num">2.2%</td><td class="num">2.9</td><td class="num"><b>165〜200万</b></td></tr>
+</table></div>
+<p><b>ベンチマーク（7月フル分析より）</b>：直近1年の本編中央値は297,261・75%タイルは436,286。お持ち帰りweekの着地予測は<b>1本あたり中央値並み〜やや上</b>——「案件週間なのに通常運転の数字」自体がセールスポイントになる（案件が数字を殺していない実証）。さらに同型企画「マルチ勧誘のヤバ女を『何もしないよ』でお持ち帰り」は<b>120.8万再生</b>の上振れ実績があり、悪者成敗×お持ち帰りのハイブリッドを引けた場合の上限はこの水準。</p>
+
+<h2>2. 露出の寿命 — 成長カーブの実測（7/31→8/9のスナップショット差分）</h2>
+<div class="tablewrap"><table>
+<tr><th>動画の年齢帯</th><th class="num">日次の追加再生（中央値）</th><th>案件にとっての意味</th></tr>
+<tr><td>公開0〜10日</td><td class="num">D1→D10で約4倍（68,614→276,752の実測）</td><td>初速はほぼ10日で完成——計測窓はD10で一次判定可能</td></tr>
+<tr><td>公開9〜30日</td><td class="num">+2,757/日</td><td>2週目以降も1本あたり月8万視聴が上積み</td></tr>
+<tr><td>公開30〜60日</td><td class="num">+2,063/日</td><td rowspan="2"><b>概要欄リンクは掲載し続ける限り毎月クリックを生む「家賃収入」</b>——買い切り型でなく掲載継続型の価格設計が双方に得</td></tr>
+<tr><td>公開60〜120日</td><td class="num">+714/日</td></tr>
+<tr><td>公開120日〜</td><td class="num">+72/日</td><td>1年後はほぼ完了——リンク差し替えの目安は90〜120日</td></tr>
+</table></div>
+<p class="small">読み方：雨来ズ。の動画はカタログ寿命が長く、6本パッケージなら<b>公開後3ヶ月間で合計210〜240万露出</b>（30日予測＋2〜3ヶ月目の上積み）まで伸びる試算。単発の瞬間風速でなく「四半期の常設広告面」として提案できる。</p>
+
+<h2>3. 視聴者の質 — この観客はマチアプ/チャット系に効くのか（コメント638件＋7月フル分析）</h2>
+<div class="tablewrap"><table>
+<tr><th>シグナル</th><th class="num">実測</th><th>解釈</th></tr>
+<tr><td>箱推し（メンバー名言及）</td><td class="num">82/千件</td><td>観客はメンバーのファン——「モトダが使うアプリ」という人格添付の訴求が効く</td></tr>
+<tr><td>企画考察・検証評価</td><td class="num">70/千件</td><td>「検証」文法への信頼が厚い＝アプリを検証の道具に使う統合型と相性最良</td></tr>
+<tr><td>恋愛・出会いの自分事化</td><td class="num">5/千件</td><td><b>正直な注意点：観客は娯楽として見ており、出会い目的の自分事化は薄い</b>——CVはオファー（割引・特典）駆動で設計する</td></tr>
+<tr><td>学生・若年シグナル</td><td class="num">3/千件</td><td>コメント欄上は薄いが、ファン層は若い（イベント設計から自明）——18歳未満排除はLP側で担保必須</td></tr>
+<tr><td>案件への忌避反応</td><td class="num">3/千件（批判ゼロ）</td><td>「案件乙」型の拒絶が観測されない——広告耐性が高い状態</td></tr>
+</table></div>
+<blockquote>これはもうマイパピーじゃなくてモトダが凄い<span class="src">👍367 / ダブルブッキング回——案件名がツッコミの道具として自然流通</span></blockquote>
+<blockquote>お持ち帰りした女の子がシャワー浴びてる間にモトダとそうたが入れ替わってみたドッキリして下さい<span class="src">👍1,866 / 同回——観客が次の案件企画を発注してくる状態</span></blockquote>
+<p><b>7月フル分析からの補強</b>：コメント投稿者の97.6%が他の分析済みchに出現しない排他的箱推し型。勝ち語彙は夜の街×1.94・悪者成敗×2.30。ファン圏はえびじゃ（4.15%）・コムドット（1.40%）と接続する「チャラ男連合圏」で、<b>視聴文脈（夜遊び・出会い・お持ち帰り）と商材文脈が完全一致する稀有なチャンネル</b>。大人向け商材にとって、コンテンツ文脈とのミスマッチ炎上リスクが構造的に低い。</p>
+
+<h2>4. 案件形態の比較 — 何が効いて何が効かないか（同一ch内の実測比較）</h2>
+<div class="tablewrap"><table>
+<tr><th>形態</th><th>実例</th><th class="num">再生</th><th>商品への反応</th><th>判定</th></tr>
+<tr><td><b>①企画統合型（週間ジャック）</b></td><td>mypappy「お持ち帰りweek」6本</td><td class="num">125.6万〜（10日）</td><td>案件名がコメントで自然言及・次企画の発注まで発生</td><td><span class="tag win">最強——本命商品</span></td></tr>
+<tr><td>②単発PR動画型</td><td>プム韓国Vlog（7/23・2分24秒・#PR）</td><td class="num">21.9万</td><td><b>上位コメント38件中、商品言及ゼロ</b>（全てムスカ声・集合体ネタ）</td><td><span class="tag mid">露出は出るが記憶に残らない</span></td></tr>
+<tr><td>③概要欄枠のみ</td><td>（企画に絡まないリンク掲載）</td><td class="num">—</td><td>§2の通りロングテールのクリックは生む</td><td><span class="tag mid">継続掲載の家賃モデル向き</span></td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>営業上の核心</b>：このチャンネルの売り物は「露出」ではなく<b>「企画の文法にアプリを組み込む統合力」</b>。①では商材がツッコミどころ＝エンタメの部品になり、想起が発生する。提案書は①を本命（週間パッケージ）、③を継続オプション（掲載延長）、②は原則やらない、の3段構成にする。</p>
+</div>
+
+<h2>5. 成果予測モデル — 提案書に書ける数字（仮定は明示）</h2>
+<p class="small">クリック率・CV率は業界標準レンジの仮定値（YouTube概要欄リンクの実測は広告主側の計測データが必要——<b>未確認項目として提案書にも明記する</b>のが信頼を作る）。</p>
+<div class="tablewrap"><table>
+<tr><th>ファネル段階</th><th class="num">保守</th><th class="num">中位</th><th class="num">強気</th><th>根拠・仮定</th></tr>
+<tr><td>露出（6本週間・90日累計）</td><td class="num">165万</td><td class="num">190万</td><td class="num">240万</td><td>§1実測＋§2カーブ。上振れは「悪者成敗」型が引けた場合（過去120.8万/本の実績）</td></tr>
+<tr><td>リンク到達率（クリック÷再生）</td><td class="num">0.3%</td><td class="num">0.6%</td><td class="num">1.2%</td><td>概要欄1番目＋口頭CTA＋固定コメの3点掲出を条件とした業界レンジ（仮定）</td></tr>
+<tr><td>クリック数</td><td class="num">5,000</td><td class="num">11,400</td><td class="num">28,800</td><td>上2行の積</td></tr>
+<tr><td>登録CV率（クリック→登録）</td><td class="num">15%</td><td class="num">25%</td><td class="num">35%</td><td>割引オファー付きマチアプの標準レンジ（仮定）。35%OFFオファーは中位以上を支持</td></tr>
+<tr><td><b>新規登録数</b></td><td class="num"><b>750</b></td><td class="num"><b>2,850</b></td><td class="num"><b>10,000</b></td><td>—</td></tr>
+</table></div>
+<div class="tablewrap"><table>
+<tr><th>費用シナリオ（週間6本パッケージ）</th><th class="num">CPA（登録単価）中位ケース</th><th>成立判定の目安</th></tr>
+<tr><td>200万円（再生単価 約1.1円/90日露出）</td><td class="num">約700円/登録</td><td>男性課金型（パパ活系・チャット系）のLTVなら余裕で成立</td></tr>
+<tr><td>350万円（登録者単価 約6円）</td><td class="num">約1,230円/登録</td><td>ARPUの高い大人向け商材なら成立圏——このゾーンが交渉の主戦場</td></tr>
+<tr><td>500万円</td><td class="num">約1,750円/登録</td><td>保守ケース（750登録）だとCPA6,700円——強気の値付けは統合企画の質が担保条件</td></tr>
+</table></div>
+<h3>成果測定の設計（提案書にそのまま書ける仕様）</h3>
+<ul>
+<li><b>動画別リンク発行</b>：onelink/adjustのパラメータを6本で分ける——「どの企画型がクリックを生むか」が次回の値付け根拠になる（現状は全本共通リンクの模様＝もったいない）。</li>
+<li><b>プロモコード併用</b>：「アメコズ」等の音声想起コード。リンクを踏まない想起流入（指名検索経由）を回収する唯一の手段。</li>
+<li><b>計測窓の取り決め</b>：一次判定D10（初速の約8割が完成・§2実測）／最終精算D30＋掲載継続分は月次レポート。view-through（視聴後7日以内の自然流入）込みの定義を事前合意。</li>
+<li><b>指名検索リフト</b>：公開週の「mypappy」「マイパピー」サジェスト・検索動向を測る（Googleトレンド＋YouTubeサジェスト監視）。クリック計測に乗らないブランド効果の証拠になる。</li>
+<li><b>固定コメント＋概要欄1番目</b>：掲出位置を契約条件に明記。§2のロングテール分（90日で+30〜40万露出）は掲載継続オプションとして別建て請求。</li>
+</ul>
+
+<h2>6. リスクと担保 — 大人向け商材だからこそ先に潰す（要対応1件あり）</h2>
+<div class="grid2">
+<div class="panel lose"><h4>⚠ 要対応：ステマ規制（景表法・2023年10月〜）</h4>
+<ul><li>mypappy掲載6本の概要欄に「PR」「広告」「プロモーション」表記が<b>見当たらない</b>（実測。動画内での言及・YouTubeの有料プロモーションラベルの有無は未確認）</li><li>タイアップである以上、①概要欄冒頭に「プロモーションを含みます」②YouTube設定の有料プロモーションラベルON——の2点を次の案件から必須条項に。広告主側もステマ認定時は措置命令の対象</li></ul></div>
+<div class="panel"><h4>プラットフォーム・ポリシーの線引き</h4>
+<ul><li>マチアプ訴求はYouTube上で可。ただし性的サービスの直接訴求は動画削除・年齢制限・収益化停止リスク——動画内呼称は「大人向けマッチングアプリ」に留め、18歳未満排除・アダルト要素はLP側で処理する現行の建付けが正解</li><li><b>アダルトチャット系（ライブチャット等）は一段リスクが上</b>：動画内での実演・画面表示は避け、①概要欄＋固定コメのリンク枠から開始→②反応を見て口頭言及→③統合企画は商材名の露出設計を精査してから、の段階導入を推奨</li></ul></div>
+</div>
+<div class="callout lose">
+<p><b>炎上リスクの評価</b>：視聴文脈と商材が一致しているため「なぜこのchがこの広告を？」型の炎上は構造的に起きにくい（§3）。残るリスクは②未成年視聴者への訴求と見なされる事態——LP側の年齢確認だけでなく、<b>動画内で「18歳以上」「大人向け」を口頭明示する</b>ことでチャンネル側の防御線を作る。ファン層の若さ（イベントに学生層が来る実態）を踏まえると、ここはコストでなく保険。</p>
+</div>
+
+<h2>7. 提案パッケージ（案件を書く時の雛形）</h2>
+<div class="tablewrap"><table>
+<tr><th>メニュー</th><th>内容</th><th class="num">想定成果（中位）</th><th class="num">価格帯の目安</th></tr>
+<tr><td><b>A. 週間ジャック（本命）</b></td><td>企画統合6本＋概要欄・固定コメ90日掲載＋動画別リンク計測</td><td class="num">露出190万・登録2,850</td><td class="num">250〜400万円</td></tr>
+<tr><td>B. 単発統合（お試し）</td><td>統合企画1本＋90日掲載。「悪者成敗×商材」型を狙う</td><td class="num">露出30〜40万（上振れ120万実績）・登録450〜700</td><td class="num">60〜100万円</td></tr>
+<tr><td>C. 常設リンク枠（継続）</td><td>過去人気動画への概要欄リンク掲載（月極）</td><td class="num">月間追加露出6〜25万/本（§2）</td><td class="num">月5〜15万円/本</td></tr>
+</table></div>
+<div class="callout gold">
+<p><b>次の一手（1つだけ）</b>：mypappyの実測クリック/登録データを広告主から共有してもらう交渉を最優先に。§5の仮定レンジが実測CTR/CVに置き換われば、このレポートは「予測」から<b>「実績保証型の営業資料」</b>に化け、次のマチアプ/チャット系への提案単価を1段上げられる。</p>
+</div>
+
+<h2>8. データの注記（正直ベース）</h2>
+<ul class="small">
+<li>再生数は2026-08-09取得の累積値。直近2本（8/7・8/9）は成長途上のため30日予測の幅を広めに取った。</li>
+<li>30日予測は7/31スナップショットとの9日間差分から作った成長カーブ（D1→D10≒×4、以降の日次実測）による外挿。異常拡散（切り抜きバズ等）は予測に含まない。</li>
+<li>クリック率・CV率は業界標準レンジの<b>仮定値</b>であり実測ではない。実測にはmypappy側のonelink計測データが必要。</li>
+<li>コメント638件（6本＋PR動画1本・relevance順上位）による語彙率は参考値。視聴者の年齢・性別構成はYouTube Studioの非公開データでのみ確定可能——提案書には「チャンネル側Studioデータで補強可」と書ける。</li>
+<li>本レポートの指標はYouTube公式の提供指標ではなく公開データからの独自算出。</li>
+</ul>
+
+<footer>雨来ズ。(@amekoz) 案件特化分析 ｜ データ取得: 2026-08-09 / YouTube Data API v3 ｜ 直近6本＋PR動画実測・スナップショット差分カーブ・コメント638件 ｜ ベース: 2026-07フル分析（全1,414本・ID照合）</footer>
+</div>
+
+</body>
+</html>
